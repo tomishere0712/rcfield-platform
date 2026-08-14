@@ -30,13 +30,13 @@ Tài liệu này mô tả luồng end-to-end hiện tại: Provider tạo contes
 ```mermaid
 sequenceDiagram
     autonumber
-    participant P as Provider
+    actor P as Provider
     participant W as Web App
     participant API as API
     participant DB as PostgreSQL
     participant Audit as ContestAudit
 
-    P->>W: Nhập contest config + participating_cafe_ids
+    P->>W: Enter contest configuration and participating_cafe_ids
     W->>API: POST /contests
     API->>DB: Validate provider owns ACTIVE cafes
     alt Invalid
@@ -56,7 +56,7 @@ sequenceDiagram
 ```mermaid
 sequenceDiagram
     autonumber
-    participant P as Provider
+    actor P as Provider
     participant API as API
     participant DB as PostgreSQL
     participant Audit as ContestAudit
@@ -80,16 +80,16 @@ sequenceDiagram
 ```mermaid
 sequenceDiagram
     autonumber
-    participant C as Customer
+    actor C as Customer
     participant W as Web App
     participant API as API
     participant DB as PostgreSQL
     participant Audit as ContestAudit
 
-    C->>W: Xem contest public
+    C->>W: View public contest
     W->>API: GET /contests/:id
     API-->>W: Contest detail + cafes + summary + rules/prizes
-    C->>W: Chọn vehicle_source RENTAL/BYOC
+    C->>W: Select vehicle_source RENTAL/BYOC
     W->>API: POST /contests/:id/register
     API->>DB: BEGIN transaction
     API->>DB: Validate OPEN + window + capacity + duplicate + vehicle_rule
@@ -112,7 +112,7 @@ sequenceDiagram
 ```mermaid
 sequenceDiagram
     autonumber
-    participant P as Provider
+    actor P as Provider
     participant API as API
     participant DB as PostgreSQL
     participant Audit as ContestAudit
@@ -138,7 +138,7 @@ sequenceDiagram
     participant DB as Database<br/>(PostgreSQL)
     participant Audit as ContestAudit<br/>(contest_audit_logs)
 
-    S->>W: Nhập/quét check_in_code
+    S->>W: Enter or scan check_in_code
     W->>API: GET /api/v1/contests/:id/registrations/lookup?check_in_code=...
     API->>CS: lookupRegistration()
     CS->>DB: Find registration in contest
@@ -161,7 +161,7 @@ sequenceDiagram
 ```mermaid
 sequenceDiagram
     autonumber
-    participant O as Provider/Assigned Staff
+    actor O as Provider/Assigned Staff
     participant API as API
     participant DB as PostgreSQL
     participant Audit as ContestAudit
@@ -183,7 +183,7 @@ sequenceDiagram
 ```mermaid
 sequenceDiagram
     autonumber
-    participant O as Provider/Assigned Staff
+    actor O as Provider/Assigned Staff
     participant API as API
     participant DB as PostgreSQL
     participant Audit as ContestAudit
@@ -202,7 +202,7 @@ sequenceDiagram
 ```mermaid
 sequenceDiagram
     autonumber
-    participant O as Provider/Assigned Staff
+    actor O as Provider/Assigned Staff
     participant API as API
     participant DB as PostgreSQL
     participant Audit as ContestAudit
@@ -230,7 +230,7 @@ sequenceDiagram
 ```mermaid
 sequenceDiagram
     autonumber
-    participant O as Provider/Assigned Staff
+    actor O as Provider/Assigned Staff
     participant API as API
     participant DB as PostgreSQL
     participant Audit as ContestAudit

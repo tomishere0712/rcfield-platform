@@ -20,7 +20,7 @@ sequenceDiagram
     participant DB as Database<br/>(PostgreSQL)
     participant Bank as Bank / Sandbox Bank
 
-    C->>FE: Chọn chuyển khoản và xác nhận checkout
+    C->>FE: Select bank transfer and confirm checkout
     FE->>API: POST /api/v1/bookings/:id/checkout
     API->>PS: checkout(bookingId, BANK_TRANSFER)
     PS->>Repo: Load booking, cafe payment settings, payment transaction
@@ -32,7 +32,7 @@ sequenceDiagram
     Repo->>DB: INSERT/UPDATE payment_transactions
     PS-->>API: checkout response + QR data
     API-->>FE: 200 payment instructions
-    FE-->>C: Hiển thị QR và mã tham chiếu
+    FE-->>C: Display QR code and payment reference
     Bank->>WH: POST /api/v1/payments/bank-webhook
     WH->>Repo: Create bank transaction and match payment_ref_code
     Repo->>DB: INSERT bank transaction and SELECT payment transaction
@@ -62,7 +62,7 @@ sequenceDiagram
     participant DB as Database<br/>(PostgreSQL)
     participant PG as PayOS
 
-    P->>FE: Chọn gói và thanh toán PayOS
+    P->>FE: Select a plan and pay through PayOS
     FE->>API: POST /api/v1/provider/payment-requests/payos-link
     API->>PR: createPayOSPaymentLink(provider, plan)
     PR->>Repo: Validate provider, plan, trial usage, pending request
@@ -102,14 +102,14 @@ sequenceDiagram
     participant Repo as Repository<br/>(TypeORM)
     participant DB as Database<br/>(PostgreSQL)
 
-    U->>FE: Mở tài chính giải đấu
+    U->>FE: Open contest finance
     FE->>API: GET /api/v1/contests/:contestId/finance
     API->>FS: getFinanceSummary(contestId, actor)
     FS->>Repo: Authorize contest branch and load registrations/ledger
     Repo->>DB: SELECT contests + registrations + contest_ledger_entries
     FS-->>API: entry fees, other income, expenses, balance
     API-->>FE: 200 finance summary
-    U->>FE: Ghi khoản thu hoặc chi
+    U->>FE: Record an income or expense entry
     FE->>API: POST /api/v1/contests/:contestId/ledger-entries
     API->>LS: createManualEntry(payload, actor)
     LS->>LS: Validate role, direction, amount and immutable source fields
@@ -117,7 +117,7 @@ sequenceDiagram
     Repo->>DB: INSERT contest_ledger_entries
     LS-->>API: created entry
     API-->>FE: 201 and refreshed summary
-    FE-->>U: Hiển thị số dư và lịch sử mới
+    FE-->>U: Display updated balance and history
 ```
 
 ## 4. Itemized Damage Charge, Customer Confirmation, and Additional Payment
@@ -134,7 +134,7 @@ sequenceDiagram
     participant Repo as Repository<br/>(TypeORM)
     participant DB as Database<br/>(PostgreSQL)
 
-    S->>FE: Lập danh sách hư hỏng và đơn giá
+    S->>FE: Enter damage items and unit prices
     FE->>API: POST /api/v1/staff/sessions/:id/inspections
     API->>IS: submitCheckoutInspection(damageItems)
     IS->>IS: Validate part, description, quantity and unit price
@@ -142,7 +142,7 @@ sequenceDiagram
     Repo->>DB: INSERT inspection_reports + damage_line_items
     IS-->>API: checkout summary and total damage charge
     API-->>FE: 200 summary awaiting customer confirmation
-    C->>FE: Xác nhận hoặc phản đối tại chỗ
+    C->>FE: Confirm or dispute on site
     FE->>API: POST /api/v1/sessions/:id/inspection/confirm
     alt Customer confirms and outstanding amount exists
         API->>PS: createAdditionalPayment(session, damageTotal)
@@ -175,7 +175,7 @@ sequenceDiagram
     participant Repo as Repository<br/>(TypeORM)
     participant DB as Database<br/>(PostgreSQL)
 
-    P->>FE: Tạo, sửa, sắp xếp hoặc xoá danh mục
+    P->>FE: Create, edit, reorder, or delete a category
     FE->>API: POST/PATCH/DELETE /api/v1/cafes/:cafeId/menu-categories
     API->>SVC: validate ownership and category command
     SVC->>Repo: Load cafe categories and linked menu items

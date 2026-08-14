@@ -11,6 +11,7 @@
 ```mermaid
 sequenceDiagram
     autonumber
+    actor StaffUser as Staff
     participant Staff as Screen<br/>(StaffCheckoutSummaryPage)
     participant API as API<br/>(Express / SessionController)
     participant S as SessionService<br/>(checkout handlers)
@@ -18,6 +19,7 @@ sequenceDiagram
     participant DB as Database<br/>(PostgreSQL - payment_components, transactions)
     participant R as ProviderDashboardService<br/>(provider-dashboard.service.ts)
     participant P as Screen<br/>(ProviderRevenuePage)
+    StaffUser->>Staff: Confirm checkout and settlement
 
     Staff->>API: Confirm checkout complete
     API->>S: completeCheckout(sessionId)

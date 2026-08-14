@@ -24,7 +24,7 @@ sequenceDiagram
     participant Pay as PaymentEngine<br/>(payment.service.ts)
     participant Store as Cloudinary<br/>(UploadController)
 
-    C->>FE: Chon cafe, track, slot, rental vehicles, optional F&B
+    C->>FE: Select cafe, track, slot, rental vehicles, and optional F&B
     FE->>API: POST /api/v1/bookings
     API->>BS: createBooking(payload, customerId)
     BS->>DB: Check cafe ACTIVE, slot, vehicle availability
@@ -35,7 +35,7 @@ sequenceDiagram
     API->>BS: confirmPayment(bookingId)
     BS->>DB: Booking PENDING -> CONFIRMED
 
-    C->>Staff: Dua QR/code tai quay
+    C->>Staff: Present QR code at the counter
     Staff->>API: POST /api/v1/sessions/check-in
     API->>SS: validate code + open session
     SS->>DB: Validate booking CONFIRMED, cafe, time window, staff assignment
@@ -52,7 +52,7 @@ sequenceDiagram
     FE->>API: POST /api/v1/sessions/:id/inspection/confirm
     API->>SS: confirm baseline
     SS->>DB: Session CHECKED_IN -> ACTIVE
-    API-->>Staff: Cho phep customer vao san
+    API-->>Staff: Allow customer to enter the track
 ```
 
 ---
@@ -89,12 +89,15 @@ Note: F&B on-site khong di qua platform payment gateway va khong tinh platform f
 ```mermaid
 sequenceDiagram
     autonumber
+    actor S as Staff
+    actor Customer as Customer
     participant Staff as Screen<br/>(StaffSessionDetailPage)
     participant API as API<br/>(Express / SessionController)
     participant SS as SessionService<br/>(extension handlers)
     participant DB as Database<br/>(PostgreSQL)
     participant C as Screen<br/>(CustomerExtensionResponsePage)
 
+    S->>Staff: Propose a session extension
     Staff->>API: POST /api/v1/sessions/:id/extensions
     API->>SS: proposeExtension(sessionId, minutes)
     SS->>DB: Validate Session ACTIVE
@@ -104,6 +107,7 @@ sequenceDiagram
         SS->>DB: INSERT ExtensionProposal PENDING
         API-->>C: Notify extension proposal
         alt Customer approves
+            Customer->>C: Accept the extension
             C->>API: POST /api/v1/sessions/extensions/:id/approve
             API->>SS: approveExtension(proposalId)
             SS->>DB: INSERT PaymentComponent EXTENSION_FEE
@@ -126,6 +130,8 @@ sequenceDiagram
 ```mermaid
 sequenceDiagram
     autonumber
+    actor S as Staff
+    actor Customer as Customer
     participant Staff as Screen<br/>(StaffCheckoutSummaryPage)
     participant API as API<br/>(Express / SessionController)
     participant SS as SessionService<br/>(checkout handlers)
@@ -134,6 +140,7 @@ sequenceDiagram
     participant C as Screen<br/>(CustomerInspectionConfirmPage)
     participant Pay as PaymentEngine<br/>(payment.service.ts)
 
+    S->>Staff: Start checkout and record damage
     Staff->>API: POST /api/v1/sessions/:id/check-out
     API->>SS: beginCheckout(sessionId)
     SS->>DB: Session ACTIVE -> CHECKING_OUT
@@ -176,11 +183,13 @@ sequenceDiagram
     SS->>DB: Calculate damage_charge = estimate * damage_multiplier
     API-->>C: Send damage evidence
     alt Customer confirms or 24h timeout
+        Customer->>C: Confirm evidence and charges
         SS->>DB: INSERT PaymentComponent DAMAGE_CHARGE
         SS->>Pay: settle(sessionId)
         Pay->>DB: Capture/settle according to components
         SS->>DB: Session CHECKING_OUT -> COMPLETED
     else Customer disputes
+        Customer->>C: Submit a dispute
         SS->>DB: INSERT Incident or Dispute
         Admin->>API: Resolve policy result
         API->>DB: Incident RESOLVED/WAIVED

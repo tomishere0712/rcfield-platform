@@ -40,7 +40,7 @@ The provider fills in a public registration form. The account is created with `R
 ```mermaid
 sequenceDiagram
     autonumber
-    participant P as Provider
+    actor P as Provider
     participant M as Screen<br/>(ProviderRegisterPage)
     participant B as API<br/>(Express + TS / ProviderOnboardingController)
     participant DB as PostgreSQL
@@ -73,7 +73,7 @@ Admin reviews pending registrations from `AdminProvidersPage`. Approving trigger
 ```mermaid
 sequenceDiagram
     autonumber
-    participant A as Admin
+    actor A as Admin
     participant MA as Screen<br/>(AdminProvidersPage)
     participant B as API<br/>(Express + TS / ProviderOnboardingController)
     participant DB as PostgreSQL
@@ -87,9 +87,8 @@ sequenceDiagram
     MA->>A: table — business_name, email, status badge, created_at
 
     alt Admin approves
-        A->>MA: clicks "Duyệt"
+        A->>MA: Click Approve
         MA->>B: POST /api/v1/admin/providers/:id/approve
-        Note over B,DB: Atomic transaction
         B->>DB: UPDATE provider_profiles SET registration_status = ACTIVE
         B->>DB: INSERT provider_subscriptions<br/>(status = TRIAL, expires_at = NOW + 30d,<br/>plan = TRIAL plan, ai_quota_reset_at = 1st next month)
         B->>DB: INSERT cafes (first branch)
@@ -97,16 +96,16 @@ sequenceDiagram
         B->>N: createNotification(ACCOUNT_APPROVED)
         N->>DB: INSERT notifications
         B-->>MA: 200 { success: true, subscription_id, branch_id }
-        MA->>A: toast — "Đã duyệt Provider"
+        MA->>A: Show toast "Đã duyệt Provider"
 
     else Admin rejects
-        A->>MA: clicks "Từ chối" → enters reason → confirms
+        A->>MA: Click Reject, enter reason, and confirm
         MA->>B: POST /api/v1/admin/providers/:id/reject { reason }
         B->>DB: UPDATE provider_profiles<br/>SET registration_status = REJECTED, rejection_reason = reason
         B->>N: createNotification(ACCOUNT_REJECTED)
         N->>DB: INSERT notifications
         B-->>MA: 200 { success: true }
-        MA->>A: toast — "Đã từ chối"
+        MA->>A: Show toast "Đã từ chối"
 
     else Provider not found
         B-->>MA: 404 { code: "NOT_FOUND" }
@@ -168,7 +167,7 @@ When a provider's trial is nearing expiry (or already in GRACE_PERIOD / EXPIRED)
 ```mermaid
 sequenceDiagram
     autonumber
-    participant P as Provider
+    actor P as Provider
     participant MP as Screen<br/>(ProviderSubscriptionsPage)
     participant B as API<br/>(Express + TS / PaymentRequestController)
     participant DB as PostgreSQL
@@ -189,11 +188,11 @@ sequenceDiagram
         B->>DB: INSERT payment_requests (status = PENDING)
         DB-->>B: new payment_request row
         B-->>MP: 200 { id, status: "PENDING", created_at }
-        MP->>P: toast — "Yêu cầu đã gửi. Chờ Admin xác nhận."
+        MP->>P: Show toast "Yêu cầu đã gửi. Chờ Admin xác nhận."
     else Already has a PENDING request
         DB-->>B: 1 existing row
         B-->>MP: 400 { code: "DUPLICATE_PENDING_REQUEST" }
-        MP->>P: show warning — "Bạn đã có yêu cầu đang chờ xử lý"
+        MP->>P: Show warning "Bạn đã có yêu cầu đang chờ xử lý"
     else Plan not found
         B-->>MP: 404 { code: "PLAN_NOT_FOUND" }
     end
@@ -222,7 +221,7 @@ sequenceDiagram
     MA->>A: table — business_name, plan, amount, reference, date
 
     alt Admin confirms payment
-        A->>MA: clicks "Xác nhận" → optionally enters notes → confirms
+        A->>MA: Click Confirm, optionally enter notes, and submit
         MA->>B: POST /api/v1/admin/payment-requests/:id/confirm { notes }
         Note over B,DB: Atomic transaction
         B->>DB: UPDATE payment_requests\nSET status = CONFIRMED, reviewed_by, reviewed_at, admin_notes
@@ -236,7 +235,7 @@ sequenceDiagram
         MA->>A: toast — "Đã xác nhận thanh toán"
 
     else Admin rejects
-        A->>MA: clicks "Từ chối" → enters reason → confirms
+        A->>MA: Click Reject, enter reason, and confirm
         MA->>B: POST /api/v1/admin/payment-requests/:id/reject { reason }
         B->>DB: UPDATE payment_requests\nSET status = REJECTED, admin_notes = reason, reviewed_by, reviewed_at
         B->>N: createNotification(PAYMENT_REQUEST_REJECTED)

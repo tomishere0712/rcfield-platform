@@ -32,7 +32,7 @@ Luồng đồng bộ của Widget embed và Full Page Chat — cùng dùng chung
 ```mermaid
 sequenceDiagram
     autonumber
-    participant U as Customer
+    actor U as Customer
     participant M as Component<br/>(ChatWidget)
     participant B as API<br/>(Express / ChatController)
     participant NLU as NLU Service<br/>(Python / FastAPI)
@@ -40,40 +40,37 @@ sequenceDiagram
     participant DB as PostgreSQL
     participant RC as Redis<br/>(RAG Cache)
 
-    U->>M: nhập tin nhắn hoặc nhấn quick reply chip
+    U->>M: Enter a message or click a quick-reply chip
     M->>B: POST /api/v1/cafes/:cafeId/chat {message, history[]}
 
-    Note over B: Validate ChatMessageSchema (zod)
 
     B->>DB: checkGate - SELECT feature_flags WHERE AI_CHATBOT AND entity_id=cafeId
     alt AI_DISABLED (flag off or not found)
         B-->>M: 503 code=AI_DISABLED
-        M-->>U: hiển thị lỗi AI chat chưa kích hoạt
+        M-->>U: Display AI chat unavailable message
     end
 
     B->>NLU: POST http://nlu-service:8000/classify {text}
-    Note over NLU: timeout = 2000ms
-    alt NLU timeout hoặc unreachable
-        Note over B: fallback: intent=rag_query, confidence=0<br/>(routes to rag, forces Pro model)
+    alt NLU timeout or unreachable
+        NLU--xB: Timeout or connection error
+        B->>B: Use fallback classification
+    else Classification succeeds
+        NLU-->>B: {intent, confidence, needs_llm_fallback}
     end
-    NLU-->>B: {intent, confidence, needs_llm_fallback}
 
     alt intent=greeting AND confidence >= 0.6 AND NOT needs_llm_fallback
         B->>DB: SELECT cafe_widget_configs WHERE cafe_id
         DB-->>B: {greetingMessage, quickReplies}
-        Note over B: route=fast — zero LLM calls
     else intent=thanks AND confidence >= 0.6
-        Note over B: route=thanks — random reply, pure function, no I/O
+        B->>B: Build deterministic thanks response
     else intent=farewell AND confidence >= 0.6
-        Note over B: route=farewell — random reply, pure function, no I/O
-    else rag (mọi trường hợp khác, hoặc needs_llm_fallback=true)
-        Note over B: route=rag, model = confidence >= 0.7 ? Flash : Pro
+        B->>B: Build deterministic farewell response
+    else rag (all other cases or needs_llm_fallback=true)
         B->>RC: ragCache.get(cafeId, queryEmbedding) (in-memory LRU)
         alt cache hit
             B->>GEM: rephraseAnswer(cachedAnswer) via Flash
-            GEM-->>B: rephrased text (giữ nội dung, đổi cách diễn đạt)
+            GEM-->>B: Rephrased text with preserved meaning
         else cache miss - full RAG pipeline
-            Note over B,DB: See Section 4 for ragChat internals
             B->>GEM: 1st pass - tool call or direct answer
             opt model calls check_availability
                 B->>DB: availability query (generate_series + bookings)
@@ -85,7 +82,7 @@ sequenceDiagram
     B->>DB: consumeProviderAIQuota<br/>UPDATE provider_subscriptions SET ai_messages_used+1<br/>(ADMIN cafe bypassed)
     alt AI_QUOTA_EXCEEDED
         B-->>M: 429 code=AI_QUOTA_EXCEEDED
-        Note over B: Gemini đã được gọi nhưng response bị chặn
+        M-->>U: Display AI quota exceeded message
     end
 
     B-->>M: 200 {answer, response_type, sources?, quick_replies?}
@@ -103,7 +100,7 @@ Khác biệt chính so với non-streaming: quota check trước `flushHeaders`,
 ```mermaid
 sequenceDiagram
     autonumber
-    participant U as Customer
+    actor U as Customer
     participant M as Component<br/>(ChatWidget)
     participant B as API<br/>(Express / ChatController)
     participant NLU as NLU Service<br/>(Python / FastAPI)
@@ -197,23 +194,22 @@ Facebook gọi webhook với mọi tin nhắn và backend trả `200 OK` trướ
 ```mermaid
 sequenceDiagram
     autonumber
-    participant FBU as Facebook User
+    actor FBU as Facebook User
     participant FBAPI as Facebook<br/>Graph API
     participant WH as API<br/>(Express / FbWebhook)
     participant Q as BullMQ<br/>fb-chat Queue
 
-    FBU->>FBAPI: gửi tin nhắn vào Page
+    FBU->>FBAPI: Send message to Page
     FBAPI->>WH: POST /api/v1/webhook/facebook {object:page, entry:[...]}
-    WH-->>FBAPI: 200 OK (ngay lập tức)
+    WH-->>FBAPI: 200 OK immediately
     alt payload.object != page
-        Note over WH: return, không enqueue
+        WH-->>WH: Ignore non-Page payload
     else FB_CHAT_QUEUE_ENABLED = false
-        Note over WH: log warn và bỏ qua event
+        WH-->>WH: Skip processing and log warning
     else valid Page events
-        loop mỗi entry và messaging event
+        loop Each entry and messaging event
             WH->>Q: add process {event, pageId}<br/>attempts=3, exponential backoff 2s
             Q-->>WH: job id
-            Note over WH: log enqueued; lỗi enqueue được log async
         end
     end
 ```
@@ -231,28 +227,28 @@ sequenceDiagram
 
     Q->>W: process {event, pageId}
     W->>RDS: SET fb:psid-lock:{pageId}:{psid} 1 EX 30 NX
-    alt lock chưa lấy được
-        loop poll 300ms, tối đa 15s
+    alt Lock unavailable
+        loop Poll every 300ms, max 15s
             W->>RDS: retry SET NX
         end
         alt timeout
-            Note over W: throw; BullMQ retry theo job policy
+            W-->>Q: Throw lock timeout for job retry
         end
     end
     W->>WH: processEvent(event, pageId)
-    alt echo hoặc message không có text
+    alt Echo or message has no text
         WH-->>W: return
     else text message
         WH->>DB: find CONNECTED FACEBOOK_MESSENGER CafeChannel by pageId
-        alt channel không tồn tại
-            Note over WH: log unknown page_id và return
-        else channel hợp lệ
-            Note over WH: decrypt page token; cafeId lấy trực tiếp từ channel
+        alt Channel not found
+            WH-->>W: Log unknown page_id and return
+        else Channel found
+            WH->>WH: Decrypt page token and resolve cafeId
             WH->>RDS: SET facebook:processed:{pageId}:{mid} 1 EX 300 NX
             alt dedup hit
                 WH-->>W: return
             else first delivery
-                Note over WH: tiếp tục AI processing (Section 3.3)
+                WH->>WH: Continue to AI response flow
             end
         end
     end
@@ -269,7 +265,7 @@ sequenceDiagram
     participant FBAPI as Facebook<br/>Graph API
     participant NLU as NLU Service<br/>(Python / FastAPI)
     participant GEM as Gemini / RAG
-    participant FBU as Facebook User
+    actor FBU as Facebook User
 
     WH->>DB: SELECT provider_id, role for cafeId
     par sender actions
@@ -284,21 +280,21 @@ sequenceDiagram
     WH->>NLU: route(text) / classify intent
     NLU-->>WH: route + confidence
     alt fast / thanks / farewell
-        Note over WH: build deterministic answer
+        WH->>WH: Build deterministic answer
     else rag
         WH->>GEM: ragChat(cafeId, text, [], confidence)
         GEM-->>WH: answer + quick replies
     end
 
-    Note over WH: FbMessengerFormatter.format(response)<br/>stripMarkdown: [text](url) -> text (URL bi mat!)<br/>truncate <= 2000 chars, quickReplies max 5 title max 20
-    Note over WH: elapsed = Date.now() - typingAt<br/>if elapsed < 1500ms -> sleep (1500 - elapsed)ms
+    WH->>WH: Format response and enforce Messenger limits
+    WH->>WH: Enforce minimum 1500ms typing duration
     WH->>FBAPI: POST /me/messages {text, quick_replies?}
-    FBAPI->>FBU: tin nhan duoc deliver voi quick reply buttons
-    alt AI disabled hoặc quota exceeded
+    FBAPI->>FBU: Deliver response with quick-reply buttons
+    alt AI disabled or quota exceeded
         WH->>FBAPI: sendText(service unavailable)
         FBAPI->>FBU: fallback support message
     else unexpected error
-        Note over WH: log processing error; worker job completes
+        WH->>WH: Log processing error
     end
 ```
 
@@ -329,9 +325,9 @@ sequenceDiagram
     SVC->>RC: ragCache.get(cafeId, queryEmbedding) cosine distance
     alt cache HIT
         SVC->>GEM: rephraseAnswer(cachedAnswer) via Flash
-        Note over GEM: Viet lai cau nay voi cach dien dat khac<br/>nhung giu nguyen day du thong tin...
+        SVC->>GEM: Rewrite answer while preserving meaning
         GEM-->>SVC: rephrased answer
-        SVC-->>CALLER: {answer, sources, quickReplies} - tu cache, skip full pipeline
+        SVC-->>CALLER: {answer, sources, quickReplies} from cache, skip full pipeline
     else cache MISS
         par
             SVC->>DB: SELECT name, address, operating_hours FROM cafes WHERE id=cafeId
@@ -344,18 +340,18 @@ sequenceDiagram
         end
         DB-->>SVC: cafe info, doc titles, widget config, track list
 
-        SVC->>DB: kbService.retrieveChunks(cafeId, queryEmbedding)<br/>pgvector cosine similarity tren kb_chunks.embedding dim=768
+        SVC->>DB: retrieveChunks(cafeId, queryEmbedding)<br/>pgvector cosine similarity on kb_chunks.embedding dim=768
         DB-->>SVC: top-K relevant KB chunks (text snippets)
 
-        Note over SVC: buildSystemPrompt(cafe, chunks, customSystemPrompt)<br/>- identity: Ban la tro ly AI cua cafe xe RC {name}<br/>- today date in Vietnamese (VN UTC+7)<br/>- tool usage rules: khi khach hoi lich -> goi check_availability<br/>- bookingUrl: {frontendUrl}/booking/create?cafeId={id}<br/>- track list voi capacity RENTAL/BYOC<br/>- KB chunks joined with ---
+        SVC->>SVC: Build system prompt from cafe, KB, tools, and booking URL
 
-        Note over SVC: selectedModel = nluConfidence >= 0.7 ? Flash : Pro<br/>Flash: cheap, fast - dung khi NLU confident<br/>Pro: accurate - dung khi NLU uncertain or complex query
+        SVC->>SVC: Select Flash when confidence >= 0.7, otherwise Pro
 
         SVC->>GEM: 1st pass generateContent<br/>model: selectedModel, systemInstruction: systemPrompt<br/>tools: [{functionDeclarations: [check_availability_def]}]<br/>contents: [...history, {role:user, text:message}]
 
-        alt Gemini quyet dinh goi check_availability
+        alt Gemini requests check_availability
             GEM-->>SVC: {functionCalls: [{name:check_availability, args:{date?}}]}
-            Note over SVC: cafeId LUON tu widget context<br/>KHONG BAO GIO tu fc.args (tranh cross-cafe attack)
+            SVC->>SVC: Bind cafeId from trusted widget context and ignore function args
 
             SVC->>TOOL: dispatchTool(cafeId, check_availability, {date?})
             TOOL->>DB: SELECT byoc_capacity, slot_duration_minutes FROM cafes
@@ -370,9 +366,9 @@ sequenceDiagram
                 SVC->>GEM: generateQuickReplies(message, cafeName) via Flash
             end
             GEM-->>SVC: final answer (incorporating availability info)
-        else Gemini tra loi truc tiep (no function call)
+        else Gemini returns a direct answer (no function call)
             par
-                Note over SVC: answer = firstResponse.text
+                SVC->>SVC: Use firstResponse.text as answer
             and
                 SVC->>GEM: generateQuickReplies(message, cafeName) via Flash
             end

@@ -69,6 +69,7 @@ tich hop.
 | [`sequence-flow-redis-usage.md`](./sequence-flow-redis-usage.md) | Redis usage: auth brute force, booking locks, BYOC counter, FB nonce/dedup | Truoc khi dung cache/lock/dedup |
 | [`sequence-flow-revenue-payout.md`](./sequence-flow-revenue-payout.md) | Revenue, commission, provider payout | Truoc khi lam settlement/payout dashboard |
 | [`sequence-flow-supporting-operations.md`](./sequence-flow-supporting-operations.md) | Support CRUD/utility summary: auth/profile, cafe/menu/pricing/packages/promotions/vehicles, reviews, staff invite, notifications, upload | Doc nhanh khi can overview ngan |
+| [`sequence-flow-2026-08-finance-and-operations.md`](./sequence-flow-2026-08-finance-and-operations.md) | Bank-transfer booking payment, PayOS subscription, contest ledger, itemized damage charge, custom menu categories | Khi cap nhat Report 4 theo cac feature 016-019 va backend 2026-08 |
 
 ## Coverage Matrix
 

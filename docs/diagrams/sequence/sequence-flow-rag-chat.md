@@ -190,7 +190,9 @@ sequenceDiagram
 
 ## 3. Facebook Messenger Webhook
 
-Facebook gọi webhook với mọi tin nhắn, backend phải trả `200 OK` ngay lập tức rồi xử lý async. Không có streaming. Session cafe được lưu trong Redis. Luồng phức tạp hơn widget vì cần handle multi-cafe, dedup, và typing indicator.
+Facebook gọi webhook với mọi tin nhắn và backend trả `200 OK` trước khi xử lý bất đồng bộ. Source hiện tại ánh xạ mỗi Facebook Page trực tiếp tới một `CafeChannel`, đẩy event qua BullMQ, khóa tuần tự theo PSID và dùng Redis để chống xử lý trùng. Luồng được tách thành ba sequence nhỏ để giữ nội dung đọc được khi import vào Report 4.
+
+### 3.1 Webhook Intake and Queue Dispatch
 
 ```mermaid
 sequenceDiagram
@@ -198,110 +200,109 @@ sequenceDiagram
     participant FBU as Facebook User
     participant FBAPI as Facebook<br/>Graph API
     participant WH as API<br/>(Express / FbWebhook)
-    participant NLU as NLU Service<br/>(Python / FastAPI)
-    participant GEM as Gemini<br/>(Google GenAI)
-    participant DB as PostgreSQL
-    participant RDS as Redis<br/>(Session / Dedup)
+    participant Q as BullMQ<br/>fb-chat Queue
 
     FBU->>FBAPI: gửi tin nhắn vào Page
     FBAPI->>WH: POST /api/v1/webhook/facebook {object:page, entry:[...]}
     WH-->>FBAPI: 200 OK (ngay lập tức)
-    Note over WH: processEvent() chạy fire-and-forget<br/>Facebook yêu cầu 200 trong vòng 15s
-
-    Note over WH: skip if message.is_echo = true
-
-    WH->>DB: CafeChannel.findOne WHERE pageId AND FACEBOOK_MESSENGER AND CONNECTED
-    alt channel not found
-        Note over WH: log warn + return
-    end
-    Note over WH: decryptToken(encryptedPageToken) -> pageToken
-
-    alt postback event (persistent menu)
-        alt payload starts with CAFE_SELECT
-            Note over WH: handleCafeSelect(psid, cafeId, pageId, pageToken)
-            WH->>RDS: SET fb:cafe-session:{pageId}:{psid} cafeId EX 86400
-            WH->>FBAPI: sendText(Da chon chi nhanh X. Ban can hoi gi?)
+    alt payload.object != page
+        Note over WH: return, không enqueue
+    else FB_CHAT_QUEUE_ENABLED = false
+        Note over WH: log warn và bỏ qua event
+    else valid Page events
+        loop mỗi entry và messaging event
+            WH->>Q: add process {event, pageId}<br/>attempts=3, exponential backoff 2s
+            Q-->>WH: job id
+            Note over WH: log enqueued; lỗi enqueue được log async
         end
-        Note over WH: return
     end
+```
 
-    WH->>RDS: SET facebook:processed:{pageId}:{mid} 1 NX EX 300
-    alt key da ton tai (dedup hit)
-        Note over WH: return - message da xu ly (idempotency)
+### 3.2 Queue Worker, PSID Ordering and Deduplication
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Q as BullMQ<br/>fb-chat Queue
+    participant W as FbChatWorker
+    participant RDS as Redis<br/>Lock / Dedup
+    participant WH as processEvent()
+    participant DB as PostgreSQL
+
+    Q->>W: process {event, pageId}
+    W->>RDS: SET fb:psid-lock:{pageId}:{psid} 1 EX 30 NX
+    alt lock chưa lấy được
+        loop poll 300ms, tối đa 15s
+            W->>RDS: retry SET NX
+        end
+        alt timeout
+            Note over W: throw; BullMQ retry theo job policy
+        end
     end
-
-    alt quick_reply payload starts with CAFE_SELECT
-        Note over WH: handleCafeSelect(psid, cafeId, pageId, pageToken)
-        WH->>RDS: SET fb:cafe-session:{pageId}:{psid} cafeId EX 86400
-        WH->>FBAPI: sendText(Da chon chi nhanh X...)
-        Note over WH: return
-    end
-
-    alt message text chua reset keyword (doi chi nhanh...)
-        WH->>RDS: DEL fb:cafe-session:{pageId}:{psid}
-        Note over WH: cafeId = null - force re-select
-    end
-
-    WH->>RDS: GET fb:cafe-session:{pageId}:{psid}
-
-    alt cafeId not in session
-        WH->>DB: getCafesForPage(pageId)<br/>SELECT cafes WHERE provider owns this page
-        alt 0 cafes found
-            Note over WH: return silently
-        else 1 cafe (single-branch provider)
-            WH->>RDS: SET fb:cafe-session:{pageId}:{psid} cafeId EX 86400
-            Note over WH: auto-select silently - no message sent
-        else multiple cafes
-            par
-                WH->>FBAPI: markSeen(psid)
-            and
-                WH->>FBAPI: sendMessage - Chon chi nhanh + quick replies (max 13)<br/>payload: CAFE_SELECT:{cafeId}
+    W->>WH: processEvent(event, pageId)
+    alt echo hoặc message không có text
+        WH-->>W: return
+    else text message
+        WH->>DB: find CONNECTED FACEBOOK_MESSENGER CafeChannel by pageId
+        alt channel không tồn tại
+            Note over WH: log unknown page_id và return
+        else channel hợp lệ
+            Note over WH: decrypt page token; cafeId lấy trực tiếp từ channel
+            WH->>RDS: SET facebook:processed:{pageId}:{mid} 1 EX 300 NX
+            alt dedup hit
+                WH-->>W: return
+            else first delivery
+                Note over WH: tiếp tục AI processing (Section 3.3)
             end
-            Note over WH: return - cho user chon chi nhanh
         end
     end
+    W->>RDS: DEL fb:psid-lock:{pageId}:{psid}
+```
 
-    WH->>DB: SELECT c.provider_id, u.role FROM cafes JOIN users WHERE c.id=cafeId
+### 3.3 AI Routing and Messenger Response Delivery
 
-    par typing indicators
+```mermaid
+sequenceDiagram
+    autonumber
+    participant WH as processEvent()
+    participant DB as PostgreSQL
+    participant FBAPI as Facebook<br/>Graph API
+    participant NLU as NLU Service<br/>(Python / FastAPI)
+    participant GEM as Gemini / RAG
+    participant FBU as Facebook User
+
+    WH->>DB: SELECT provider_id, role for cafeId
+    par sender actions
         WH->>FBAPI: markSeen(psid)
     and
         WH->>FBAPI: typingOn(psid)
     end
-    Note over WH: typingAt = Date.now() - track min 1500ms total wait
-
-    WH->>DB: checkGate(cafeId) - check AI_CHATBOT feature flag
-    alt AI_DISABLED
-        WH->>FBAPI: sendText(Xin loi, dich vu ho tro tu dong hien khong kha dung...)
-        Note over WH: return
+    WH->>DB: checkGate(cafeId)
+    alt provider role != ADMIN
+        WH->>DB: incrementAIQuota(providerId)
     end
-
-    alt providerRole != ADMIN
-        WH->>DB: incrementAIQuota(providerId)<br/>UPDATE provider_subscriptions SET ai_messages_used+1
-        alt AI_QUOTA_EXCEEDED
-            WH->>FBAPI: sendText(Xin loi, dich vu AI khong kha dung...)
-            Note over WH: return
-        end
-    end
-
-    WH->>NLU: POST /classify {text}
-    NLU-->>WH: {intent, confidence, needs_llm_fallback}
-
+    WH->>NLU: route(text) / classify intent
+    NLU-->>WH: route + confidence
     alt fast / thanks / farewell
-        Note over WH: fastAnswer(cafeId) hoac thanksAnswer() hoac farewellAnswer()
+        Note over WH: build deterministic answer
     else rag
-        Note over WH: ragChat(cafeId, text, [], confidence)<br/>history = [] LUON LUON - khong co conversation memory<br/>Xem Section 4 cho ragChat internals
+        WH->>GEM: ragChat(cafeId, text, [], confidence)
+        GEM-->>WH: answer + quick replies
     end
 
     Note over WH: FbMessengerFormatter.format(response)<br/>stripMarkdown: [text](url) -> text (URL bi mat!)<br/>truncate <= 2000 chars, quickReplies max 5 title max 20
-
     Note over WH: elapsed = Date.now() - typingAt<br/>if elapsed < 1500ms -> sleep (1500 - elapsed)ms
-
     WH->>FBAPI: POST /me/messages {text, quick_replies?}
     FBAPI->>FBU: tin nhan duoc deliver voi quick reply buttons
+    alt AI disabled hoặc quota exceeded
+        WH->>FBAPI: sendText(service unavailable)
+        FBAPI->>FBU: fallback support message
+    else unexpected error
+        Note over WH: log processing error; worker job completes
+    end
 ```
 
-> **Multi-cafe flow**: Khi provider có nhiều chi nhánh trên cùng 1 Page, user phải chọn chi nhánh lần đầu. Lựa chọn được lưu trong Redis 24h. Reset bằng các keyword hoặc khi TTL expire.
+> **Current channel mapping**: Mỗi Facebook Page được ánh xạ 1:1 tới một `CafeChannel`; flow chọn chi nhánh và Redis cafe session trong phiên bản tài liệu cũ không còn nằm trong webhook runtime hiện tại.
 
 ---
 

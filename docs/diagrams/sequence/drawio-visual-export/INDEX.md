@@ -5,6 +5,12 @@ The editable Mermaid source is included below the visual diagram in the same fil
 
 | Source | Type | Section | Visual XML | SVG |
 |---|---|---|---|---|
+| sequence-flow-2026-08-finance-and-operations.md | sequence | 1. Booking Checkout by Bank Transfer and Webhook Reconciliation | — | `sequence-flow-2026-08-finance-and-operations.md-1.svg` |
+| sequence-flow-2026-08-finance-and-operations.md | sequence | 2. Provider Subscription Checkout through PayOS | — | `sequence-flow-2026-08-finance-and-operations.md-2.svg` |
+| sequence-flow-2026-08-finance-and-operations.md | sequence | 3. Contest Finance Ledger and Summary | — | `sequence-flow-2026-08-finance-and-operations.md-3.svg` |
+| sequence-flow-2026-08-finance-and-operations.md | sequence | 4. Itemized Damage Charge, Customer Confirmation, and Additional Payment | — | `sequence-flow-2026-08-finance-and-operations.md-4.svg` |
+| sequence-flow-2026-08-finance-and-operations.md | sequence | 5. Provider Custom Menu Category Management | — | `sequence-flow-2026-08-finance-and-operations.md-5.svg` |
+| sequence-flow-2026-08-finance-and-operations.md | class | 6. Class Diagram: Finance and Operations Update | — | `sequence-flow-2026-08-finance-and-operations.md-6.svg` |
 | sequence-flow-admin-operations.md | sequence | 1. Admin Dashboard and System Summary | `sequence-flow-admin-operations__01__1.-Admin-Dashboard-and-System-Summary.visual.drawio.xml` | `sequence-flow-admin-operations.md-1.svg` |
 | sequence-flow-admin-operations.md | sequence | 2. Provider Review, Detail, Suspension and Impersonation | `sequence-flow-admin-operations__02__2.-Provider-Review-Detail-Suspension-and-Impersonation.visual.drawio.xml` | `sequence-flow-admin-operations.md-2.svg` |
 | sequence-flow-admin-operations.md | sequence | 3. Payment Requests, Subscription Plans and Contest Fee Orders | `sequence-flow-admin-operations__03__3.-Payment-Requests-Subscription-Plans-and-Contest-Fee-Orders.visual.drawio.xml` | `sequence-flow-admin-operations.md-3.svg` |
@@ -72,7 +78,9 @@ The editable Mermaid source is included below the visual diagram in the same fil
 | sequence-flow-provider-operations.md | class | 8. Class Diagram: Provider Operations | `sequence-flow-provider-operations__08__8.-Class-Diagram-Provider-Operations.visual.drawio.xml` | `sequence-flow-provider-operations.md-8.svg` |
 | sequence-flow-rag-chat.md | sequence | 1. Widget / Full Page Chat — Non-Streaming (POST /chat) | `sequence-flow-rag-chat__01__1.-Widget-Full-Page-Chat-Non-Streaming-POST-chat.visual.drawio.xml` | `sequence-flow-rag-chat.md-1.svg` |
 | sequence-flow-rag-chat.md | sequence | 2. Widget / Full Page Chat — SSE Streaming (POST /chat/stream) | `sequence-flow-rag-chat__02__2.-Widget-Full-Page-Chat-SSE-Streaming-POST-chat-stream.visual.drawio.xml` | `sequence-flow-rag-chat.md-2.svg` |
-| sequence-flow-rag-chat.md | sequence | 3. Facebook Messenger Webhook | `sequence-flow-rag-chat__03__3.-Facebook-Messenger-Webhook.visual.drawio.xml` | `sequence-flow-rag-chat.md-3.svg` |
+| sequence-flow-rag-chat.md | sequence | 3.1 Facebook Messenger Webhook Intake and Queue Dispatch | `sequence-flow-rag-chat__03a__3.1-Facebook-Messenger-Webhook-Intake-and-Queue-Dispatch.visual.drawio.xml` | `sequence-flow-rag-chat.md-3a.svg` |
+| sequence-flow-rag-chat.md | sequence | 3.2 Facebook Messenger Queue Worker, PSID Ordering and Deduplication | `sequence-flow-rag-chat__03b__3.2-Facebook-Messenger-Queue-Worker-and-Deduplication.visual.drawio.xml` | `sequence-flow-rag-chat.md-3b.svg` |
+| sequence-flow-rag-chat.md | sequence | 3.3 Facebook Messenger AI Routing and Response Delivery | `sequence-flow-rag-chat__03c__3.3-Facebook-Messenger-AI-Routing-and-Response-Delivery.visual.drawio.xml` | `sequence-flow-rag-chat.md-3c.svg` |
 | sequence-flow-rag-chat.md | sequence | 4. RAG Core — Embed, Retrieve, Generate, Function Call | `sequence-flow-rag-chat__04__4.-RAG-Core-Embed-Retrieve-Generate-Function-Call.visual.drawio.xml` | `sequence-flow-rag-chat.md-4.svg` |
 | sequence-flow-rag-chat.md | flowchart | 9. Application Flow Overview | `sequence-flow-rag-chat__05__9.-Application-Flow-Overview.visual.drawio.xml` | `sequence-flow-rag-chat.md-5.svg` |
 | sequence-flow-rag-chat.md | class | 10. Class Diagram: RAG Chat | `sequence-flow-rag-chat__06__10.-Class-Diagram-RAG-Chat.visual.drawio.xml` | `sequence-flow-rag-chat.md-6.svg` |

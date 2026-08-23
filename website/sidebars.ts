@@ -68,6 +68,7 @@ const sidebars: SidebarsConfig = {
         'diagrams/sequence/sequence-flow-rag-chat',
         'diagrams/sequence/sequence-flow-redis-usage',
         'diagrams/sequence/sequence-flow-contest-lifecycle',
+        'diagrams/sequence/sequence-flow-contest-knockout',
         'diagrams/sequence/sequence-flow-contest-vehicle-operations',
       ],
     },
@@ -81,20 +82,45 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
+      label: 'Screen Flow Diagrams',
+      collapsed: false,
+      items: [
+        'diagrams/screen-flow/admin-screen-flow',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'ERD',
+      collapsed: false,
+      items: [
+        'diagrams/erd/operation-service-database-design',
+      ],
+    },
+    {
+      type: 'category',
       label: 'Developer Guides',
       collapsed: false,
       items: [
+        'developer/system-knowledge-base',
+        'developer/contribution-evidence',
         'developer/provider-subscription-enforcement',
+        'developer/bank-transfer-demo-setup',
         {
           type: 'category',
           label: 'Contest Delivery',
           collapsed: true,
           items: [
+            // Docusaurus strip tiền tố số khỏi tên file, nên id KHÔNG có '01-'.
+            // Giữ tiền tố ở đây là sidebar trỏ vào id không tồn tại và cả site
+            // không build được.
             'developer/contest-delivery/README',
             'developer/contest-delivery/roadmap-and-scope',
             'developer/contest-delivery/database-and-backend-rollout',
             'developer/contest-delivery/frontend-rollout',
             'developer/contest-delivery/testing-commit-and-release-checklist',
+            'developer/contest-delivery/contest-current-backend-vs-requested-flow',
+            'developer/contest-delivery/frontend-refactor-report',
+            'developer/contest-delivery/contest-flow-audit',
           ],
         },
       ],

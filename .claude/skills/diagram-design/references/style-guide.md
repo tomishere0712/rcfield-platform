@@ -16,25 +16,56 @@ Every token is referred to by **semantic role**, not by its hex value. Type refe
 
 | Role | Purpose | Default (light) | Default (dark) |
 |---|---|---|---|
-| `background` | HTML page background | `#ffffff` (white) | `#111111` |
-| `paper` | SVG diagram bg, default node fill | `#f5f5f5` (light grey) | `#1a1a1a` |
-| `paper-2` | Container bg, secondary fill | `#ececec` | `#222222` |
-| `ink` | Primary text, primary stroke | `#111111` (near-black) | `#f5f5f5` |
-| `muted` | Secondary text, default arrow stroke | `#888888` (mid-grey) | `#777777` |
-| `soft` | Sublabels, boundary labels | `#aaaaaa` | `#666666` |
-| `rule` | Hairline borders | `rgba(17,17,17,0.12)` | `rgba(245,245,245,0.12)` |
-| `rule-solid` | Stronger borders, baselines | `#cccccc` | `rgba(200,200,200,0.25)` |
-| `accent` | Focal / 1–2 max per diagram | `#111111` (near-black) | `#f5f5f5` |
-| `accent-tint` | Fill for accent-bordered boxes | `rgba(17,17,17,0.06)` | `rgba(245,245,245,0.08)` |
+| `paper` | Page background, default node fill | `#f5f5f5` (white-smoke) | `#2d3142` (jet-black) |
+| `paper-2` | Diagram container bg, secondary fill | `#ececec` | `#393e53` |
+| `ink` | Primary text, primary stroke | `#2d3142` (jet-black) | `#f5f5f5` (white-smoke) |
+| `muted` | Secondary text, default arrow stroke | `#4f5d75` (blue-slate) | `#bfc0c0` (silver) |
+| `soft` | Sublabels, boundary labels | `#7a8399` | `#8e98ac` |
+| `rule` | Hairline borders | `rgba(45,49,66,0.12)` | `rgba(245,245,245,0.12)` |
+| `rule-solid` | Stronger borders, baselines | `#bfc0c0` (silver) | `rgba(191,192,192,0.25)` |
+| `accent` | Focal / 1–2 max per diagram | `#eb6c36` (atomic-tangerine) | `#f08a59` |
+| `accent-tint` | Fill for accent-bordered boxes | `rgba(235,108,54,0.08)` | `rgba(240,138,89,0.10)` |
 | `link` | HTTP/API calls, external arrows | `#2e5aa8` | `#6a95d8` |
 
-> **Custom tokens (RCField project):** monochrome editorial palette — white page, light-grey diagram ground, near-black ink, mid-grey muted, no color accent. Focal elements are distinguished by stroke weight and fill contrast, not hue. `link` retains blue for HTTP/API calls where color carries functional meaning.
+> **Brand palette source:** this skin maps to a five-color brand palette — `jet-black #2d3142`, `silver #bfc0c0`, `white-smoke #f5f5f5`, `atomic-tangerine #eb6c36`, `blue-slate #4f5d75`. The `soft`, `rule`, and `link` tokens are derived (lighter slate, ink-at-opacity, and a saturated variant in the blue-slate hue family) to cover roles the brand palette doesn't name directly.
 
 > **Note:** The pre-baked example HTML files in `assets/` were built under an earlier skin. Regenerating them against the current `style-guide.md` is a v5.1 task. New diagrams the skill produces will use the tokens above.
 
 ### Inversion rule (light → dark)
 
 Any `rgba(28,25,23, X)` in light becomes `rgba(250,247,242, X)` in dark. Same opacities, RGB flipped. The accent gets a slight hue-shift brighter to read on dark paper.
+
+### Series palette (multi-series chart types only)
+
+A small set of desaturated, editorial-tone colors for chart types that genuinely need to distinguish multiple overlapping entities (currently: **radar**). The "1-focal" rule still holds — `accent` is reserved for the focal series; the palette below covers the rest.
+
+| Token | Light | Dark | Notes |
+|---|---|---|---|
+| `series-1` | `#7c8f6f` (sage) | `#9caf8f` | Non-focal series |
+| `series-2` | `#5e7a9b` (dusty-blue) | `#82a0c0` | Non-focal series |
+| `series-3` | `#b8915a` (mustard) | `#d3ad7a` | Non-focal series |
+| `series-4` | `#9c6b50` (rust-brown) | `#b88670` | Non-focal series |
+| `series-5` | `#6e6479` (slate) | `#8d8298` | Non-focal series |
+
+Fills sit at `0.18` opacity light, `0.22` dark; strokes use the full color. **Don't backfill these tokens to non-chart types** — architecture, swimlane, etc. continue to use muted-ink variants. The series palette is opt-in for diagrams where overlapping shapes demand distinguishable color, not a license to add color elsewhere.
+
+### Terminal skin (opt-in alternate)
+
+A self-contained palette for the terminal-window primitive (see [primitive-terminal.md](primitive-terminal.md)) — a CLI-chrome register for dev-tool posts and technical social cards. It does not replace the default skin above and isn't affected by onboarding; it's a second, fixed skin you opt into per-diagram.
+
+| Token | Hex | Purpose |
+|---|---|---|
+| `terminal-page` | `#0a0a0a` | Page background behind the window |
+| `terminal-paper` | `#141414` | Window body, node fill |
+| `terminal-bar` | `#1b1b1b` | Titlebar strip |
+| `terminal-border` | `#2b2b2b` | Window border, hairlines |
+| `terminal-ink` | `#f5f5f5` | Primary text, primary stroke (same white-smoke as default `ink`) |
+| `terminal-muted` | `#9a9a9a` | Secondary text, sublabels, ring stroke |
+| `terminal-soft` | `#5c5c5c` | Tertiary — inactive dots, spokes |
+| `terminal-accent` | `#ff5a36` | The one accent — focal station, prompt sign, active dot |
+| `terminal-accent-tint` | `rgba(255,90,54,0.12)` | Fill for accent-bordered boxes |
+
+**1-accent rule still holds.** Everything that isn't `terminal-ink` or `terminal-muted`/`terminal-soft` should be `terminal-accent` — never introduce a second hue.
 
 ---
 

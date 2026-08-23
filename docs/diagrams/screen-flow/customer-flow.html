@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Luồng màn hình khách hàng — RCField</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #f5f5f5;
+      --color-ink:    #2d3142;
+      --color-muted:  #4f5d75;
+      --color-accent: #eb6c36;
+      --font-sans:  'Geist', system-ui, sans-serif;
+      --font-serif: 'Lora', Georgia, serif;
+      --font-mono:  'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1400px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono); font-size: 0.66rem; font-weight: 500;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--color-muted); margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400; letter-spacing: -0.02em; line-height: 1.15;
+      color: var(--color-ink); margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 900px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Flowchart · RCField</p>
+    <h1>Luồng màn hình của khách hàng</h1>
+    <svg viewBox="0 0 1712 828" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="customer-flow-title customer-flow-desc">
+    <title id="customer-flow-title">Luồng màn hình của khách hàng trên RCField</title>
+    <desc id="customer-flow-desc">Sơ đồ luồng màn hình cho vai trò khách hàng: từ đăng nhập vào trang chủ, rẽ sang bốn nhóm — đặt sân và thanh toán, các thao tác trong ca chơi, giải đấu, và tài khoản cá nhân.</desc>
+    <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker>
+    <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#eb6c36"/></marker>
+    <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2e5aa8"/></marker>
+    </defs>
+    <rect width="100%" height="100%" fill="#f5f5f5"/>
+    <rect x="512" y="64" width="1152" height="192" rx="8" fill="#ececec" stroke="rgba(45,49,66,0.10)" stroke-width="1"/>
+    <text x="528" y="84" fill="#7a8399" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">ĐẶT SÂN &amp; THANH TOÁN</text>
+    <rect x="1232" y="308" width="432" height="192" rx="8" fill="#ececec" stroke="rgba(45,49,66,0.10)" stroke-width="1"/>
+    <text x="1248" y="328" fill="#7a8399" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">TRONG CA CHƠI</text>
+    <rect x="512" y="308" width="672" height="192" rx="8" fill="#ececec" stroke="rgba(45,49,66,0.10)" stroke-width="1"/>
+    <text x="528" y="328" fill="#7a8399" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">GIẢI ĐẤU</text>
+    <rect x="512" y="528" width="192" height="192" rx="8" fill="#ececec" stroke="rgba(45,49,66,0.10)" stroke-width="1"/>
+    <text x="528" y="548" fill="#7a8399" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">TÀI KHOẢN</text>
+    <path d="M 208,368 H 288" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+    <path d="M 448,320 H 448 Q 456,320 456,312 V 132 Q 456,124 464,124 H 528" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+    <path d="M 448,340 H 460 Q 468,340 468,332 V 220 Q 468,212 476,212 H 1008" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+    <path d="M 448,360 H 472 Q 480,360 480,368 V 360 Q 480,368 488,368 H 528" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+    <path d="M 448,376 H 508 Q 516,376 516,384 V 448 Q 516,456 524,456 H 528" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+    <path d="M 448,396 H 496 Q 504,396 504,404 V 580 Q 504,588 512,588 H 528" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+    <path d="M 448,412 H 484 Q 492,412 492,420 V 668 Q 492,676 500,676 H 528" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+    <path d="M 688,124 H 768" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+    <path d="M 928,124 H 1008" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+    <path d="M 1168,124 H 1248" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+    <path d="M 1408,116 H 1488" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+    <path d="M 1408,136 H 1432 Q 1440,136 1440,144 V 204 Q 1440,212 1448,212 H 1488" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+    <path d="M 1168,212 H 1284 Q 1292,212 1292,204 V 160 Q 1292,152 1300,152 H 1300" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+    <path d="M 1356,152 V 340" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+    <path d="M 1408,368 H 1488" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+    <path d="M 1328,428 V 396" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+    <path d="M 1408,464 H 1488" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+    <path d="M 1408,448 H 1436 Q 1444,448 1444,440 V 392 Q 1444,384 1452,384 H 1488" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+    <path d="M 688,368 H 768" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+    <path d="M 928,368 H 1008" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+    <rect x="222" y="346" width="52" height="12" rx="2" fill="#f5f5f5"/>
+    <text x="248" y="355" fill="#7a8399" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">CUSTOMER</text>
+    <rect x="942" y="102" width="52" height="12" rx="2" fill="#f5f5f5"/>
+    <text x="968" y="111" fill="#7a8399" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">CHỌN GIỜ</text>
+    <rect x="1184" y="102" width="47" height="12" rx="2" fill="#f5f5f5"/>
+    <text x="1208" y="111" fill="#7a8399" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">TẠO ĐƠN</text>
+    <rect x="1412" y="94" width="72" height="12" rx="2" fill="#f5f5f5"/>
+    <text x="1448" y="103" fill="#7a8399" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">CHUYỂN KHOẢN</text>
+    <rect x="1422" y="154" width="37" height="12" rx="2" fill="#f5f5f5"/>
+    <text x="1440" y="163" fill="#7a8399" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">VNPAY</text>
+    <rect x="1204" y="190" width="52" height="12" rx="2" fill="#f5f5f5"/>
+    <text x="1230" y="199" fill="#7a8399" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">CHỌN ĐƠN</text>
+    <rect x="1366" y="244" width="72" height="12" rx="2" fill="#f5f5f5"/>
+    <text x="1402" y="253" fill="#7a8399" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">ĐẾN GIỜ CHƠI</text>
+    <rect x="1412" y="346" width="72" height="12" rx="2" fill="#f5f5f5"/>
+    <text x="1448" y="355" fill="#7a8399" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">XIN THÊM GIỜ</text>
+    <rect x="1414" y="442" width="67" height="12" rx="2" fill="#f5f5f5"/>
+    <text x="1448" y="451" fill="#7a8399" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">BÀN GIAO XE</text>
+    <rect x="937" y="346" width="62" height="12" rx="2" fill="#f5f5f5"/>
+    <text x="968" y="355" fill="#7a8399" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">NỘP LỆ PHÍ</text>
+    <rect x="48" y="340" width="160" height="56" rx="20" fill="#f5f5f5"/><rect x="48" y="340" width="160" height="56" rx="20" fill="rgba(79,93,117,0.10)" stroke="#7a8399" stroke-width="1"/><text x="128" y="372" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle"><tspan x="128" dy="0">Đăng nhập / Đăng ký</tspan></text>
+    <rect x="288" y="304" width="160" height="128" rx="6" fill="#f5f5f5"/><rect x="288" y="304" width="160" height="128" rx="6" fill="rgba(235,108,54,0.08)" stroke="#eb6c36" stroke-width="1"/><text x="368" y="364" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle"><tspan x="368" dy="0">Trang chủ</tspan><tspan x="368" dy="16">khách hàng</tspan></text>
+    <rect x="528" y="96" width="160" height="56" rx="6" fill="#f5f5f5"/><rect x="528" y="96" width="160" height="56" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/><text x="608" y="128" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle"><tspan x="608" dy="0">Tìm sân</tspan></text>
+    <rect x="768" y="96" width="160" height="56" rx="6" fill="#f5f5f5"/><rect x="768" y="96" width="160" height="56" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/><text x="848" y="128" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle"><tspan x="848" dy="0">Chi tiết cơ sở</tspan></text>
+    <rect x="1008" y="96" width="160" height="56" rx="6" fill="#f5f5f5"/><rect x="1008" y="96" width="160" height="56" rx="6" fill="rgba(235,108,54,0.08)" stroke="#eb6c36" stroke-width="1"/><text x="1088" y="128" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle"><tspan x="1088" dy="0">Đặt lịch</tspan></text>
+    <rect x="1248" y="96" width="160" height="56" rx="6" fill="#f5f5f5"/><rect x="1248" y="96" width="160" height="56" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/><text x="1328" y="128" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle"><tspan x="1328" dy="0">Chi tiết đơn đặt</tspan></text>
+    <rect x="1488" y="96" width="160" height="56" rx="6" fill="#f5f5f5"/><rect x="1488" y="96" width="160" height="56" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/><text x="1568" y="128" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle"><tspan x="1568" dy="0">Chuyển khoản VietQR</tspan></text>
+    <rect x="1488" y="184" width="160" height="56" rx="6" fill="#f5f5f5"/><rect x="1488" y="184" width="160" height="56" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/><text x="1568" y="208" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle"><tspan x="1568" dy="0">Kết quả thanh toán</tspan><tspan x="1568" dy="16">VNPay</tspan></text>
+    <rect x="1008" y="184" width="160" height="56" rx="6" fill="#f5f5f5"/><rect x="1008" y="184" width="160" height="56" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/><text x="1088" y="216" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle"><tspan x="1088" dy="0">Lịch đặt sân</tspan></text>
+    <rect x="1248" y="340" width="160" height="56" rx="6" fill="#f5f5f5"/><rect x="1248" y="340" width="160" height="56" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/><text x="1328" y="372" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle"><tspan x="1328" dy="0">Ca chơi đang diễn ra</tspan></text>
+    <rect x="1488" y="340" width="160" height="56" rx="6" fill="#f5f5f5"/><rect x="1488" y="340" width="160" height="56" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/><text x="1568" y="372" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle"><tspan x="1568" dy="0">Trả lời gia hạn</tspan></text>
+    <rect x="1248" y="428" width="160" height="56" rx="6" fill="#f5f5f5"/><rect x="1248" y="428" width="160" height="56" rx="6" fill="rgba(79,93,117,0.10)" stroke="#7a8399" stroke-width="1"/><text x="1328" y="460" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle"><tspan x="1328" dy="0">Chuông thông báo</tspan></text>
+    <rect x="1488" y="428" width="160" height="56" rx="6" fill="#f5f5f5"/><rect x="1488" y="428" width="160" height="56" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/><text x="1568" y="452" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle"><tspan x="1568" dy="0">Xác nhận biên bản</tspan><tspan x="1568" dy="16">nhận xe</tspan></text>
+    <rect x="528" y="340" width="160" height="56" rx="6" fill="#f5f5f5"/><rect x="528" y="340" width="160" height="56" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/><text x="608" y="372" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle"><tspan x="608" dy="0">Danh sách giải đấu</tspan></text>
+    <rect x="768" y="340" width="160" height="56" rx="6" fill="#f5f5f5"/><rect x="768" y="340" width="160" height="56" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/><text x="848" y="372" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle"><tspan x="848" dy="0">Chi tiết giải đấu</tspan></text>
+    <rect x="1008" y="340" width="160" height="56" rx="6" fill="#f5f5f5"/><rect x="1008" y="340" width="160" height="56" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/><text x="1088" y="372" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle"><tspan x="1088" dy="0">Đăng ký thi đấu</tspan></text>
+    <rect x="528" y="428" width="160" height="56" rx="6" fill="#f5f5f5"/><rect x="528" y="428" width="160" height="56" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/><text x="608" y="460" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle"><tspan x="608" dy="0">Giải đấu đã tham gia</tspan></text>
+    <rect x="528" y="560" width="160" height="56" rx="6" fill="#f5f5f5"/><rect x="528" y="560" width="160" height="56" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/><text x="608" y="592" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle"><tspan x="608" dy="0">Gói hội viên</tspan></text>
+    <rect x="528" y="648" width="160" height="56" rx="6" fill="#f5f5f5"/><rect x="528" y="648" width="160" height="56" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/><text x="608" y="680" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle"><tspan x="608" dy="0">Hồ sơ cá nhân</tspan></text>
+    <line x1="48" y1="760" x2="1664" y2="760" stroke="rgba(45,49,66,0.10)" stroke-width="0.8"/>
+    <text x="48" y="776" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+    <rect x="192" y="764" width="16" height="12" rx="2" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+    <text x="216" y="774" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace">Màn hình có địa chỉ riêng</text>
+    <rect x="448" y="764" width="16" height="12" rx="2" fill="rgba(235,108,54,0.08)" stroke="#eb6c36" stroke-width="1"/>
+    <text x="472" y="774" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace">Bước trọng tâm của luồng</text>
+    <rect x="704" y="764" width="16" height="12" rx="2" fill="rgba(79,93,117,0.10)" stroke="#7a8399" stroke-width="1"/>
+    <text x="728" y="774" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace">Điểm vào ngoài giao diện</text>
+    </svg>
+  </div>
+</body>
+</html>

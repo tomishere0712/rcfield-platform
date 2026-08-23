@@ -58,7 +58,10 @@
     <p class="eyebrow">[Type] · Diagram Design</p>
     <h1>[Diagram title]</h1>
 
-    <svg viewBox="0 0 1000 600" xmlns="http://www.w3.org/2000/svg">
+    <!-- Replace [diagram-slug] with a unique slug for this diagram before export. -->
+    <svg viewBox="0 0 1000 600" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="[diagram-slug]-title [diagram-slug]-desc">
+      <title id="[diagram-slug]-title">[Diagram title]</title>
+      <desc id="[diagram-slug]-desc">[One sentence describing what the diagram shows]</desc>
       <defs>
         <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#bfc0c0"/></marker>
         <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#f08a59"/></marker>

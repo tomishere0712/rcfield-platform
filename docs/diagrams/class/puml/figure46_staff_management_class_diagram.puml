@@ -1,0 +1,184 @@
+@startuml figure46_staff_management_class_diagram
+skinparam dpi 300
+skinparam shadowing false
+skinparam roundCorner 4
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam nodesep 110
+skinparam ranksep 80
+skinparam labelDistance 2.5
+skinparam labelAngle 60
+
+hide circle
+hide <<hidden>> circle
+hide <<hidden>> stereotype
+
+skinparam class {
+    BackgroundColor #FFFFFF
+    BorderColor #000000
+    BorderThickness 1.5
+    HeaderBackgroundColor #F7FAFC
+    FontName Arial
+    FontSize 14
+    FontStyle bold
+    FontColor #000000
+    AttributeFontName Arial
+    AttributeFontSize 12
+    AttributeFontColor #000000
+}
+
+skinparam package {
+    BackgroundColor #FAFAFA
+    BorderColor #A0AEC0
+    BorderThickness 1.2
+    FontName Arial
+    FontSize 13
+    FontStyle bold
+    FontColor #000000
+}
+
+skinparam labelBackgroundColor #FFFFFF
+skinparam arrow {
+    Color #000000
+    Thickness 1.4
+    FontSize 12
+    FontColor #000000
+}
+
+top to bottom direction
+
+package "API Controllers" as ApiTier {
+    class StaffManagementController {
+        - staffService : StaffService
+        --
+        + inviteStaff(input : InviteStaffInput) : InviteResponse
+        + listStaff(cafeId : UUID) : StaffResponse[]
+        + deactivateStaff(staffId : UUID) : void
+        + reactivateStaff(staffId : UUID) : void
+        + transferStaffBranch(staffId : UUID, cafeId : UUID) : void
+    }
+
+    class StaffInviteController {
+        - staffService : StaffService
+        --
+        + validateInviteToken(token : String) : InviteVerificationResponse
+        + activateStaffAccount(input : ActivateStaffInput) : AuthTokenResponse
+    }
+
+    StaffManagementController -[hidden]right-> StaffInviteController
+}
+
+package "Business Services" as ServiceTier {
+    class StaffService {
+        - userRepository : UserRepository
+        - tokenRepository : StaffInviteTokenRepository
+        - emailService : BrevoEmailService
+        --
+        + createStaffInvitation(providerId : UUID, input : InviteStaffInput) : StaffInviteToken
+        + activateAccount(input : ActivateStaffInput) : User
+        + deactivateStaff(staffId : UUID) : void
+        + reactivateStaff(staffId : UUID) : void
+        + assignStaffToBranch(staffId : UUID, cafeId : UUID) : void
+        + getStaffWorkspaces(staffId : UUID) : Cafe[]
+    }
+
+    class BrevoEmailService {
+        - apiKey : String
+        --
+        + sendStaffInviteEmail(to : String, inviteUrl : String) : void
+    }
+
+    StaffService -[hidden]right-> BrevoEmailService
+}
+
+package "Data Repositories" as DataTier {
+    class UserRepository {
+        - dataSource : DataSource
+        --
+        + findById(id : UUID) : User
+        + findByEmail(email : String) : User
+        + findByCafe(cafeId : UUID) : User[]
+        + save(user : User) : User
+    }
+
+    class StaffInviteTokenRepository {
+        - dataSource : DataSource
+        --
+        + findByTokenHash(hash : String) : StaffInviteToken
+        + save(token : StaffInviteToken) : StaffInviteToken
+    }
+
+    UserRepository -[hidden]right-> StaffInviteTokenRepository
+}
+
+package "Domain Entities" as DomainTier {
+    class Cafe {
+        - id : UUID
+        - providerId : UUID
+        - name : String
+        - status : CafeStatus
+        --
+        + isOpen() : Boolean
+    }
+
+    class User {
+        - id : UUID
+        - email : String
+        - fullName : String
+        - phone : String
+        - role : UserRole
+        - status : UserStatus
+        - providerId : UUID
+        - createdAt : Date
+        --
+        + isStaffActive() : Boolean
+    }
+
+    class StaffInviteToken {
+        - id : UUID
+        - providerId : UUID
+        - tokenHash : String
+        - expiresAt : Date
+        - usedAt : Date
+        --
+        + isExpired() : Boolean
+    }
+
+    class Session {
+        - id : UUID
+        - status : SessionStatus
+        - actualStartTime : Date
+        - actualEndTime : Date
+        --
+        + isCompleted() : Boolean
+    }
+
+    Cafe -[hidden]right-> User
+    User -[hidden]right-> StaffInviteToken
+    User -[hidden]down-> Session
+}
+
+' Layout ordering enforcement
+ApiTier -[hidden]down-> ServiceTier
+ServiceTier -[hidden]down-> DataTier
+DataTier -[hidden]down-> DomainTier
+
+' Controller to Service Associations (Directed Association --> as per Rule 4)
+StaffManagementController --> StaffService
+StaffInviteController --> StaffService
+
+' Service to Service / Service to Repository Associations (Directed Association --> as per Rule 4)
+StaffService --> UserRepository
+StaffService --> StaffInviteTokenRepository
+StaffService --> BrevoEmailService
+
+' Repository to Entity Dependencies (Dependency ..> as per Rule 4)
+UserRepository ..> User
+StaffInviteTokenRepository ..> StaffInviteToken
+
+' Entity Relationships & Compositions (with explicit roles and 3-space padded multiplicities as per Rule 3 & 5)
+Cafe "1\n " -right- "0..*\n " User : "+staffMembers"
+User "1\n " *--- "0..1\n " StaffInviteToken : "+inviteToken"
+User "1   " -down- "0..*   " Session : "+handledSessions"
+
+@enduml

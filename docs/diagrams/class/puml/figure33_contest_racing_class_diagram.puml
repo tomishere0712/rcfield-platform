@@ -1,0 +1,222 @@
+@startuml figure33_contest_racing_class_diagram
+skinparam dpi 300
+skinparam shadowing false
+skinparam roundCorner 4
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam nodesep 100
+skinparam ranksep 60
+skinparam labelDistance 10
+
+hide circle
+hide <<hidden>> circle
+hide <<hidden>> stereotype
+
+skinparam class {
+    BackgroundColor #FFFFFF
+    BorderColor #000000
+    BorderThickness 1.5
+    HeaderBackgroundColor #F7FAFC
+    FontName Arial
+    FontSize 14
+    FontStyle bold
+    FontColor #000000
+    AttributeFontName Arial
+    AttributeFontSize 12
+    AttributeFontColor #000000
+}
+
+skinparam class<<hidden>> {
+    BackgroundColor transparent
+    BorderColor transparent
+    FontColor transparent
+}
+
+skinparam package {
+    BackgroundColor #FAFAFA
+    BorderColor #A0AEC0
+    BorderThickness 1.2
+    FontName Arial
+    FontSize 13
+    FontStyle bold
+    FontColor #000000
+}
+
+skinparam labelBackgroundColor #FFFFFF
+skinparam arrow {
+    Color #000000
+    Thickness 1.4
+    FontSize 12
+    FontColor #000000
+}
+
+top to bottom direction
+
+package "API Controllers" as ApiTier {
+    class ContestController {
+        - contestService : ContestService
+        --
+        + createContest(input : CreateContestInput) : ContestResponse
+        + getContestDetail(contestId : UUID) : ContestDetailResponse
+        + updateContest(contestId : UUID, input : UpdateContestInput) : ContestResponse
+        + changeContestStatus(contestId : UUID, status : ContestStatus) : void
+        + getFinanceReport(contestId : UUID) : ContestFinanceReportResponse
+    }
+
+    class ContestRegistrationController {
+        - contestService : ContestService
+        --
+        + register(input : ContestRegisterInput) : RegistrationResponse
+        + listRegistrations(contestId : UUID) : RegistrationResponse[]
+        + checkInRegistration(regId : UUID) : void
+        + disqualify(regId : UUID, reason : String) : void
+    }
+
+    class ContestMatchController {
+        - runtimeService : ContestRuntimeService
+        --
+        + generateMatches(contestId : UUID, format : ContestFormat) : MatchScheduleResponse
+        + submitMatchResult(matchId : UUID, input : MatchResultInput) : void
+        + publishLeaderboard(contestId : UUID) : LeaderboardResponse
+    }
+
+    ContestController -[hidden]right-> ContestRegistrationController
+    ContestRegistrationController -[hidden]right-> ContestMatchController
+}
+
+package "Business Services" as ServiceTier {
+    class ContestService {
+        - contestRepository : ContestRepository
+        - registrationRepository : ContestRegistrationRepository
+        --
+        + createContest(providerId : UUID, input : CreateContestInput) : Contest
+        + registerParticipant(customerId : UUID, input : ContestRegisterInput) : ContestRegistration
+        + checkInRegistration(regId : UUID, staffId : UUID) : void
+        + disqualifyRegistration(regId : UUID, reason : String) : void
+        + buildFinanceReport(contestId : UUID) : ContestFinanceReportResponse
+    }
+
+    class ContestRuntimeService {
+        - matchRepository : ContestMatchRepository
+        --
+        + generateBracket(contestId : UUID, format : ContestFormat) : ContestMatch[]
+        + recordMatchResult(matchId : UUID, input : MatchResultInput) : void
+        + advanceWinners(matchId : UUID) : void
+        + publishFinalStandings(contestId : UUID) : LeaderboardResponse
+    }
+
+    ContestService -[hidden]right-> ContestRuntimeService
+}
+
+package "Data Repositories" as DataTier {
+    class ContestRepository {
+        - dataSource : DataSource
+        --
+        + findById(id : UUID) : Contest
+        + save(contest : Contest) : Contest
+    }
+
+    class ContestRegistrationRepository {
+        - dataSource : DataSource
+        --
+        + findById(id : UUID) : ContestRegistration
+        + findByContest(contestId : UUID) : ContestRegistration[]
+        + save(reg : ContestRegistration) : ContestRegistration
+    }
+
+    class ContestMatchRepository {
+        - dataSource : DataSource
+        --
+        + findById(id : UUID) : ContestMatch
+        + findByContest(contestId : UUID) : ContestMatch[]
+        + save(match : ContestMatch) : ContestMatch
+    }
+
+    ContestRepository -[hidden]right-> ContestRegistrationRepository
+    ContestRegistrationRepository -[hidden]right-> ContestMatchRepository
+}
+
+package "Domain Entities" as DomainTier {
+    class Contest {
+        - id : UUID
+        - cafeId : UUID
+        - title : String
+        - contestType : ContestType
+        - format : ContestFormat
+        - entryFee : Decimal
+        - prizePool : Decimal
+        - maxParticipants : Int
+        - status : ContestStatus
+        - contestDate : Date
+        --
+        + isRegistrationOpen() : Boolean
+        + calculatePrizePool() : Decimal
+    }
+
+    class ContestMatch {
+        - id : UUID
+        - roundNumber : Int
+        - matchNumber : Int
+        - status : MatchStatus
+        - startTime : Date
+        - endTime : Date
+        --
+        + isCompleted() : Boolean
+    }
+
+    class ContestRegistration {
+        - id : UUID
+        - customerId : UUID
+        - registrationCode : String
+        - vehicleOption : VehicleOption
+        - rentalCatalogId : UUID
+        - isByoc : Boolean
+        - byocBrand : String
+        - byocModel : String
+        - paymentStatus : PaymentStatus
+        - seedNumber : Int
+        - status : RegistrationStatus
+        --
+        + isCheckedIn() : Boolean
+    }
+
+    class ContestMatchParticipant {
+        - id : UUID
+        - registrationId : UUID
+        - laneNumber : Int
+        - lapTimeSeconds : Decimal
+        - rankInMatch : Int
+        - isWinner : Boolean
+        --
+        + isWinner() : Boolean
+    }
+
+    Contest -[hidden]right-> ContestMatch
+    Contest -[hidden]down-> ContestRegistration
+    ContestMatch -[hidden]down-> ContestMatchParticipant
+}
+
+' Layout ordering enforcement
+ApiTier -[hidden]down-> ServiceTier
+ServiceTier -[hidden]down-> DataTier
+DataTier -[hidden]down-> DomainTier
+
+' Control flow links
+ContestController -down-> ContestService
+ContestRegistrationController -down-> ContestService
+ContestMatchController -down-> ContestRuntimeService
+
+ContestService -down-> ContestRepository
+ContestService -down-> ContestRegistrationRepository
+ContestRuntimeService -down-> ContestMatchRepository
+
+ContestRepository ..> Contest
+ContestRegistrationRepository ..> ContestRegistration
+ContestMatchRepository ..> ContestMatch
+
+' Entity Compositions (with explicit roles and multiplicities)
+Contest "1   " *-right-- "0..*   " ContestMatch : "+matches   "
+Contest "1   " *-down-- "0..*   " ContestRegistration : "+registrations   "
+ContestMatch "1   " *-down-- "2..*   " ContestMatchParticipant : "+participants   "
+
+@enduml

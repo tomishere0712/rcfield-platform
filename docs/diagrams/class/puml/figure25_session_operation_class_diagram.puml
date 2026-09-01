@@ -1,0 +1,167 @@
+@startuml
+skinparam dpi 300
+skinparam shadowing false
+skinparam roundCorner 4
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam nodesep 60
+skinparam ranksep 70
+skinparam labelDistance 10
+
+hide circle
+
+skinparam package {
+    BackgroundColor #FAFAFA
+    BorderColor #A0AEC0
+    BorderThickness 1.2
+    FontName Arial
+    FontSize 13
+    FontStyle bold
+    FontColor #000000
+}
+
+skinparam class {
+    BackgroundColor #FFFFFF
+    BorderColor #000000
+    BorderThickness 1.5
+    HeaderBackgroundColor #F7FAFC
+    FontName Arial
+    FontSize 14
+    FontStyle bold
+    FontColor #000000
+    AttributeFontName Arial
+    AttributeFontSize 12
+    AttributeFontColor #000000
+}
+
+skinparam labelBackgroundColor #FFFFFF
+skinparam arrow {
+    Color #000000
+    Thickness 1.4
+    FontSize 12
+    FontColor #000000
+}
+
+top to bottom direction
+
+package "API Controllers" {
+    class StaffController {
+        - staffService : StaffService
+        + checkInBooking(input : CheckInInput) : SessionResponse
+        + submitInspection(input : SubmitInspectionInput) : InspectionResponse
+        + proposeExtension(input : ProposeExtensionInput) : ProposalResponse
+        + confirmCheckout(sessionId : UUID) : CheckoutSummaryResponse
+    }
+
+    class SessionController {
+        - staffService : StaffService
+        + getSessionDetail(sessionId : UUID) : SessionDetailResponse
+        + confirmInspection(inspectionId : UUID, passed : Boolean) : void
+        + respondExtension(proposalId : UUID, accept : Boolean) : void
+        + listActiveSessions(cafeId : UUID) : SessionSummaryResponse[]
+    }
+}
+
+package "Business Services" {
+    class StaffService {
+        - sessionRepository : SessionRepository
+        - inspectionRepository : InspectionRepository
+        - cloudinaryService : CloudinaryService
+        + startCheckIn(staffId : UUID, input : CheckInInput) : Session
+        + submitInspection(inspectorId : UUID, input : SubmitInspectionInput) : Inspection
+        + confirmInspection(inspectionId : UUID, passed : Boolean) : void
+        + proposeExtension(input : ProposeExtensionInput) : ExtensionProposal
+        + completeCheckout(sessionId : UUID) : Session
+    }
+
+    class CloudinaryService {
+        - cloudName : String
+        + uploadInspectionPhoto(file : Buffer) : String
+        + deletePhoto(publicId : String) : void
+    }
+}
+
+package "Data Repositories" {
+    class SessionRepository {
+        - dataSource : DataSource
+        + findById(id : UUID) : Session
+        + findActiveByCafe(cafeId : UUID) : Session[]
+        + save(session : Session) : Session
+    }
+
+    class InspectionRepository {
+        - dataSource : DataSource
+        + findById(id : UUID) : Inspection
+        + findBySession(sessionId : UUID) : Inspection[]
+        + save(inspection : Inspection) : Inspection
+    }
+}
+
+package "Domain Entities" {
+    class Session {
+        - id : UUID
+        - bookingId : UUID
+        - cafeId : UUID
+        - staffId : UUID
+        - status : SessionStatus
+        - actualStartTime : Date
+        - actualEndTime : Date
+        - totalDurationMinutes : Int
+        - extensionMinutes : Int
+        - createdAt : Date
+        + isActive() : Boolean
+        + calculateExtensionFee() : Decimal
+    }
+
+    class Inspection {
+        - id : UUID
+        - vehicleId : UUID
+        - inspectorId : UUID
+        - inspectionType : InspectionType
+        - passed : Boolean
+        - notes : String
+        - customerConfirmed : Boolean
+        - createdAt : Date
+        + isPassed() : Boolean
+    }
+
+    class DamageLineItem {
+        - id : UUID
+        - partName : String
+        - severity : DamageSeverity
+        - repairCost : Decimal
+        - chargeCustomer : Boolean
+        - description : String
+        + getTotalCost() : Decimal
+    }
+
+    class ExtensionProposal {
+        - id : UUID
+        - proposedMinutes : Int
+        - feeAmount : Decimal
+        - status : ProposalStatus
+        - customerApproved : Boolean
+        - respondedAt : Date
+        + isApproved() : Boolean
+    }
+}
+
+' Layout hints inside Business Services
+StaffService -right-> CloudinaryService : "    "
+
+' Control flow links
+StaffController --> StaffService
+SessionController --> StaffService
+
+StaffService --> SessionRepository
+StaffService --> InspectionRepository
+
+SessionRepository ..> Session
+InspectionRepository ..> Inspection
+
+' Entity Compositions (with explicit roles and multiplicities)
+Session "1   " *--- "0..*   " ExtensionProposal : "+extensions   "
+Session "1   " *--- "0..*   " Inspection : "+inspections   "
+Inspection "1   " *--- "0..*   " DamageLineItem : "+damageItems   "
+
+@enduml

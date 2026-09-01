@@ -9,4 +9,5 @@ rcfeild-be/
 rcfeild-fe/
 .agents/
 .be-notes/
-rcfield-fe
+rcfield-mobile/
+*.jar

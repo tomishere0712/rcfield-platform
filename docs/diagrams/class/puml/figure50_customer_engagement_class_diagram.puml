@@ -1,0 +1,194 @@
+@startuml
+skinparam dpi 300
+skinparam shadowing false
+skinparam roundCorner 4
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam nodesep 110
+skinparam ranksep 80
+skinparam labelDistance 3.5
+skinparam labelAngle 60
+
+hide circle
+hide <<hidden>> circle
+
+skinparam package {
+    BackgroundColor #FAFAFA
+    BorderColor #A0AEC0
+    BorderThickness 1.2
+    FontName Arial
+    FontSize 13
+    FontStyle bold
+    FontColor #000000
+}
+
+skinparam class {
+    BackgroundColor #FFFFFF
+    BorderColor #000000
+    BorderThickness 1.5
+    HeaderBackgroundColor #F7FAFC
+    FontName Arial
+    FontSize 14
+    FontStyle bold
+    FontColor #000000
+    AttributeFontName Arial
+    AttributeFontSize 12
+    AttributeFontColor #000000
+}
+
+skinparam labelBackgroundColor #FFFFFF
+skinparam arrow {
+    Color #000000
+    Thickness 1.4
+    FontSize 12
+    FontColor #000000
+}
+
+top to bottom direction
+
+package "API Controllers" {
+    class CafePublicController {
+        - cafePublicService : CafePublicService
+        + listCafes(query : CafeFilterQuery) : CafeSummaryResponse[]
+        + getCafeDetail(id : UUID) : CafePublicDetailResponse
+        + toggleFavorite(cafeId : UUID, userId : UUID) : FavoriteToggleResponse
+        + listFavorites(userId : UUID) : CafeSummaryResponse[]
+    }
+
+    class ReviewController {
+        - reviewService : ReviewService
+        + createReview(input : CreateReviewInput) : ReviewResponse
+        + listCafeReviews(cafeId : UUID) : ReviewResponse[]
+        + moderateReview(reviewId : UUID, isHidden : Boolean) : void
+        + getReviewSummary(cafeId : UUID) : ReviewSummaryResponse
+    }
+
+    class NotificationController {
+        - notificationService : NotificationService
+        + listNotifications(userId : UUID) : NotificationResponse[]
+        + markAsRead(id : UUID) : void
+        + markAllAsRead(userId : UUID) : void
+        + registerPushToken(input : PushTokenInput) : void
+    }
+}
+
+package "Business Services" {
+    class CafePublicService {
+        - cafeRepository : CafeRepository
+        + listCafes(query : CafeFilterQuery) : CafeSummary[]
+        + getCafeDetail(id : UUID) : Cafe
+        + toggleFavorite(cafeId : UUID, userId : UUID) : Boolean
+    }
+
+    class ReviewService {
+        - reviewRepository : ReviewRepository
+        + createReview(customerId : UUID, input : CreateReviewInput) : Review
+        + listCafeReviews(cafeId : UUID) : Review[]
+        + moderateReview(reviewId : UUID, isHidden : Boolean) : Review
+        + recalculateCafeRating(cafeId : UUID) : void
+    }
+
+    class NotificationService {
+        - notificationRepository : NotificationRepository
+        - pushTokenRepository : PushTokenRepository
+        + sendNotification(userId : UUID, title : String, body : String) : Notification
+        + sendPushNotification(userId : UUID, payload : JsonObject) : void
+        + markAsRead(notificationId : UUID) : void
+        + markAllAsRead(userId : UUID) : void
+    }
+}
+
+package "Data Repositories" {
+    class CafeRepository {
+        - dataSource : DataSource
+        + findById(id : UUID) : Cafe
+        + searchCafes(query : CafeFilterQuery) : Cafe[]
+    }
+
+    class ReviewRepository {
+        - dataSource : DataSource
+        + findById(id : UUID) : Review
+        + findByCafe(cafeId : UUID) : Review[]
+        + save(review : Review) : Review
+    }
+
+    class NotificationRepository {
+        - dataSource : DataSource
+        + findByUser(userId : UUID) : Notification[]
+        + save(notif : Notification) : Notification
+    }
+
+    class PushTokenRepository {
+        - dataSource : DataSource
+        + findByUser(userId : UUID) : PushToken[]
+        + save(token : PushToken) : PushToken
+    }
+}
+
+package "Domain Entities" {
+    class Cafe {
+        - id : UUID
+        - name : String
+        - rating : Decimal
+        - reviewCount : Int
+        - status : CafeStatus
+        + recalculateRating() : void
+    }
+
+    class Review {
+        - id : UUID
+        - bookingId : UUID
+        - customerId : UUID
+        - rating : Int
+        - comment : String
+        - replyText : String
+        - isHidden : Boolean
+        - createdAt : Date
+        + isVisible() : Boolean
+    }
+
+    class Notification {
+        - id : UUID
+        - userId : UUID
+        - type : NotificationType
+        - title : String
+        - body : String
+        - data : JsonObject
+        - isRead : Boolean
+        - readAt : Date
+        - createdAt : Date
+        + markAsRead() : void
+    }
+
+    class PushToken {
+        - id : UUID
+        - userId : UUID
+        - token : String
+        - platform : PlatformType
+        - lastSeenAt : Date
+        + isActive() : Boolean
+    }
+}
+
+' Controller Associations
+CafePublicController --> CafePublicService
+ReviewController --> ReviewService
+NotificationController --> NotificationService
+
+' Service Associations
+CafePublicService --> CafeRepository
+ReviewService --> ReviewRepository
+NotificationService --> NotificationRepository
+NotificationService --> PushTokenRepository
+
+' Repository Dependencies
+CafeRepository ..> Cafe
+ReviewRepository ..> Review
+NotificationRepository ..> Notification
+PushTokenRepository ..> PushToken
+
+' Entity Compositions & Layout Hints
+Cafe -[hidden]down-> Review
+Cafe "  1  \n " *-- "  0..*  \n " Review : "+reviews"
+
+@enduml

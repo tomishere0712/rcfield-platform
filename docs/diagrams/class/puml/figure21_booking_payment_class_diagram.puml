@@ -1,0 +1,212 @@
+@startuml figure21_booking_payment_class_diagram
+skinparam dpi 300
+skinparam shadowing false
+skinparam roundCorner 4
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam nodesep 60
+skinparam ranksep 55
+skinparam labelDistance 10
+
+hide circle
+hide <<hidden>> circle
+hide <<hidden>> stereotype
+
+skinparam class {
+    BackgroundColor #FFFFFF
+    BorderColor #000000
+    BorderThickness 1.5
+    HeaderBackgroundColor #F7FAFC
+    FontName Arial
+    FontSize 14
+    FontStyle bold
+    FontColor #000000
+    AttributeFontName Arial
+    AttributeFontSize 12
+    AttributeFontColor #000000
+}
+
+skinparam class<<hidden>> {
+    BackgroundColor transparent
+    BorderColor transparent
+    FontColor transparent
+}
+
+skinparam package {
+    BackgroundColor #FAFAFA
+    BorderColor #A0AEC0
+    BorderThickness 1.2
+    FontName Arial
+    FontSize 13
+    FontStyle bold
+    FontColor #000000
+}
+
+skinparam labelBackgroundColor #FFFFFF
+skinparam arrow {
+    Color #000000
+    Thickness 1.4
+    FontSize 12
+    FontColor #000000
+}
+
+top to bottom direction
+
+package "API Controllers" as ApiTier {
+    class BookingController {
+        - bookingService : BookingService
+        - paymentService : PaymentService
+        + createBooking(input : CreateBookingInput) : BookingResponse
+        + getBookingDetail(id : UUID) : BookingDetailResponse
+        + cancelBooking(id : UUID, reason : String) : void
+        + listMyBookings(userId : UUID) : BookingSummaryResponse[]
+    }
+
+    class PaymentController {
+        - paymentService : PaymentService
+        + createPaymentUrl(bookingId : UUID, method : PaymentMethod) : PaymentUrlResponse
+        + handleVnpayIpn(input : PaymentIpnInput) : IpnResponse
+        + confirmBankTransfer(txId : UUID) : void
+    }
+    
+    BookingController -[hidden]right-> PaymentController
+}
+
+package "Business Services" as ServiceTier {
+    class BookingService {
+        - bookingRepository : BookingRepository
+        - pricingService : PricingService
+        - redisLock : RedisLockService
+        + createBooking(customerId : UUID, input : CreateBookingInput) : Booking
+        + lockVehicleSlots(booking : Booking) : Boolean
+        + cancelBooking(id : UUID, reason : String) : Booking
+        + getBookingDetail(id : UUID) : Booking
+    }
+
+    class PaymentService {
+        - gatewayFactory : PaymentGatewayFactory
+        + createPaymentUrl(bookingId : UUID, method : PaymentMethod) : String
+        + processVnpayCallback(params : JsonObject) : PaymentResult
+        + verifyBankTransfer(tx : BankTransaction) : void
+    }
+
+    class PaymentGatewayFactory {
+        + getGateway(method : PaymentMethod) : IPaymentGateway
+    }
+    
+    BookingService -[hidden]right-> PaymentService
+    PaymentService -[hidden]right-> PaymentGatewayFactory
+}
+
+package "Data Repositories" as DataTier {
+    class " " as spacerData0 <<hidden>> {}
+    class " " as spacerData1 <<hidden>> {}
+    spacerData0 -[hidden]right-> spacerData1
+    spacerData1 -[hidden]right-> BookingRepository
+
+    class BookingRepository {
+        - dataSource : DataSource
+        + findById(id : UUID) : Booking
+        + findByCode(code : String) : Booking
+        + save(booking : Booking) : Booking
+    }
+}
+
+package "Domain Entities" as DomainTier {
+    class " " as spacerDom0 <<hidden>> {}
+    spacerDom0 -[hidden]right-> Booking
+
+    class Booking {
+        - id : UUID
+        - bookingCode : String
+        - customerId : UUID
+        - cafeId : UUID
+        - trackTypeId : UUID
+        - playMode : PlayMode
+        - startTime : Date
+        - endTime : Date
+        - status : BookingStatus
+        - totalAmount : Decimal
+        - qrCode : String
+        - createdAt : Date
+        + isCancellable() : Boolean
+        + calculateTotal() : Decimal
+    }
+
+    class " " as spacer1 <<hidden>> {
+    }
+
+    class PaymentTransaction {
+        - id : UUID
+        - txnRef : String
+        - paymentMethod : PaymentMethod
+        - amount : Decimal
+        - status : TxStatus
+        - gatewayResponse : JsonObject
+        + isSuccessful() : Boolean
+    }
+
+    class PaymentComponent {
+        - id : UUID
+        - componentType : PaymentComponentType
+        - amount : Decimal
+        - status : PaymentComponentStatus
+        - metadata : JsonObject
+        + isPaid() : Boolean
+    }
+
+    Booking -[hidden]right-> spacer1
+    spacer1 -[hidden]right-> PaymentTransaction
+    Booking -[hidden]down-> PaymentComponent
+}
+
+package "Payment Gateway Adapters" as AdapterTier {
+    class IPaymentGateway <<interface>> {
+        + buildPaymentUrl(tx : PaymentTransaction) : String
+        + verifySignature(params : JsonObject) : Boolean
+    }
+
+    class VNPayGateway {
+        - config : VnpayConfig
+        + buildPaymentUrl(tx : PaymentTransaction) : String
+        + verifyIpnSignature(params : JsonObject) : Boolean
+    }
+
+    class BankTransferGateway {
+        - config : VietQrConfig
+        + generateQrUrl(setting : CafePaymentSetting, amount : Decimal, code : String) : String
+        + verifyIncomingTransfer(tx : BankTransaction) : Boolean
+    }
+    
+    IPaymentGateway -[hidden]down-> VNPayGateway
+    VNPayGateway -[hidden]right-> BankTransferGateway
+}
+
+' Layout ordering enforcement
+ApiTier -[hidden]down-> ServiceTier
+ServiceTier -[hidden]down-> DataTier
+ServiceTier -[hidden]down-> AdapterTier
+DataTier -[hidden]right-> AdapterTier
+DataTier -[hidden]down-> DomainTier
+DomainTier -[hidden]right-> AdapterTier
+
+' Control flow links
+BookingController -down-> BookingService
+BookingController -down-> PaymentService
+PaymentController -down-> PaymentService
+
+BookingService ..> PaymentService
+BookingService -down-> BookingRepository
+PaymentService -down-> PaymentGatewayFactory
+
+PaymentGatewayFactory -down..> IPaymentGateway
+
+VNPayGateway -up..|> IPaymentGateway
+BankTransferGateway -up..|> IPaymentGateway
+
+BookingRepository -down..> Booking
+
+Booking "   1\n " *-right- "1..*   \n " PaymentTransaction : "+transactions   "
+Booking "1   " *-down-- "1..*   " PaymentComponent : "+components   "
+
+@enduml

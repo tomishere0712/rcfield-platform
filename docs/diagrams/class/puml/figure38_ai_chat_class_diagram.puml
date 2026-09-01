@@ -1,0 +1,213 @@
+@startuml figure38_ai_chat_class_diagram
+skinparam dpi 300
+skinparam shadowing false
+skinparam roundCorner 4
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam nodesep 60
+skinparam ranksep 70
+skinparam labelDistance 10
+
+hide circle
+hide <<hidden>> circle
+hide <<hidden>> stereotype
+
+skinparam class {
+    BackgroundColor #FFFFFF
+    BorderColor #000000
+    BorderThickness 1.5
+    HeaderBackgroundColor #F7FAFC
+    FontName Arial
+    FontSize 14
+    FontStyle bold
+    FontColor #000000
+    AttributeFontName Arial
+    AttributeFontSize 12
+    AttributeFontColor #000000
+}
+
+skinparam package {
+    BackgroundColor #FAFAFA
+    BorderColor #A0AEC0
+    BorderThickness 1.2
+    FontName Arial
+    FontSize 13
+    FontStyle bold
+    FontColor #000000
+}
+
+skinparam labelBackgroundColor #FFFFFF
+skinparam arrow {
+    Color #000000
+    Thickness 1.4
+    FontSize 12
+    FontColor #000000
+}
+
+top to bottom direction
+
+package "API Controllers" as ApiTier {
+    class ChatController {
+        - chatService : ChatService
+        - fbChannelService : FacebookChannelService
+        --
+        + chat(cafeId : UUID, input : ChatMessageInput) : ChatMessageResponse
+        + chatStream(cafeId : UUID, input : ChatMessageInput) : Observable
+        + uploadKnowledge(cafeId : UUID, input : UploadDocInput) : KbDocResponse
+        + listKnowledge(cafeId : UUID) : KbDocResponse[]
+        + deleteKnowledge(documentId : UUID) : void
+        + getWidgetConfig(cafeId : UUID) : WidgetConfigResponse
+        + updateWidgetConfig(cafeId : UUID, input : UpdateWidgetConfigInput) : WidgetConfigResponse
+    }
+
+    class FbChannelController {
+        - fbChannelService : FacebookChannelService
+        --
+        + getAuthUrl(cafeId : UUID) : FbAuthUrlResponse
+        + oauthCallback(code : String, state : String) : void
+        + getChannelStatus(cafeId : UUID) : FbChannelStatusResponse
+        + testChannelConnection(cafeId : UUID) : FbTestResponse
+        + disconnectChannel(cafeId : UUID) : void
+    }
+
+    ChatController -[hidden]right-> FbChannelController
+}
+
+package "Business Services & AI Integrations" as ServiceTier {
+    class GeminiProvider {
+        - apiKey : String
+        - model : String
+        --
+        + generateChatCompletion(prompt : String) : String
+        + createEmbedding(text : String) : Float[]
+    }
+
+    class NluService {
+        - nluEndpoint : String
+        --
+        + classifyIntent(text : String) : IntentResult
+        + extractEntities(text : String) : EntityMap
+    }
+
+    class ChatService {
+        - widgetRepo : CafeWidgetRepository
+        - docRepo : KbDocumentRepository
+        - chunkRepo : KbChunkRepository
+        - geminiProvider : GeminiProvider
+        - nluService : NluService
+        --
+        + generateResponse(cafeId : UUID, message : String) : ChatAnswer
+        + streamResponse(cafeId : UUID, message : String) : Observable
+        + retrieveKnowledge(cafeId : UUID, query : String) : KbChunk[]
+        + buildPrompt(cafeId : UUID, context : ChatContext) : String
+        + checkQuota(providerId : UUID) : Boolean
+        + vectorizeText(content : String) : Float[]
+    }
+
+    class FacebookChannelService {
+        - chatService : ChatService
+        - channelRepo : CafeChannelRepository
+        - fbChatQueue : FbChatQueue
+        --
+        + buildAuthUrl(cafeId : UUID, userId : UUID) : String
+        + handleOAuthCallback(code : String, state : String) : OAuthResult
+        + handleWebhookEvent(event : JsonObject) : void
+        + sendMessengerReply(pageId : String, recipientId : String, text : String) : void
+        + disconnect(cafeId : UUID, userId : UUID) : void
+    }
+
+    GeminiProvider -[hidden]right-> NluService
+    NluService -[hidden]right-> ChatService
+    ChatService -[hidden]right-> FacebookChannelService
+}
+
+package "Domain Entities" as DomainTier {
+    class AiAnalysisLog {
+        - id : UUID
+        - cafeId : UUID
+        - userMessage : String
+        - botReply : String
+        - intent : String
+        - tokensUsed : Int
+        - createdAt : Date
+        --
+        + getCostEstimate() : Decimal
+    }
+
+    class CafeWidgetConfig {
+        - id : UUID
+        - cafeId : UUID
+        - greetingMessage : String
+        - primaryColor : String
+        - position : String
+        - isEnabled : Boolean
+        - quickReplies : String[]
+        --
+        + isConfigured() : Boolean
+    }
+
+    class KbDocument {
+        - id : UUID
+        - cafeId : UUID
+        - title : String
+        - sourceType : String
+        - fileUrl : String
+        - status : DocStatus
+        - createdAt : Date
+        --
+        + isProcessed() : Boolean
+    }
+
+    class KbChunk {
+        - id : UUID
+        - cafeId : UUID
+        - content : String
+        - embedding : Float[]
+        - chunkIndex : Int
+        --
+        + getSimilarity(vector : Float[]) : Float
+    }
+
+    class CafeChannel {
+        - id : UUID
+        - cafeId : UUID
+        - pageId : String
+        - pageName : String
+        - pageAccessToken : String
+        - isActive : Boolean
+        - connectedAt : Date
+        --
+        + isConnected() : Boolean
+    }
+
+    AiAnalysisLog -[hidden]right-> CafeWidgetConfig
+    CafeWidgetConfig -[hidden]right-> KbDocument
+    KbDocument -[hidden]right-> CafeChannel
+    KbDocument -[hidden]down-> KbChunk
+}
+
+' Layout ordering enforcement
+ApiTier -[hidden]down-> ServiceTier
+ServiceTier -[hidden]down-> DomainTier
+
+' Controller to Service Associations (Directed Association --> as per Rule 4)
+ChatController --> ChatService
+ChatController --> FacebookChannelService
+FbChannelController --> FacebookChannelService
+
+' Service Internal & Provider Associations (Directed Association --> as per Rule 4)
+FacebookChannelService --> ChatService
+ChatService --> GeminiProvider
+ChatService --> NluService
+
+' Service to Entity Dependencies (Dependency ..> as per Rule 4)
+ChatService ..> CafeWidgetConfig
+ChatService ..> KbDocument
+ChatService ..> KbChunk
+ChatService ..> AiAnalysisLog
+FacebookChannelService ..> CafeChannel
+
+' Entity Composition (with explicit roles and 3-space padded multiplicities as per Rule 3 & 5)
+KbDocument "1   " *-down-- "0..*   " KbChunk : "+chunks   "
+
+@enduml

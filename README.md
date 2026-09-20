@@ -138,9 +138,9 @@ npx expo start
 **RCField** was developed as a capstone project (**SEP490**) by a team of software engineering students at FPT University.
 
 ### 👤 Individual Contribution — [Nguyen Vinh Phuc](https://github.com/tomishere0712)
-> **Role:** Frontend Core & Cross-Stack Contributor | **322 Commits** across all repositories
+> **Role:** Frontend & Cross-Stack Engineer | **322 Commits** across all repositories
 
-#### ⚛️ Primary Focus: Frontend Web (ReactJS) — ~70%
+#### ⚛️ Frontend Web Application (React 19 & TypeScript)
 - **Staff Operations & Counter POS Portal:**
   - Architected `StaffShell`, layout frames, and role-based operational contexts for venue staff.
   - Built walk-in booking wizard with visual `DailySlotGrid`, dynamic VietQR payment modal with auto-polling, and cash confirmation modal featuring an integrated quick-change calculator.
@@ -154,15 +154,15 @@ npx expo start
   - Built global client state with **Zustand**; enforced strict TypeScript typing (eliminated unsafe casts across public, customer, provider, staff, and admin portals).
   - Integrated real-time notifications and session events using **Socket.IO** client with custom notification bell UI.
 
-#### 🚀 Key Plus 1: Backend Engineering (Node.js & PostgreSQL) — ~15%
+#### 🚀 Backend Services & API Architecture (Node.js & PostgreSQL)
 - **Session Lifecycle & Post-Paid Settlements:** Implemented backend entities, migrations, and controllers for active play sessions, vehicle damage inspections, and secondary post-paid checkouts (F&B orders / overtime charges).
 - **Master Data, Caching & Events:** Built cafe favoriting service, booking timeout cron jobs, Socket.IO event emitters, and configured **Upstash Redis TLS** cloud integration.
 
-#### 📱 Key Plus 2: Mobile Application (React Native / Expo) — ~15%
+#### 📱 Mobile Application Development (React Native & Expo)
 - **Staff Counter & Inspection Tools:** Ported staff check-in, walk-in VietQR modal, and inspection workflows to mobile with native camera capture (`expo-camera`, `expo-image-picker`).
 - **Realtime Sync & CI/CD:** Integrated push notifications (`expo-notifications`), WebSocket alerts, deep linking from notifications & VNPay redirects, and automated Android standalone APK builds via **EAS Build**.
 
-#### 📐 System Architecture & DevOps
+#### 📐 System Architecture & Production Deployment
 - **Architecture Design:** Authored **10 UML 2 Class Diagrams** (PlantUML) and **Conceptual ERD** covering the entire platform domain.
 - **24/7 Cloud Deployment:** Deployed and maintained the zero-cost production stack on **Vercel** (Frontend), **Render Docker** (API), **Neon** (PostgreSQL 16 SSL), and **Upstash** (Redis TLS).
 

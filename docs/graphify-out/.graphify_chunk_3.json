@@ -1,0 +1,924 @@
+{
+  "nodes": [
+    {
+      "id": "speckit_guide",
+      "label": "SpecKit Guide",
+      "file": "docs/speckit-guide.md",
+      "file_type": "document",
+      "description": "Guide for spec-driven development workflow using SpecKit CLI within rcfield-spec. Covers constitution management, feature specification, planning, task generation, and implementation steps."
+    },
+    {
+      "id": "speckit_constitution",
+      "label": "SpecKit Constitution",
+      "file": ".specify/memory/constitution.md",
+      "file_type": "document",
+      "description": "Living distillation of project principles from docs/spec/. AI reads this briefing document. Must be re-generated via /speckit-constitution whenever docs/spec/ changes."
+    },
+    {
+      "id": "speckit_workflow",
+      "label": "SpecKit Feature Workflow",
+      "file": "docs/speckit-guide.md",
+      "file_type": "rationale",
+      "description": "Six-step workflow: specify -> clarify -> plan -> tasks -> analyze -> implement. Each step corresponds to a slash command and produces an artifact in .specify/memory/."
+    },
+    {
+      "id": "adr_001_tenant_ui",
+      "label": "ADR-001: B2B SaaS Chain Branch Model",
+      "file": "docs/adr/001-tenant-ui-model.md",
+      "file_type": "document",
+      "description": "Architecture decision: RCField is B2B SaaS sold to one business operating a chain of RC branches. Chose Model D (chain model like Starbucks) over marketplace, per-tenant subdomain, or hybrid. All branches share one app and one domain. rationale: only 1 enterprise customer; mentor confirmed multi-branch management; discovery still available; per-branch config needed."
+    },
+    {
+      "id": "adr_002_express",
+      "label": "ADR-002: Express.js Backend Framework",
+      "file": "docs/adr/002-backend-framework-express.md",
+      "file_type": "document",
+      "description": "Architecture decision: use Express.js over NestJS for the backend. rationale: no learning curve for the 4-person team, 4-month timeline safety, sufficient for project scope. Mitigations: requireRole middleware for RBAC, zod for validation, global AppError middleware, node-cron for jobs, convention-enforced routing structure."
+    },
+    {
+      "id": "booking_lifecycle_sequence",
+      "label": "Sequence Flow: Booking Lifecycle",
+      "file": "docs/diagrams/sequence/sequence-flow-booking-lifecycle.md",
+      "file_type": "document",
+      "description": "End-to-end sequence diagram from booking creation to completion or cancellation. Covers: create booking, payment, check-in (booking->session), extension, check-out with incident policy, and completion/settlement. Uses sessions for actual play and incidents for damage/incident logging."
+    },
+    {
+      "id": "spec_00_overview",
+      "label": "Spec 00: Project Overview",
+      "file": "docs/spec/00-overview.md",
+      "file_type": "document",
+      "description": "RCField B2B SaaS platform for RC car field operations. Phase 1 Operational Core includes 41 tables: booking/session lifecycle, fleet, BYOC, F&B, packages, subscriptions, contests, promotions, inspections, disputes, maintenance logs, trust score, feature flags. Phase 2 adds AI, SaaS tenant/billing, advanced multi-party dispute workflow."
+    },
+    {
+      "id": "spec_01_domain_model",
+      "label": "Spec 01: Domain Model",
+      "file": "docs/spec/01-domain-model.md",
+      "file_type": "document",
+      "description": "Defines all Phase 1 entities (User, Cafe, Vehicle, CustomerVehicle, Booking, BookingParticipant, BookingVehicle, Session, SessionParticipant, SessionVehicle, PaymentComponent, PaymentTransaction, Inspection, InspectionPhoto, InspectionChecklist, ExtensionProposal, FnbOrder, Package, Subscription, Contest, Incident, Dispute, Promotion, Review, NotificationLog, TrustScoreLog, FeatureFlag) and all enums."
+    },
+    {
+      "id": "spec_02_state_machine",
+      "label": "Spec 02: Booking & Session State Machine",
+      "file": "docs/spec/02-state-machine.md",
+      "file_type": "document",
+      "description": "Defines two independent state machines: Booking (PENDING->CONFIRMED->COMPLETED/CANCELLED/NO_SHOW) and Session (CHECKED_IN->ACTIVE->EXTENDING->CHECKING_OUT->COMPLETED/CANCELLED). All transitions must go through service layer. Includes timeout rules and event enums."
+    },
+    {
+      "id": "spec_03_payment_engine",
+      "label": "Spec 03: Payment Engine",
+      "file": "docs/spec/03-payment-engine.md",
+      "file_type": "document",
+      "description": "Critical spec for all payment logic. Principles: snapshot-first, component isolation, immutable ledger, platform fee only on consummated components, DB row lock for race conditions, settlement per session. Defines component lifecycle, refund rules R1/R2/R3, extension fee cap, damage charge formula, discount/platform fee calculation."
+    },
+    {
+      "id": "spec_04_inspection_flow",
+      "label": "Spec 04: Inspection Flow",
+      "file": "docs/spec/04-inspection-flow.md",
+      "file_type": "document",
+      "description": "Digital evidence mechanism at every asset handover. Check-in flow: create session, 4 mandatory photos (FRONT/BACK/LEFT/RIGHT), checklist, pre_existing_flag, customer confirmation with 15-min auto-confirm timeout. Check-out flow: re-photograph same angles, compare, flag damage, customer confirmation with 2h/24h timeouts. Photo storage via Cloudinary."
+    },
+    {
+      "id": "spec_05_api_contracts",
+      "label": "Spec 05: API Contracts",
+      "file": "docs/spec/05-api-contracts.md",
+      "file_type": "document",
+      "description": "REST API surface for Phase 1. Endpoints for Auth, Cafes, Fleet, Bookings, Sessions, Inspections, Extensions, Incidents, F&B, Packages, Subscriptions, Contests. Standard response format {data, meta?, error?}. Common error codes defined."
+    },
+    {
+      "id": "spec_06_database",
+      "label": "Spec 06: Database Specification",
+      "file": "docs/spec/06-database.md",
+      "file_type": "document",
+      "description": "Schema source of truth for Phase 1 Operational Core (41 tables). Conventions: snake_case plural table names, UUID PKs, numeric(15,2) for money, jsonb for snapshots, timestamptz UTC, soft delete via deleted_at."
+    },
+    {
+      "id": "br_payment",
+      "label": "BR-Payment: Payment Business Rules",
+      "file": "docs/spec/business-rules/BR-payment.md",
+      "file_type": "document",
+      "description": "Business rules for payment. BR-PM-001 snapshot-first, BR-PM-002 immutable ledger, BR-PM-003 component isolation. Component creation on CONFIRMED, extension, damage. Settlement per session. Refund rules R1 (customer cancel), R2 (provider cancel), R3 (no-show). Damage charge formula. F&B payment rules."
+    },
+    {
+      "id": "br_fnb",
+      "label": "BR-FnB: F&B Business Rules",
+      "file": "docs/spec/business-rules/BR-fnb.md",
+      "file_type": "document",
+      "description": "F&B pre-order gated to booking time, merged into single payment transaction. On-site order linked to Session, paid directly to Provider (cash/bank transfer). Platform takes 0% on all F&B. Menu per branch; items can be toggled without deletion."
+    },
+    {
+      "id": "br_promotions",
+      "label": "BR-Promotions: Promotion Business Rules",
+      "file": "docs/spec/business-rules/BR-promotions.md",
+      "file_type": "document",
+      "description": "Promotion validation: 8-step fail-fast check. Discount calculation: PERCENT (capped by max_discount_amount) or FIXED (capped at subtotal). Security deposit never discounted. Usage locked atomically at booking PENDING. Rollback on cancel via cron. 1 promo per booking. Platform fee calculated on discounted amount. Promo details snapshotted in booking.snapshot."
+    },
+    {
+      "id": "br_extension",
+      "label": "BR-Extension: Slot Extension Business Rules",
+      "file": "docs/spec/business-rules/BR-extension.md",
+      "file_type": "document",
+      "description": "Extension only when session ACTIVE. Staff proposes, customer decides. Extension fee cap = 50% of security_deposit. Multiple extensions allowed within cap. Fee is post-paid (HELD component, settled from deposit). Session planned_end_at updated on approval. 10-minute customer response timeout -> auto-reject."
+    },
+    {
+      "id": "br_fleet",
+      "label": "BR-Fleet: Fleet Management Business Rules",
+      "file": "docs/spec/business-rules/BR-fleet.md",
+      "file_type": "document",
+      "description": "Three vehicle tiers: STANDARD (1.0x damage multiplier), PREMIUM (1.5x), RESTRICTED (2.0x). Vehicle only rentable when AVAILABLE. Status transitions: AVAILABLE->IN_USE on check-in, IN_USE->AVAILABLE on session complete/cancel. BYOC vehicles not restricted by track compatibility. Fleet is per-branch; no cross-branch sharing."
+    },
+    {
+      "id": "br_dispute",
+      "label": "BR-Dispute: Incident & Dispute Business Rules",
+      "file": "docs/spec/business-rules/BR-dispute.md",
+      "file_type": "document",
+      "description": "Phase 1 has two layers: Incident (policy-based, Staff/Admin) and Dispute (formal, Admin-only). Incidents require session evidence from inspections. Incomplete inspection evidence = no damage charge. Responsible party: CUSTOMER/PROVIDER/STAFF/SHARED/UNKNOWN. Disputes: max 1 per booking, only before COMPLETED, Admin-only adjudication. Multi-party arbitration is Phase 2."
+    },
+    {
+      "id": "br_booking",
+      "label": "BR-Booking: Booking Business Rules",
+      "file": "docs/spec/business-rules/BR-booking.md",
+      "file_type": "document",
+      "description": "Fixed slot system per cafe.slot_duration_minutes. Multi-slot and multi-vehicle bookings. Availability checks for RENTAL and BYOC. Redis slot lock (TTL 1800s) before DB insert. 30-minute payment window. Cancellation refund tiers (>24h, 12-24h, <12h). No-show auto-cancel after 30 min post slot_start. Vehicle eligibility by tier and trust_score."
+    },
+    {
+      "id": "br_inspection",
+      "label": "BR-Inspection: Inspection Business Rules",
+      "file": "docs/spec/business-rules/BR-inspection.md",
+      "file_type": "document",
+      "description": "Inspection is digital evidence at every asset handover. 4 mandatory photos (FRONT/BACK/LEFT/RIGHT). Full checklist required. pre_existing_flag valid only with complete inspection + customer confirmation. Check-in: 1 per session, staff must be assigned to branch. RENTAL and BYOC have different checklist formats. Check-out: 2h no-damage timeout, 24h damage auto-confirm. Photo retention: 90 days after COMPLETED, 30 days post incident/dispute resolution."
+    },
+    {
+      "id": "br_readme",
+      "label": "Business Rules README",
+      "file": "docs/spec/business-rules/README.md",
+      "file_type": "document",
+      "description": "Index of all business rule files. Links each domain file to corresponding technical spec. Format: BR-[DOMAIN]-[NNN] with IF/THEN/NOTE structure."
+    },
+    {
+      "id": "entity_user",
+      "label": "User Entity",
+      "file": "docs/spec/01-domain-model.md",
+      "file_type": "rationale",
+      "description": "Core user entity with roles CUSTOMER/PROVIDER/STAFF/ADMIN, auth_provider (LOCAL/GOOGLE), trust_score decimal, is_active flag."
+    },
+    {
+      "id": "entity_cafe",
+      "label": "Cafe Entity",
+      "file": "docs/spec/01-domain-model.md",
+      "file_type": "rationale",
+      "description": "Branch/location entity. Has per-branch config: operating_hours JSON, track_types, slot_duration_minutes, slot_fee_rate, max_concurrent_bookings, byoc_capacity."
+    },
+    {
+      "id": "entity_vehicle",
+      "label": "Vehicle Entity",
+      "file": "docs/spec/01-domain-model.md",
+      "file_type": "rationale",
+      "description": "Rental vehicle in fleet. Has tier (STANDARD/PREMIUM/RESTRICTED), status (AVAILABLE/IN_USE/MAINTENANCE/RETIRED), hourly_rate, security_deposit, damage_multiplier, compatible_track_types."
+    },
+    {
+      "id": "entity_booking",
+      "label": "Booking Entity",
+      "file": "docs/spec/01-domain-model.md",
+      "file_type": "rationale",
+      "description": "Planned reservation record. No direct vehicle_id. Has snapshot JSON for price/policy immutability. Linked to booking_vehicles for rental vehicles. Has booking_mode (SINGLE/PACKAGE/SUBSCRIPTION) and play_mode (RENTAL/BYOC/MIXED)."
+    },
+    {
+      "id": "entity_session",
+      "label": "Session Entity",
+      "file": "docs/spec/01-domain-model.md",
+      "file_type": "rationale",
+      "description": "Actual play session created at check-in. A booking can have 0..N sessions. Tracks actual_start_at, planned_end_at, actual_total_amount. Linked to session_participants, session_vehicles, inspections, extension_proposals, incidents."
+    },
+    {
+      "id": "entity_payment_component",
+      "label": "PaymentComponent Entity",
+      "file": "docs/spec/01-domain-model.md",
+      "file_type": "rationale",
+      "description": "Immutable payment ledger entry. Types: SLOT_FEE/RENTAL_FEE/SECURITY_DEPOSIT/EXTENSION_FEE/DAMAGE_CHARGE/FNB_PREORDER/FNB_ON_SITE/PACKAGE_PURCHASE/CONTEST_ENTRY. Status: PENDING/HELD/DISBURSED/REFUNDED/PARTIALLY_REFUNDED/CAPTURED. Amount never updated; create new component for adjustments."
+    },
+    {
+      "id": "entity_inspection",
+      "label": "Inspection Entity",
+      "file": "docs/spec/01-domain-model.md",
+      "file_type": "rationale",
+      "description": "Digital evidence record at asset handover. Linked to session and optionally session_vehicle. Has type (CHECK_IN/CHECK_OUT/STAFF_HANDOVER), pre_existing_flag, damage_noted, customer_confirmed status."
+    },
+    {
+      "id": "entity_incident",
+      "label": "Incident Entity",
+      "file": "docs/spec/01-domain-model.md",
+      "file_type": "rationale",
+      "description": "Operational incident log within a session. Has status (RECORDED/REVIEWED/RESOLVED/WAIVED), responsible_party, final_amount, resolution_note. Complete when all fields are set."
+    },
+    {
+      "id": "entity_dispute",
+      "label": "Dispute Entity",
+      "file": "docs/spec/01-domain-model.md",
+      "file_type": "rationale",
+      "description": "Formal dispute record. Max 1 per booking. Only Admin can resolve. Uses inspection evidence as baseline. Cannot open after booking COMPLETED."
+    },
+    {
+      "id": "payment_snapshot_principle",
+      "label": "Snapshot-First Payment Principle",
+      "file": "docs/spec/03-payment-engine.md",
+      "file_type": "rationale",
+      "description": "All payment calculations use booking.snapshot, never current Cafe or Vehicle prices. Snapshot must be immutable after booking creation. All refund/settlement calculations read from snapshot.calculated."
+    },
+    {
+      "id": "payment_component_lifecycle",
+      "label": "Payment Component Lifecycle",
+      "file": "docs/spec/03-payment-engine.md",
+      "file_type": "rationale",
+      "description": "Components created at CONFIRMED (SLOT_FEE, RENTAL_FEE, SECURITY_DEPOSIT, FNB_PREORDER). Extension creates EXTENSION_FEE per session. Damage creates DAMAGE_CHARGE. Settlement at session COMPLETED: disburse to Provider, refund deposit to Customer. Platform fee 15% on disbursed amounts."
+    },
+    {
+      "id": "inspection_evidence_principle",
+      "label": "Evidence-Based Inspection Principle",
+      "file": "docs/spec/04-inspection-flow.md",
+      "file_type": "rationale",
+      "description": "No valid inspection = no basis for DAMAGE_CHARGE or incident resolution. 4 photos required (FRONT/BACK/LEFT/RIGHT). pre_existing_flag only valid with complete inspection + customer confirmation. Provider loses damage rights if inspection protocol is incomplete."
+    },
+    {
+      "id": "booking_session_separation",
+      "label": "Booking-Session Data Separation",
+      "file": "docs/spec/00-overview.md",
+      "file_type": "rationale",
+      "description": "Planned data (booking, booking_participants, booking_vehicles) is separate from actual data (session, session_participants, session_vehicles). No vehicle_id directly on bookings. BYOC vehicles only finalized at check-in via session_vehicles."
+    },
+    {
+      "id": "cloudinary_storage",
+      "label": "Cloudinary Photo Storage",
+      "file": "docs/spec/04-inspection-flow.md",
+      "file_type": "rationale",
+      "description": "Inspection photos uploaded to Cloudinary. URL stored in inspection_photos table. Folder convention: inspections/{session_id}/{session_vehicle_id}/{check_in|check_out}/{angle}. Retention: 90 days post COMPLETED, extended during incidents/disputes."
+    },
+    {
+      "id": "redis_slot_lock",
+      "label": "Redis Slot Lock Mechanism",
+      "file": "docs/spec/business-rules/BR-booking.md",
+      "file_type": "rationale",
+      "description": "SET NX for RENTAL slots, INCR counter for BYOC, TTL 1800s. Slot locked in Redis before DB insert to prevent race conditions. Redis TTL releases availability; cron job handles booking status=CANCELLED and promo rollback."
+    },
+    {
+      "id": "platform_fee_model",
+      "label": "Platform Fee Model",
+      "file": "docs/spec/03-payment-engine.md",
+      "file_type": "rationale",
+      "description": "15% platform fee on disbursed amounts to Provider (SLOT_FEE + RENTAL_FEE + EXTENSION_FEE + DAMAGE_CHARGE after discount). 0% on SECURITY_DEPOSIT (customer's money). 0% on all F&B. Fee calculated on consummated, post-discount amounts."
+    },
+    {
+      "id": "vehicle_tier_system",
+      "label": "Vehicle Tier System",
+      "file": "docs/spec/business-rules/BR-fleet.md",
+      "file_type": "rationale",
+      "description": "STANDARD (deposit low, 1.0x multiplier, all customers), PREMIUM (medium deposit, 1.5x, eligible customers), RESTRICTED (high deposit, 2.0x, limited/approval required). Eligibility tied to trust_score (details TBD)."
+    },
+    {
+      "id": "b2b_saas_chain_model",
+      "label": "B2B SaaS Chain Model",
+      "file": "docs/adr/001-tenant-ui-model.md",
+      "file_type": "rationale",
+      "description": "Single enterprise customer (Provider) with multiple branches sharing one platform. Not marketplace, not per-tenant subdomain. All branches discoverable via shared app. Per-branch config for pricing, fleet, F&B menu. PROVIDER sees aggregate chain reports + per-branch drill-down."
+    },
+    {
+      "id": "expressjs_architecture",
+      "label": "Express.js Architecture",
+      "file": "docs/adr/002-backend-framework-express.md",
+      "file_type": "rationale",
+      "description": "routes/ -> controllers/ -> services/ -> models/ layered architecture enforced by code review convention. RBAC via requireRole middleware. Validation via zod. Error handling via global AppError middleware. Jobs via node-cron. Storage via Cloudinary."
+    }
+  ],
+  "edges": [
+    {
+      "source": "speckit_guide",
+      "target": "speckit_constitution",
+      "relation": "manages",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "speckit_guide",
+      "target": "speckit_workflow",
+      "relation": "describes",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "speckit_constitution",
+      "target": "spec_01_domain_model",
+      "relation": "distilled_from",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "speckit_constitution",
+      "target": "spec_02_state_machine",
+      "relation": "distilled_from",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "speckit_constitution",
+      "target": "spec_03_payment_engine",
+      "relation": "distilled_from",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "adr_001_tenant_ui",
+      "target": "b2b_saas_chain_model",
+      "relation": "decides",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "adr_002_express",
+      "target": "expressjs_architecture",
+      "relation": "decides",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "booking_lifecycle_sequence",
+      "target": "spec_02_state_machine",
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "booking_lifecycle_sequence",
+      "target": "spec_03_payment_engine",
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "booking_lifecycle_sequence",
+      "target": "spec_04_inspection_flow",
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "booking_lifecycle_sequence",
+      "target": "spec_01_domain_model",
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "booking_lifecycle_sequence",
+      "target": "spec_00_overview",
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "booking_lifecycle_sequence",
+      "target": "spec_05_api_contracts",
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "spec_00_overview",
+      "target": "spec_01_domain_model",
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "spec_00_overview",
+      "target": "booking_session_separation",
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "spec_01_domain_model",
+      "target": "spec_06_database",
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "spec_01_domain_model",
+      "target": "spec_02_state_machine",
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "spec_01_domain_model",
+      "target": "spec_03_payment_engine",
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "spec_01_domain_model",
+      "target": "spec_04_inspection_flow",
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "spec_01_domain_model",
+      "target": "entity_user",
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "spec_01_domain_model",
+      "target": "entity_cafe",
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "spec_01_domain_model",
+      "target": "entity_vehicle",
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "spec_01_domain_model",
+      "target": "entity_booking",
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "spec_01_domain_model",
+      "target": "entity_session",
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "spec_01_domain_model",
+      "target": "entity_payment_component",
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "spec_01_domain_model",
+      "target": "entity_inspection",
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "spec_01_domain_model",
+      "target": "entity_incident",
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "spec_01_domain_model",
+      "target": "entity_dispute",
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "spec_02_state_machine",
+      "target": "spec_01_domain_model",
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "spec_02_state_machine",
+      "target": "spec_03_payment_engine",
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "spec_02_state_machine",
+      "target": "spec_04_inspection_flow",
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "spec_02_state_machine",
+      "target": "br_booking",
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "spec_02_state_machine",
+      "target": "entity_booking",
+      "relation": "governs",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95
+    },
+    {
+      "source": "spec_02_state_machine",
+      "target": "entity_session",
+      "relation": "governs",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95
+    },
+    {
+      "source": "spec_03_payment_engine",
+      "target": "payment_snapshot_principle",
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "spec_03_payment_engine",
+      "target": "payment_component_lifecycle",
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "spec_03_payment_engine",
+      "target": "platform_fee_model",
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "spec_03_payment_engine",
+      "target": "entity_payment_component",
+      "relation": "governs",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95
+    },
+    {
+      "source": "spec_04_inspection_flow",
+      "target": "inspection_evidence_principle",
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "spec_04_inspection_flow",
+      "target": "cloudinary_storage",
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "spec_04_inspection_flow",
+      "target": "entity_inspection",
+      "relation": "governs",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95
+    },
+    {
+      "source": "spec_06_database",
+      "target": "spec_01_domain_model",
+      "relation": "implements",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "br_readme",
+      "target": "br_booking",
+      "relation": "indexes",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "br_readme",
+      "target": "br_fleet",
+      "relation": "indexes",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "br_readme",
+      "target": "br_payment",
+      "relation": "indexes",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "br_readme",
+      "target": "br_inspection",
+      "relation": "indexes",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "br_readme",
+      "target": "br_extension",
+      "relation": "indexes",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "br_readme",
+      "target": "br_fnb",
+      "relation": "indexes",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "br_readme",
+      "target": "br_dispute",
+      "relation": "indexes",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "br_readme",
+      "target": "spec_02_state_machine",
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "br_readme",
+      "target": "spec_03_payment_engine",
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "br_readme",
+      "target": "spec_04_inspection_flow",
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "br_readme",
+      "target": "spec_01_domain_model",
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "br_payment",
+      "target": "payment_snapshot_principle",
+      "relation": "formalizes",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95
+    },
+    {
+      "source": "br_payment",
+      "target": "payment_component_lifecycle",
+      "relation": "formalizes",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95
+    },
+    {
+      "source": "br_payment",
+      "target": "spec_03_payment_engine",
+      "relation": "extends",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95
+    },
+    {
+      "source": "br_booking",
+      "target": "redis_slot_lock",
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "br_booking",
+      "target": "entity_booking",
+      "relation": "governs",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95
+    },
+    {
+      "source": "br_booking",
+      "target": "spec_02_state_machine",
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "br_fleet",
+      "target": "vehicle_tier_system",
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "br_fleet",
+      "target": "entity_vehicle",
+      "relation": "governs",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95
+    },
+    {
+      "source": "br_inspection",
+      "target": "inspection_evidence_principle",
+      "relation": "formalizes",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95
+    },
+    {
+      "source": "br_inspection",
+      "target": "cloudinary_storage",
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "br_inspection",
+      "target": "entity_inspection",
+      "relation": "governs",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95
+    },
+    {
+      "source": "br_extension",
+      "target": "entity_session",
+      "relation": "governs",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95
+    },
+    {
+      "source": "br_extension",
+      "target": "entity_payment_component",
+      "relation": "creates",
+      "provenance": "INFERRED",
+      "confidence_score": 0.85
+    },
+    {
+      "source": "br_dispute",
+      "target": "entity_incident",
+      "relation": "governs",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95
+    },
+    {
+      "source": "br_dispute",
+      "target": "entity_dispute",
+      "relation": "governs",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95
+    },
+    {
+      "source": "br_dispute",
+      "target": "inspection_evidence_principle",
+      "relation": "depends_on",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "br_promotions",
+      "target": "spec_03_payment_engine",
+      "relation": "referenced_by",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "br_promotions",
+      "target": "entity_booking",
+      "relation": "governs",
+      "provenance": "INFERRED",
+      "confidence_score": 0.85
+    },
+    {
+      "source": "br_fnb",
+      "target": "entity_session",
+      "relation": "governs",
+      "provenance": "INFERRED",
+      "confidence_score": 0.85
+    },
+    {
+      "source": "br_fnb",
+      "target": "platform_fee_model",
+      "relation": "constrains",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "entity_booking",
+      "target": "entity_session",
+      "relation": "has_many",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "entity_session",
+      "target": "entity_inspection",
+      "relation": "has_many",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "entity_session",
+      "target": "entity_incident",
+      "relation": "has_many",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "entity_booking",
+      "target": "entity_dispute",
+      "relation": "has_at_most_one",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "entity_booking",
+      "target": "entity_payment_component",
+      "relation": "has_many",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "entity_inspection",
+      "target": "inspection_evidence_principle",
+      "relation": "implements",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95
+    },
+    {
+      "source": "entity_vehicle",
+      "target": "vehicle_tier_system",
+      "relation": "classified_by",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95
+    },
+    {
+      "source": "payment_snapshot_principle",
+      "target": "entity_booking",
+      "relation": "reads_from",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "b2b_saas_chain_model",
+      "target": "entity_cafe",
+      "relation": "architecture_drives",
+      "provenance": "INFERRED",
+      "confidence_score": 0.85
+    },
+    {
+      "source": "expressjs_architecture",
+      "target": "adr_002_express",
+      "relation": "decided_in",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "spec_05_api_contracts",
+      "target": "entity_booking",
+      "relation": "exposes",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95
+    },
+    {
+      "source": "spec_05_api_contracts",
+      "target": "entity_session",
+      "relation": "exposes",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95
+    },
+    {
+      "source": "spec_05_api_contracts",
+      "target": "entity_inspection",
+      "relation": "exposes",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95
+    },
+    {
+      "source": "spec_05_api_contracts",
+      "target": "entity_incident",
+      "relation": "exposes",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95
+    },
+    {
+      "source": "redis_slot_lock",
+      "target": "entity_booking",
+      "relation": "protects",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95
+    },
+    {
+      "source": "booking_session_separation",
+      "target": "entity_booking",
+      "relation": "governs",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "booking_session_separation",
+      "target": "entity_session",
+      "relation": "governs",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    }
+  ],
+  "hyperedges": []
+}

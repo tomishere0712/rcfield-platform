@@ -1,0 +1,4605 @@
+{
+  "directed": false,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "label": "bootstrap()",
+      "file_type": "code",
+      "source_file": "src/server.ts",
+      "source_location": "L8",
+      "id": "src_server_bootstrap",
+      "community": 2,
+      "norm_label": "bootstrap()"
+    },
+    {
+      "label": "1747180800000-InitialSchema.ts",
+      "file_type": "code",
+      "source_file": "src/migrations/1747180800000-InitialSchema.ts",
+      "source_location": "L1",
+      "id": "src_migrations_1747180800000_initialschema_ts",
+      "community": 7,
+      "norm_label": "1747180800000-initialschema.ts"
+    },
+    {
+      "label": "InitialSchema1747180800000",
+      "file_type": "code",
+      "source_file": "src/migrations/1747180800000-InitialSchema.ts",
+      "source_location": "L3",
+      "id": "migrations_1747180800000_initialschema_initialschema1747180800000",
+      "community": 7,
+      "norm_label": "initialschema1747180800000"
+    },
+    {
+      "label": ".up()",
+      "file_type": "code",
+      "source_file": "src/migrations/1747180800000-InitialSchema.ts",
+      "source_location": "L4",
+      "id": "migrations_1747180800000_initialschema_initialschema1747180800000_up",
+      "community": 7,
+      "norm_label": ".up()"
+    },
+    {
+      "label": ".down()",
+      "file_type": "code",
+      "source_file": "src/migrations/1747180800000-InitialSchema.ts",
+      "source_location": "L596",
+      "id": "migrations_1747180800000_initialschema_initialschema1747180800000_down",
+      "community": 7,
+      "norm_label": ".down()"
+    },
+    {
+      "label": "index.ts",
+      "file_type": "code",
+      "source_file": "src/types/index.ts",
+      "source_location": "L1",
+      "id": "src_types_index_ts",
+      "community": 1,
+      "norm_label": "index.ts"
+    },
+    {
+      "label": "AppError",
+      "file_type": "code",
+      "source_file": "src/types/index.ts",
+      "source_location": "L152",
+      "id": "types_index_apperror",
+      "community": 1,
+      "norm_label": "apperror"
+    },
+    {
+      "label": ".constructor()",
+      "file_type": "code",
+      "source_file": "src/types/index.ts",
+      "source_location": "L153",
+      "id": "types_index_apperror_constructor",
+      "community": 1,
+      "norm_label": ".constructor()"
+    },
+    {
+      "label": "redis.ts",
+      "file_type": "code",
+      "source_file": "src/config/redis.ts",
+      "source_location": "L1",
+      "id": "src_config_redis_ts",
+      "community": 2,
+      "norm_label": "redis.ts"
+    },
+    {
+      "label": "logger.ts",
+      "file_type": "code",
+      "source_file": "src/config/logger.ts",
+      "source_location": "L1",
+      "id": "src_config_logger_ts",
+      "community": 2,
+      "norm_label": "logger.ts"
+    },
+    {
+      "label": "shouldLog()",
+      "file_type": "code",
+      "source_file": "src/config/logger.ts",
+      "source_location": "L14",
+      "id": "config_logger_shouldlog",
+      "community": 2,
+      "norm_label": "shouldlog()"
+    },
+    {
+      "label": "formatTimestamp()",
+      "file_type": "code",
+      "source_file": "src/config/logger.ts",
+      "source_location": "L16",
+      "id": "config_logger_formattimestamp",
+      "community": 2,
+      "norm_label": "formattimestamp()"
+    },
+    {
+      "label": "database.ts",
+      "file_type": "code",
+      "source_file": "src/config/database.ts",
+      "source_location": "L1",
+      "id": "src_config_database_ts",
+      "community": 2,
+      "norm_label": "database.ts"
+    },
+    {
+      "label": "env.ts",
+      "file_type": "code",
+      "source_file": "src/config/env.ts",
+      "source_location": "L1",
+      "id": "src_config_env_ts",
+      "community": 2,
+      "norm_label": "env.ts"
+    },
+    {
+      "label": "logger.middleware.ts",
+      "file_type": "code",
+      "source_file": "src/middlewares/logger.middleware.ts",
+      "source_location": "L1",
+      "id": "src_middlewares_logger_middleware_ts",
+      "community": 2,
+      "norm_label": "logger.middleware.ts"
+    },
+    {
+      "label": "maskBody()",
+      "file_type": "code",
+      "source_file": "src/middlewares/logger.middleware.ts",
+      "source_location": "L6",
+      "id": "middlewares_logger_middleware_maskbody",
+      "community": 2,
+      "norm_label": "maskbody()"
+    },
+    {
+      "label": "requestLogger()",
+      "file_type": "code",
+      "source_file": "src/middlewares/logger.middleware.ts",
+      "source_location": "L16",
+      "id": "middlewares_logger_middleware_requestlogger",
+      "community": 2,
+      "norm_label": "requestlogger()"
+    },
+    {
+      "label": "error.middleware.ts",
+      "file_type": "code",
+      "source_file": "src/middlewares/error.middleware.ts",
+      "source_location": "L1",
+      "id": "src_middlewares_error_middleware_ts",
+      "community": 1,
+      "norm_label": "error.middleware.ts"
+    },
+    {
+      "label": "auth.middleware.ts",
+      "file_type": "code",
+      "source_file": "src/middlewares/auth.middleware.ts",
+      "source_location": "L1",
+      "id": "src_middlewares_auth_middleware_ts",
+      "community": 1,
+      "norm_label": "auth.middleware.ts"
+    },
+    {
+      "label": "authenticate()",
+      "file_type": "code",
+      "source_file": "src/middlewares/auth.middleware.ts",
+      "source_location": "L6",
+      "id": "middlewares_auth_middleware_authenticate",
+      "community": 1,
+      "norm_label": "authenticate()"
+    },
+    {
+      "label": "authorize()",
+      "file_type": "code",
+      "source_file": "src/middlewares/auth.middleware.ts",
+      "source_location": "L22",
+      "id": "middlewares_auth_middleware_authorize",
+      "community": 1,
+      "norm_label": "authorize()"
+    },
+    {
+      "label": "User",
+      "file_type": "code",
+      "source_file": "src/models/user.entity.ts",
+      "source_location": "L12",
+      "id": "models_user_entity_user",
+      "community": 5,
+      "norm_label": "user"
+    },
+    {
+      "label": "global-setup.ts",
+      "file_type": "code",
+      "source_file": "src/__tests__/global-setup.ts",
+      "source_location": "L1",
+      "id": "src_tests_global_setup_ts",
+      "community": 8,
+      "norm_label": "global-setup.ts"
+    },
+    {
+      "label": "jest-setup.ts",
+      "file_type": "code",
+      "source_file": "src/__tests__/jest-setup.ts",
+      "source_location": "L1",
+      "id": "src_tests_jest_setup_ts",
+      "community": 2,
+      "norm_label": "jest-setup.ts"
+    },
+    {
+      "label": "mockGoogleSuccess()",
+      "file_type": "code",
+      "source_file": "src/__tests__/routes/auth.test.ts",
+      "source_location": "L104",
+      "id": "routes_auth_test_mockgooglesuccess",
+      "community": 1,
+      "norm_label": "mockgooglesuccess()"
+    },
+    {
+      "label": "mockGoogleFailure()",
+      "file_type": "code",
+      "source_file": "src/__tests__/routes/auth.test.ts",
+      "source_location": "L112",
+      "id": "routes_auth_test_mockgooglefailure",
+      "community": 1,
+      "norm_label": "mockgooglefailure()"
+    },
+    {
+      "label": "hashPassword()",
+      "file_type": "code",
+      "source_file": "src/__tests__/helpers/index.ts",
+      "source_location": "L11",
+      "id": "helpers_index_hashpassword",
+      "community": 1,
+      "norm_label": "hashpassword()"
+    },
+    {
+      "label": "createTestUser()",
+      "file_type": "code",
+      "source_file": "src/__tests__/helpers/index.ts",
+      "source_location": "L24",
+      "id": "helpers_index_createtestuser",
+      "community": 1,
+      "norm_label": "createtestuser()"
+    },
+    {
+      "label": "generateToken()",
+      "file_type": "code",
+      "source_file": "src/__tests__/helpers/index.ts",
+      "source_location": "L45",
+      "id": "helpers_index_generatetoken",
+      "community": 1,
+      "norm_label": "generatetoken()"
+    },
+    {
+      "label": "createTestCafe()",
+      "file_type": "code",
+      "source_file": "src/__tests__/helpers/index.ts",
+      "source_location": "L60",
+      "id": "helpers_index_createtestcafe",
+      "community": 1,
+      "norm_label": "createtestcafe()"
+    },
+    {
+      "label": "createTestVehicle()",
+      "file_type": "code",
+      "source_file": "src/__tests__/helpers/index.ts",
+      "source_location": "L100",
+      "id": "helpers_index_createtestvehicle",
+      "community": 1,
+      "norm_label": "createtestvehicle()"
+    },
+    {
+      "label": "seed()",
+      "file_type": "code",
+      "source_file": "src/seeds/seed-users.ts",
+      "source_location": "L19",
+      "id": "seeds_seed_users_seed",
+      "community": 2,
+      "norm_label": "seed()"
+    },
+    {
+      "label": ".userRepo()",
+      "file_type": "code",
+      "source_file": "src/services/auth.service.ts",
+      "source_location": "L26",
+      "id": "services_auth_service_authservice_userrepo",
+      "community": 5,
+      "norm_label": ".userrepo()"
+    },
+    {
+      "label": ".tokenRepo()",
+      "file_type": "code",
+      "source_file": "src/services/auth.service.ts",
+      "source_location": "L30",
+      "id": "services_auth_service_authservice_tokenrepo",
+      "community": 5,
+      "norm_label": ".tokenrepo()"
+    },
+    {
+      "label": ".hashToken()",
+      "file_type": "code",
+      "source_file": "src/services/auth.service.ts",
+      "source_location": "L34",
+      "id": "services_auth_service_authservice_hashtoken",
+      "community": 5,
+      "norm_label": ".hashtoken()"
+    },
+    {
+      "label": ".issueTokenPair()",
+      "file_type": "code",
+      "source_file": "src/services/auth.service.ts",
+      "source_location": "L38",
+      "id": "services_auth_service_authservice_issuetokenpair",
+      "community": 5,
+      "norm_label": ".issuetokenpair()"
+    },
+    {
+      "label": ".loginWithPassword()",
+      "file_type": "code",
+      "source_file": "src/services/auth.service.ts",
+      "source_location": "L60",
+      "id": "services_auth_service_authservice_loginwithpassword",
+      "community": 5,
+      "norm_label": ".loginwithpassword()"
+    },
+    {
+      "label": ".loginWithGoogle()",
+      "file_type": "code",
+      "source_file": "src/services/auth.service.ts",
+      "source_location": "L92",
+      "id": "services_auth_service_authservice_loginwithgoogle",
+      "community": 5,
+      "norm_label": ".loginwithgoogle()"
+    },
+    {
+      "label": ".refreshTokens()",
+      "file_type": "code",
+      "source_file": "src/services/auth.service.ts",
+      "source_location": "L130",
+      "id": "services_auth_service_authservice_refreshtokens",
+      "community": 5,
+      "norm_label": ".refreshtokens()"
+    },
+    {
+      "label": ".logout()",
+      "file_type": "code",
+      "source_file": "src/services/auth.service.ts",
+      "source_location": "L149",
+      "id": "services_auth_service_authservice_logout",
+      "community": 5,
+      "norm_label": ".logout()"
+    },
+    {
+      "label": "eslint.config.js",
+      "file": "rcfeild-be/eslint.config.js",
+      "file_type": "code",
+      "description": "ESLint configuration enforcing TypeScript strict rules: no-any, no-floating-promises, no-console (must use logger), no-require-imports. Relaxes floating-promises and console rules for test files.",
+      "id": "eslint_config",
+      "community": 2,
+      "norm_label": "eslint.config.js"
+    },
+    {
+      "label": "jest.config.ts",
+      "file": "rcfeild-be/jest.config.ts",
+      "file_type": "code",
+      "description": "Jest configuration using ts-jest preset. Sets globalSetup for DB creation+migration, setupFilesAfterEnv for per-file DB/Redis lifecycle, and moduleNameMapper for @/ path alias.",
+      "id": "jest_config",
+      "community": 2,
+      "norm_label": "jest.config.ts"
+    },
+    {
+      "label": "app.ts",
+      "file": "rcfeild-be/src/app.ts",
+      "file_type": "code",
+      "description": "Express application factory. Mounts helmet, cors, json parser, requestLogger middleware, rate limiter (100 req/15min), and all routes under /api/v1. Registers errorMiddleware as final handler.",
+      "id": "app_ts",
+      "community": 2,
+      "norm_label": "app.ts"
+    },
+    {
+      "label": "server.ts",
+      "file": "rcfeild-be/src/server.ts",
+      "file_type": "code",
+      "description": "Bootstrap entry point. Initializes AppDataSource (PostgreSQL), connects Redis, then starts Express app. Calls process.exit(1) on any bootstrap failure.",
+      "id": "server_ts",
+      "community": 2,
+      "norm_label": "server.ts"
+    },
+    {
+      "label": "InitialSchema migration",
+      "file": "rcfeild-be/src/migrations/1747180800000-InitialSchema.ts",
+      "file_type": "code",
+      "description": "Full database schema migration creating 26 tables and all enum types: users, refresh_tokens, password_reset_tokens, cafes, cafe_images, cafe_closures, cafe_announcements, staff_cafe_assignments, vehicles, vehicle_images, feature_flags, promotions, menu_items, bookings, promotion_usages, payment_components, payment_transactions, inspection_records, extension_proposals, disputes, fnb_orders, fnb_order_items, trust_score_logs, notification_logs, vehicle_maintenance_logs, reviews. Seeds 7 feature flags.",
+      "id": "migration_initialschema",
+      "community": 2,
+      "norm_label": "initialschema migration"
+    },
+    {
+      "label": "validate/index.ts",
+      "file": "rcfeild-be/src/validate/index.ts",
+      "file_type": "code",
+      "description": "Central Zod validation schema registry. Exports LoginSchema, GoogleSchema, RefreshSchema, LogoutSchema. All request body schemas live here per convention.",
+      "id": "validate_index",
+      "community": 2,
+      "norm_label": "validate/index.ts"
+    },
+    {
+      "label": "types/index.ts",
+      "file": "rcfeild-be/src/types/index.ts",
+      "file_type": "code",
+      "description": "Central enum and type registry. Defines UserRole, AuthProvider, TrustScoreReason, CafeStatus, TrackType, AssetTier, VehicleStatus, BookingMode, BookingSource, BookingStatus, PaymentComponentType, PaymentComponentStatus, DiscountType, InspectionType, DisputeStatus, FnbOrderType, FnbOrderStatus, NotificationChannel, AppError class, AuthPayload interface, AuthRequest interface.",
+      "id": "types_index",
+      "community": 2,
+      "norm_label": "types/index.ts"
+    },
+    {
+      "label": "config/redis.ts",
+      "file": "rcfeild-be/src/config/redis.ts",
+      "file_type": "code",
+      "description": "Exports ioredis client instance configured from env. Uses lazyConnect:true. Logs connection errors via logger.",
+      "id": "config_redis",
+      "community": 2,
+      "norm_label": "config/redis.ts"
+    },
+    {
+      "label": "config/logger.ts",
+      "file": "rcfeild-be/src/config/logger.ts",
+      "file_type": "code",
+      "description": "Custom logger module. Provides structured logging with level filtering (debug/info/warn/error). Specialized methods: http, server, database, auth, debug, info, warn, error. Timestamps in Asia/Ho_Chi_Minh timezone.",
+      "id": "config_logger",
+      "community": 2,
+      "norm_label": "config/logger.ts"
+    },
+    {
+      "label": "config/database.ts",
+      "file": "rcfeild-be/src/config/database.ts",
+      "file_type": "code",
+      "description": "Exports AppDataSource (TypeORM DataSource) for PostgreSQL. synchronize=false, entities loaded from models/**/*.entity.{ts,js}, migrations from migrations/**/*.{ts,js}.",
+      "id": "config_database",
+      "community": 2,
+      "norm_label": "config/database.ts"
+    },
+    {
+      "label": "config/env.ts",
+      "file": "rcfeild-be/src/config/env.ts",
+      "file_type": "code",
+      "description": "Typed environment configuration object. Sections: db (PostgreSQL), jwt (access+refresh tokens), redis, cloudinary, google (OAuth clientId), platform (feePct=0.15, paymentWindowMinutes=30, slotLockTtlSeconds=1800).",
+      "id": "config_env",
+      "community": 2,
+      "norm_label": "config/env.ts"
+    },
+    {
+      "label": "middlewares/logger.middleware.ts",
+      "file": "rcfeild-be/src/middlewares/logger.middleware.ts",
+      "file_type": "code",
+      "description": "Express requestLogger middleware. Masks sensitive fields (password, token, refresh_token, id_token, access_token) in request body logs. Intercepts res.json to log HTTP method, path, status, duration. Logs 4xx+ responses as warnings.",
+      "id": "middleware_logger",
+      "community": 2,
+      "norm_label": "middlewares/logger.middleware.ts"
+    },
+    {
+      "label": "middlewares/error.middleware.ts",
+      "file": "rcfeild-be/src/middlewares/error.middleware.ts",
+      "file_type": "code",
+      "description": "Express error handler middleware. Handles ZodError (400 VALIDATION_ERROR), AppError (custom status), and unhandled errors (500 INTERNAL_SERVER_ERROR). Must be registered last in app.",
+      "id": "middleware_error",
+      "community": 2,
+      "norm_label": "middlewares/error.middleware.ts"
+    },
+    {
+      "label": "middlewares/auth.middleware.ts",
+      "file": "rcfeild-be/src/middlewares/auth.middleware.ts",
+      "file_type": "code",
+      "description": "JWT authentication and RBAC authorization middleware. authenticate() verifies Bearer token using env.jwt.secret and attaches AuthPayload to req.user. authorize(...roles) checks req.user.role against allowed roles.",
+      "id": "middleware_auth",
+      "community": 2,
+      "norm_label": "middlewares/auth.middleware.ts"
+    },
+    {
+      "label": "models/user.entity.ts (User)",
+      "file": "rcfeild-be/src/models/user.entity.ts",
+      "file_type": "code",
+      "description": "TypeORM User entity mapped to 'users' table. Fields: id (uuid), email, full_name, phone, password_hash, auth_provider (AuthProvider enum), role (UserRole enum), trust_score (numeric 5,2 default 100), is_active, created_at, updated_at, deleted_at (soft delete).",
+      "id": "model_user",
+      "community": 2,
+      "norm_label": "models/user.entity.ts (user)"
+    },
+    {
+      "label": "__tests__/global-setup.ts",
+      "file": "rcfeild-be/src/__tests__/global-setup.ts",
+      "file_type": "code",
+      "description": "Jest globalSetup function. Creates rcfeild_test database if not exists (connects to 'postgres' db first). Then initializes DataSource on rcfeild_test and runs all migrations. Runs once before all test suites.",
+      "id": "test_globalsetup",
+      "community": 2,
+      "norm_label": "__tests__/global-setup.ts"
+    },
+    {
+      "label": "__tests__/jest-setup.ts",
+      "file": "rcfeild-be/src/__tests__/jest-setup.ts",
+      "file_type": "code",
+      "description": "Jest setupFilesAfterEnv. beforeAll: initializes AppDataSource if not ready. beforeEach: TRUNCATE all 23 tables with RESTART IDENTITY CASCADE to reset test state. afterAll: destroys AppDataSource and quits Redis.",
+      "id": "test_jestsetup",
+      "community": 2,
+      "norm_label": "__tests__/jest-setup.ts"
+    },
+    {
+      "label": "load-env.ts",
+      "file": "rcfeild-be/src/__tests__/load-env.ts",
+      "file_type": "code",
+      "description": "Jest global setup that loads .env.test before any module import, ensuring DB_NAME=rcfeild_test during the test run.",
+      "id": "load_env_ts",
+      "community": 1,
+      "norm_label": "load-env.ts"
+    },
+    {
+      "label": "global-teardown.ts",
+      "file": "rcfeild-be/src/__tests__/global-teardown.ts",
+      "file_type": "code",
+      "description": "Jest global teardown stub. Currently a no-op but contains commented logic to DROP DATABASE rcfeild_test after all tests.",
+      "id": "global_teardown_ts",
+      "community": 9,
+      "norm_label": "global-teardown.ts"
+    },
+    {
+      "label": "auth.test.ts",
+      "file": "rcfeild-be/src/__tests__/routes/auth.test.ts",
+      "file_type": "code",
+      "description": "Integration tests for all auth endpoints: POST /api/v1/auth/login, /google, /refresh, /logout. Covers success, INVALID_CREDENTIALS, ACCOUNT_LOCKED, brute-force lockout, token rotation, and idempotent logout.",
+      "id": "auth_test_ts",
+      "community": 1,
+      "norm_label": "auth.test.ts"
+    },
+    {
+      "label": "bookings.test.ts",
+      "file": "rcfeild-be/src/__tests__/routes/bookings.test.ts",
+      "file_type": "code",
+      "description": "Integration test template for booking endpoints. All test cases are marked .todo \u2014 no implementation yet. Sets up customer, cafe, and vehicle fixtures in beforeEach.",
+      "id": "bookings_test_ts",
+      "community": 1,
+      "norm_label": "bookings.test.ts"
+    },
+    {
+      "label": "health.test.ts",
+      "file": "rcfeild-be/src/__tests__/routes/health.test.ts",
+      "file_type": "code",
+      "description": "Smoke test verifying GET /api/v1/health returns 200 with message 'RCField API is running'.",
+      "id": "health_test_ts",
+      "community": 1,
+      "norm_label": "health.test.ts"
+    },
+    {
+      "label": "test helpers/index.ts",
+      "file": "rcfeild-be/src/__tests__/helpers/index.ts",
+      "file_type": "code",
+      "description": "Test helper factories: createTestUser, createTestCafe, createTestVehicle, generateToken, hashPassword. Inserts rows directly via AppDataSource.query to bypass service layer.",
+      "id": "test_helpers_ts",
+      "community": 1,
+      "norm_label": "test helpers/index.ts"
+    },
+    {
+      "label": "seed-users.ts",
+      "file": "rcfeild-be/src/seeds/seed-users.ts",
+      "file_type": "code",
+      "description": "One-time DB seeder that creates ADMIN, PROVIDER, STAFF, CUSTOMER accounts using bcrypt-hashed passwords. Skips rows that already exist.",
+      "id": "seed_users_ts",
+      "community": 2,
+      "norm_label": "seed-users.ts"
+    },
+    {
+      "label": "auth.controller.ts",
+      "file": "rcfeild-be/src/controllers/auth.controller.ts",
+      "file_type": "code",
+      "description": "Express controller exposing login, googleLogin, refresh, logout handlers. Parses input via Zod schemas imported from validate/, delegates to authService, propagates errors to next().",
+      "id": "auth_controller_ts",
+      "community": 1,
+      "norm_label": "auth.controller.ts"
+    },
+    {
+      "label": "routes/index.ts",
+      "file": "rcfeild-be/src/routes/index.ts",
+      "file_type": "code",
+      "description": "Root Express router. Mounts GET /health and auth sub-router at /auth. Stubs for cafes, bookings, vehicles, inspections, payments, fnb are commented out.",
+      "id": "routes_index_ts",
+      "community": 1,
+      "norm_label": "routes/index.ts"
+    },
+    {
+      "label": "auth.routes.ts",
+      "file": "rcfeild-be/src/routes/auth.routes.ts",
+      "file_type": "code",
+      "description": "Auth Express router. Applies express-rate-limit (100 req / 15 min per IP). Mounts POST /login, /google, /refresh (public) and POST /logout (requires authenticate middleware).",
+      "id": "auth_routes_ts",
+      "community": 1,
+      "norm_label": "auth.routes.ts"
+    },
+    {
+      "label": "auth.service.ts",
+      "file": "rcfeild-be/src/services/auth.service.ts",
+      "file_type": "code",
+      "description": "Core auth business logic: loginWithPassword (bcrypt + Redis brute-force), loginWithGoogle (OAuth2Client token verification + upsert), refreshTokens (rotation + theft detection), logout (idempotent revoke). Private issueTokenPair generates JWT + opaque refresh token.",
+      "id": "auth_service_ts",
+      "community": 5,
+      "norm_label": "auth.service.ts"
+    },
+    {
+      "label": "SETUP.md",
+      "file": "rcfeild-spec/SETUP.md",
+      "file_type": "document",
+      "description": "Workspace bootstrap guide: cloning both repos, editor setup, Graphify and GitNexus setup commands, GitHub org and branch protection setup.",
+      "id": "setup_md",
+      "community": 6,
+      "norm_label": "setup.md"
+    },
+    {
+      "label": "README.md",
+      "file": "rcfeild-spec/README.md",
+      "file_type": "document",
+      "description": "rcfield-spec repo overview: source of truth for business logic, spec file index, Graphify setup, contributing rules (spec changes must accompany code changes in same PR).",
+      "id": "readme_md",
+      "community": 6,
+      "norm_label": "readme.md"
+    },
+    {
+      "label": "CLAUDE.md",
+      "file": "rcfeild-spec/CLAUDE.md",
+      "file_type": "document",
+      "description": "AI agent instruction file for the RCField workspace. Defines workspace layout, project overview, roles (ADMIN/PROVIDER/STAFF/CUSTOMER), tech stack, coding conventions, Git workflow, and quick business rules summary.",
+      "id": "claude_md",
+      "community": 6,
+      "norm_label": "claude.md"
+    },
+    {
+      "label": "001-user-login/quickstart.md",
+      "file": "rcfeild-spec/specs/001-user-login/quickstart.md",
+      "file_type": "document",
+      "description": "Step-by-step implementation guide for the user-login feature: prerequisites, dependency install, implementation order (entities \u2192 service \u2192 controller \u2192 routes \u2192 rate-limiting \u2192 tests), key code patterns for token issuance and brute-force.",
+      "id": "login_quickstart_md",
+      "community": 1,
+      "norm_label": "001-user-login/quickstart.md"
+    },
+    {
+      "label": "001-user-login/tasks.md",
+      "file": "rcfeild-spec/specs/001-user-login/tasks.md",
+      "file_type": "document",
+      "description": "Task breakdown for user-login feature across 7 phases (Setup, Foundational, US1-US4, Polish). All 28 tasks marked [x] complete. Includes parallel-execution hints and dependency graph.",
+      "id": "login_tasks_md",
+      "community": 1,
+      "norm_label": "001-user-login/tasks.md"
+    },
+    {
+      "label": "001-user-login/research.md",
+      "file": "rcfeild-spec/specs/001-user-login/research.md",
+      "file_type": "document",
+      "description": "Architecture decision records for user-login: Google OAuth ID-token approach, SHA-256 refresh token storage, Redis TTL brute-force, refresh token rotation + theft detection, is_active vs Redis lockout separation, HS256 JWT with opaque refresh tokens.",
+      "rationale": "ID-token approach chosen over server-side code exchange (no redirect endpoint needed, fits React SPA pattern). SHA-256 chosen over bcrypt for refresh tokens (speed) and over raw storage (DB compromise protection). Redis TTL chosen over DB columns for brute-force (zero cron overhead, auto-expires). Refresh token rotation + theft detection follows RFC 6819.",
+      "id": "login_research_md",
+      "community": 5,
+      "norm_label": "001-user-login/research.md"
+    },
+    {
+      "label": "001-user-login/data-model.md",
+      "file": "rcfeild-spec/specs/001-user-login/data-model.md",
+      "file_type": "document",
+      "description": "Data model spec for user-login: User entity (users table) and RefreshToken entity (refresh_tokens table) column definitions, Redis key patterns for brute-force, PostgreSQL enum values (user_role, auth_provider), and entity relationships.",
+      "id": "login_data_model_md",
+      "community": 5,
+      "norm_label": "001-user-login/data-model.md"
+    },
+    {
+      "label": "001-user-login/plan.md",
+      "file": "rcfeild-spec/specs/001-user-login/plan.md",
+      "file_type": "document",
+      "description": "Implementation plan for user-login: technical context (TypeScript 5.x, Node.js 22+, Jest+Supertest against rcfeild_test), constitution check (RBAC enforcement required for logout), project structure mapping spec docs to source files.",
+      "id": "login_plan_md",
+      "community": 6,
+      "norm_label": "001-user-login/plan.md"
+    },
+    {
+      "label": "001-user-login/spec.md",
+      "file": "rcfeild-spec/specs/001-user-login/spec.md",
+      "file_type": "document",
+      "description": "Feature specification for user login. Defines 4 user stories: email/password login (P1), Google OAuth (P2), token refresh (P2), logout (P3). Includes FR-001 to FR-012, acceptance scenarios, edge cases, and success criteria SC-001 to SC-006.",
+      "id": "login_spec_md",
+      "community": 6,
+      "norm_label": "001-user-login/spec.md"
+    },
+    {
+      "label": "001-user-login/checklists/requirements.md",
+      "file": "rcfeild-spec/specs/001-user-login/checklists/requirements.md",
+      "file_type": "document",
+      "description": "Spec quality checklist for user-login. All items pass: no implementation details in spec, requirements testable, success criteria measurable, edge cases identified, no NEEDS_CLARIFICATION markers. Spec cleared for /speckit-plan.",
+      "id": "login_requirements_checklist_md",
+      "community": 6,
+      "norm_label": "001-user-login/checklists/requirements.md"
+    },
+    {
+      "label": "001-user-login/contracts/auth.md",
+      "file": "rcfeild-spec/specs/001-user-login/contracts/auth.md",
+      "file_type": "document",
+      "description": "API contract definitions for /api/v1/auth: POST /login, /google, /refresh, /logout. Specifies request schemas, response shapes (success and all error codes), and per-endpoint business rules (Redis counter logic, SHA-256 hashing, revocation on logout).",
+      "id": "login_contracts_auth_md",
+      "community": 1,
+      "norm_label": "001-user-login/contracts/auth.md"
+    },
+    {
+      "label": "User Entity",
+      "file": "rcfeild-spec/specs/001-user-login/data-model.md",
+      "file_type": "document",
+      "description": "TypeORM entity mapping to the users table. Columns: id (UUID PK), email (unique), password_hash (nullable), role (user_role enum), auth_provider (auth_provider enum), google_id (nullable), is_active, trust_score, created_at, updated_at, deleted_at (soft delete).",
+      "id": "entity_user",
+      "community": 5,
+      "norm_label": "user entity"
+    },
+    {
+      "label": "RefreshToken Entity",
+      "file": "rcfeild-spec/specs/001-user-login/data-model.md",
+      "file_type": "document",
+      "description": "TypeORM entity mapping to the refresh_tokens table. Columns: id (UUID PK), user_id (FK \u2192 users), token (SHA-256 hash of raw token), expires_at, created_at, revoked_at (nullable). Valid when revoked_at IS NULL AND expires_at > now().",
+      "id": "entity_refresh_token",
+      "community": 5,
+      "norm_label": "refreshtoken entity"
+    },
+    {
+      "label": "Redis auth:failed key",
+      "file": "rcfeild-spec/specs/001-user-login/data-model.md",
+      "file_type": "document",
+      "description": "Redis key pattern auth:failed:{email} with 900s TTL. Stores integer count of consecutive failed logins per account. Count >= 5 triggers ACCOUNT_LOCKED (403). Auto-expires \u2014 no admin intervention needed.",
+      "id": "redis_brute_force_key",
+      "community": 5,
+      "norm_label": "redis auth:failed key"
+    },
+    {
+      "label": "INVALID_CREDENTIALS error code",
+      "file": "rcfeild-spec/specs/001-user-login/contracts/auth.md",
+      "file_type": "document",
+      "description": "HTTP 401 error returned for both wrong password and non-existent email. Intentionally identical message to avoid account enumeration (FR-006).",
+      "id": "error_code_invalid_credentials",
+      "community": 1,
+      "norm_label": "invalid_credentials error code"
+    },
+    {
+      "label": "ACCOUNT_LOCKED error code",
+      "file": "rcfeild-spec/specs/001-user-login/contracts/auth.md",
+      "file_type": "document",
+      "description": "HTTP 403 error returned for both is_active=false (permanent admin lockout) and Redis counter >= 5 (temporary brute-force lockout). Same response shape prevents revealing reason for lockout.",
+      "id": "error_code_account_locked",
+      "community": 1,
+      "norm_label": "account_locked error code"
+    },
+    {
+      "label": "GOOGLE_AUTH_FAILED error code",
+      "file": "rcfeild-spec/specs/001-user-login/contracts/auth.md",
+      "file_type": "document",
+      "description": "HTTP 401 error returned when google-auth-library OAuth2Client.verifyIdToken() throws or returns no email payload.",
+      "id": "error_code_google_auth_failed",
+      "community": 1,
+      "norm_label": "google_auth_failed error code"
+    },
+    {
+      "label": "INVALID_REFRESH_TOKEN error code",
+      "file": "rcfeild-spec/specs/001-user-login/contracts/auth.md",
+      "file_type": "document",
+      "description": "HTTP 401 error for refresh token not found, expired, or already revoked. Reusing a revoked token also triggers full session wipe for the user (theft detection).",
+      "id": "error_code_invalid_refresh_token",
+      "community": 1,
+      "norm_label": "invalid_refresh_token error code"
+    },
+    {
+      "label": "authenticate middleware",
+      "file": "rcfeild-be/src/routes/auth.routes.ts",
+      "file_type": "code",
+      "description": "JWT validation middleware imported from middlewares/auth.middleware.ts. Applied only to POST /logout in the auth router. Populates req.user with userId, email, and role.",
+      "id": "auth_middleware",
+      "community": 1,
+      "norm_label": "authenticate middleware"
+    },
+    {
+      "label": "authLimiter (express-rate-limit)",
+      "file": "rcfeild-be/src/routes/auth.routes.ts",
+      "file_type": "code",
+      "description": "Per-IP rate limiter applied to all /auth routes: 100 requests per 15 minutes (windowMs: 900000). Returns 429 TOO_MANY_REQUESTS on breach.",
+      "id": "rate_limiter",
+      "community": 1,
+      "norm_label": "authlimiter (express-rate-limit)"
+    },
+    {
+      "label": "UserRole enum",
+      "file": "rcfeild-be/src/types/index.ts",
+      "file_type": "code",
+      "description": "Enum with values CUSTOMER, PROVIDER, STAFF, ADMIN. Used in JWT payload, User entity, and RBAC guards.",
+      "id": "user_role_enum",
+      "community": 1,
+      "norm_label": "userrole enum"
+    },
+    {
+      "label": "AuthProvider enum",
+      "file": "rcfeild-be/src/types/index.ts",
+      "file_type": "code",
+      "description": "Enum with values LOCAL, GOOGLE. Stored in users.auth_provider column. Determines login method available to the account.",
+      "id": "auth_provider_enum",
+      "community": 5,
+      "norm_label": "authprovider enum"
+    },
+    {
+      "label": "AppError class",
+      "file": "rcfeild-be/src/types/index.ts",
+      "file_type": "code",
+      "description": "Custom error class thrown throughout services. Constructor: (message, statusCode, code). Caught by global error middleware and serialised to JSON error responses.",
+      "id": "app_error_class",
+      "community": 5,
+      "norm_label": "apperror class"
+    },
+    {
+      "label": "Zod validation schemas",
+      "file": "rcfeild-be/src/validate/index.ts",
+      "file_type": "code",
+      "description": "Centralised Zod schemas: LoginSchema (email + min-8 password), GoogleSchema (id_token), RefreshSchema (refresh_token), LogoutSchema (refresh_token). Imported by controllers \u2014 never defined inline.",
+      "id": "validate_schemas",
+      "community": 1,
+      "norm_label": "zod validation schemas"
+    },
+    {
+      "label": "AppDataSource",
+      "file": "rcfeild-be/src/config/database.ts",
+      "file_type": "code",
+      "description": "TypeORM DataSource for PostgreSQL. Entities array includes User and RefreshToken. Used by repositories in auth.service.ts and directly by test helpers.",
+      "id": "app_datasource",
+      "community": 2,
+      "norm_label": "appdatasource"
+    },
+    {
+      "label": "redis (ioredis client)",
+      "file": "rcfeild-be/src/config/redis.ts",
+      "file_type": "code",
+      "description": "ioredis client exported as redis. Used in auth.service.ts for brute-force counters (INCR, EXPIRE, DEL, GET) and in auth.test.ts to clear keys between tests.",
+      "id": "redis_client",
+      "community": 1,
+      "norm_label": "redis (ioredis client)"
+    },
+    {
+      "label": "OAuth2Client (google-auth-library)",
+      "file": "rcfeild-be/src/services/auth.service.ts",
+      "file_type": "code",
+      "description": "google-auth-library OAuth2Client used for server-side ID token verification. Instantiated per-request in loginWithGoogle() with GOOGLE_CLIENT_ID as audience.",
+      "id": "google_oauth2_client",
+      "community": 5,
+      "norm_label": "oauth2client (google-auth-library)"
+    },
+    {
+      "label": "Feature 001: User Login",
+      "file": "rcfeild-spec/specs/001-user-login/spec.md",
+      "file_type": "document",
+      "description": "Complete authentication feature: email/password login, Google OAuth, token refresh with rotation, logout. Status: all 28 tasks complete. Target: rcfeild-be backend.",
+      "id": "feature_001_user_login",
+      "community": 6,
+      "norm_label": "feature 001: user login"
+    },
+    {
+      "label": "SpecKit Guide",
+      "file": "docs/speckit-guide.md",
+      "file_type": "document",
+      "description": "Guide for spec-driven development workflow using SpecKit CLI within rcfield-spec. Covers constitution management, feature specification, planning, task generation, and implementation steps.",
+      "id": "speckit_guide",
+      "community": 0,
+      "norm_label": "speckit guide"
+    },
+    {
+      "label": "SpecKit Constitution",
+      "file": ".specify/memory/constitution.md",
+      "file_type": "document",
+      "description": "Living distillation of project principles from docs/spec/. AI reads this briefing document. Must be re-generated via /speckit-constitution whenever docs/spec/ changes.",
+      "id": "speckit_constitution",
+      "community": 0,
+      "norm_label": "speckit constitution"
+    },
+    {
+      "label": "SpecKit Feature Workflow",
+      "file": "docs/speckit-guide.md",
+      "file_type": "rationale",
+      "description": "Six-step workflow: specify -> clarify -> plan -> tasks -> analyze -> implement. Each step corresponds to a slash command and produces an artifact in .specify/memory/.",
+      "id": "speckit_workflow",
+      "community": 0,
+      "norm_label": "speckit feature workflow"
+    },
+    {
+      "label": "ADR-001: B2B SaaS Chain Branch Model",
+      "file": "docs/adr/001-tenant-ui-model.md",
+      "file_type": "document",
+      "description": "Architecture decision: RCField is B2B SaaS sold to one business operating a chain of RC branches. Chose Model D (chain model like Starbucks) over marketplace, per-tenant subdomain, or hybrid. All branches share one app and one domain. rationale: only 1 enterprise customer; mentor confirmed multi-branch management; discovery still available; per-branch config needed.",
+      "id": "adr_001_tenant_ui",
+      "community": 4,
+      "norm_label": "adr-001: b2b saas chain branch model"
+    },
+    {
+      "label": "ADR-002: Express.js Backend Framework",
+      "file": "docs/adr/002-backend-framework-express.md",
+      "file_type": "document",
+      "description": "Architecture decision: use Express.js over NestJS for the backend. rationale: no learning curve for the 4-person team, 4-month timeline safety, sufficient for project scope. Mitigations: requireRole middleware for RBAC, zod for validation, global AppError middleware, node-cron for jobs, convention-enforced routing structure.",
+      "id": "adr_002_express",
+      "community": 0,
+      "norm_label": "adr-002: express.js backend framework"
+    },
+    {
+      "label": "Sequence Flow: Booking Lifecycle",
+      "file": "docs/diagrams/sequence/sequence-flow-booking-lifecycle.md",
+      "file_type": "document",
+      "description": "End-to-end sequence diagram from booking creation to completion or cancellation. Covers: create booking, payment, check-in (booking->session), extension, check-out with incident policy, and completion/settlement. Uses sessions for actual play and incidents for damage/incident logging.",
+      "id": "booking_lifecycle_sequence",
+      "community": 0,
+      "norm_label": "sequence flow: booking lifecycle"
+    },
+    {
+      "label": "Spec 00: Project Overview",
+      "file": "docs/spec/00-overview.md",
+      "file_type": "document",
+      "description": "RCField B2B SaaS platform for RC car field operations. Phase 1 Operational Core includes 41 tables: booking/session lifecycle, fleet, BYOC, F&B, packages, subscriptions, contests, promotions, inspections, disputes, maintenance logs, trust score, feature flags. Phase 2 adds AI, SaaS tenant/billing, advanced multi-party dispute workflow.",
+      "id": "spec_00_overview",
+      "community": 0,
+      "norm_label": "spec 00: project overview"
+    },
+    {
+      "label": "Spec 01: Domain Model",
+      "file": "docs/spec/01-domain-model.md",
+      "file_type": "document",
+      "description": "Defines all Phase 1 entities (User, Cafe, Vehicle, CustomerVehicle, Booking, BookingParticipant, BookingVehicle, Session, SessionParticipant, SessionVehicle, PaymentComponent, PaymentTransaction, Inspection, InspectionPhoto, InspectionChecklist, ExtensionProposal, FnbOrder, Package, Subscription, Contest, Incident, Dispute, Promotion, Review, NotificationLog, TrustScoreLog, FeatureFlag) and all enums.",
+      "id": "spec_01_domain_model",
+      "community": 0,
+      "norm_label": "spec 01: domain model"
+    },
+    {
+      "label": "Spec 02: Booking & Session State Machine",
+      "file": "docs/spec/02-state-machine.md",
+      "file_type": "document",
+      "description": "Defines two independent state machines: Booking (PENDING->CONFIRMED->COMPLETED/CANCELLED/NO_SHOW) and Session (CHECKED_IN->ACTIVE->EXTENDING->CHECKING_OUT->COMPLETED/CANCELLED). All transitions must go through service layer. Includes timeout rules and event enums.",
+      "id": "spec_02_state_machine",
+      "community": 0,
+      "norm_label": "spec 02: booking & session state machine"
+    },
+    {
+      "label": "Spec 03: Payment Engine",
+      "file": "docs/spec/03-payment-engine.md",
+      "file_type": "document",
+      "description": "Critical spec for all payment logic. Principles: snapshot-first, component isolation, immutable ledger, platform fee only on consummated components, DB row lock for race conditions, settlement per session. Defines component lifecycle, refund rules R1/R2/R3, extension fee cap, damage charge formula, discount/platform fee calculation.",
+      "id": "spec_03_payment_engine",
+      "community": 0,
+      "norm_label": "spec 03: payment engine"
+    },
+    {
+      "label": "Spec 04: Inspection Flow",
+      "file": "docs/spec/04-inspection-flow.md",
+      "file_type": "document",
+      "description": "Digital evidence mechanism at every asset handover. Check-in flow: create session, 4 mandatory photos (FRONT/BACK/LEFT/RIGHT), checklist, pre_existing_flag, customer confirmation with 15-min auto-confirm timeout. Check-out flow: re-photograph same angles, compare, flag damage, customer confirmation with 2h/24h timeouts. Photo storage via Cloudinary.",
+      "id": "spec_04_inspection_flow",
+      "community": 0,
+      "norm_label": "spec 04: inspection flow"
+    },
+    {
+      "label": "Spec 05: API Contracts",
+      "file": "docs/spec/05-api-contracts.md",
+      "file_type": "document",
+      "description": "REST API surface for Phase 1. Endpoints for Auth, Cafes, Fleet, Bookings, Sessions, Inspections, Extensions, Incidents, F&B, Packages, Subscriptions, Contests. Standard response format {data, meta?, error?}. Common error codes defined.",
+      "id": "spec_05_api_contracts",
+      "community": 0,
+      "norm_label": "spec 05: api contracts"
+    },
+    {
+      "label": "Spec 06: Database Specification",
+      "file": "docs/spec/06-database.md",
+      "file_type": "document",
+      "description": "Schema source of truth for Phase 1 Operational Core (41 tables). Conventions: snake_case plural table names, UUID PKs, numeric(15,2) for money, jsonb for snapshots, timestamptz UTC, soft delete via deleted_at.",
+      "id": "spec_06_database",
+      "community": 4,
+      "norm_label": "spec 06: database specification"
+    },
+    {
+      "label": "BR-Payment: Payment Business Rules",
+      "file": "docs/spec/business-rules/BR-payment.md",
+      "file_type": "document",
+      "description": "Business rules for payment. BR-PM-001 snapshot-first, BR-PM-002 immutable ledger, BR-PM-003 component isolation. Component creation on CONFIRMED, extension, damage. Settlement per session. Refund rules R1 (customer cancel), R2 (provider cancel), R3 (no-show). Damage charge formula. F&B payment rules.",
+      "id": "br_payment",
+      "community": 0,
+      "norm_label": "br-payment: payment business rules"
+    },
+    {
+      "label": "BR-FnB: F&B Business Rules",
+      "file": "docs/spec/business-rules/BR-fnb.md",
+      "file_type": "document",
+      "description": "F&B pre-order gated to booking time, merged into single payment transaction. On-site order linked to Session, paid directly to Provider (cash/bank transfer). Platform takes 0% on all F&B. Menu per branch; items can be toggled without deletion.",
+      "id": "br_fnb",
+      "community": 0,
+      "norm_label": "br-fnb: f&b business rules"
+    },
+    {
+      "label": "BR-Promotions: Promotion Business Rules",
+      "file": "docs/spec/business-rules/BR-promotions.md",
+      "file_type": "document",
+      "description": "Promotion validation: 8-step fail-fast check. Discount calculation: PERCENT (capped by max_discount_amount) or FIXED (capped at subtotal). Security deposit never discounted. Usage locked atomically at booking PENDING. Rollback on cancel via cron. 1 promo per booking. Platform fee calculated on discounted amount. Promo details snapshotted in booking.snapshot.",
+      "id": "br_promotions",
+      "community": 0,
+      "norm_label": "br-promotions: promotion business rules"
+    },
+    {
+      "label": "BR-Extension: Slot Extension Business Rules",
+      "file": "docs/spec/business-rules/BR-extension.md",
+      "file_type": "document",
+      "description": "Extension only when session ACTIVE. Staff proposes, customer decides. Extension fee cap = 50% of security_deposit. Multiple extensions allowed within cap. Fee is post-paid (HELD component, settled from deposit). Session planned_end_at updated on approval. 10-minute customer response timeout -> auto-reject.",
+      "id": "br_extension",
+      "community": 0,
+      "norm_label": "br-extension: slot extension business rules"
+    },
+    {
+      "label": "BR-Fleet: Fleet Management Business Rules",
+      "file": "docs/spec/business-rules/BR-fleet.md",
+      "file_type": "document",
+      "description": "Three vehicle tiers: STANDARD (1.0x damage multiplier), PREMIUM (1.5x), RESTRICTED (2.0x). Vehicle only rentable when AVAILABLE. Status transitions: AVAILABLE->IN_USE on check-in, IN_USE->AVAILABLE on session complete/cancel. BYOC vehicles not restricted by track compatibility. Fleet is per-branch; no cross-branch sharing.",
+      "id": "br_fleet",
+      "community": 4,
+      "norm_label": "br-fleet: fleet management business rules"
+    },
+    {
+      "label": "BR-Dispute: Incident & Dispute Business Rules",
+      "file": "docs/spec/business-rules/BR-dispute.md",
+      "file_type": "document",
+      "description": "Phase 1 has two layers: Incident (policy-based, Staff/Admin) and Dispute (formal, Admin-only). Incidents require session evidence from inspections. Incomplete inspection evidence = no damage charge. Responsible party: CUSTOMER/PROVIDER/STAFF/SHARED/UNKNOWN. Disputes: max 1 per booking, only before COMPLETED, Admin-only adjudication. Multi-party arbitration is Phase 2.",
+      "id": "br_dispute",
+      "community": 0,
+      "norm_label": "br-dispute: incident & dispute business rules"
+    },
+    {
+      "label": "BR-Booking: Booking Business Rules",
+      "file": "docs/spec/business-rules/BR-booking.md",
+      "file_type": "document",
+      "description": "Fixed slot system per cafe.slot_duration_minutes. Multi-slot and multi-vehicle bookings. Availability checks for RENTAL and BYOC. Redis slot lock (TTL 1800s) before DB insert. 30-minute payment window. Cancellation refund tiers (>24h, 12-24h, <12h). No-show auto-cancel after 30 min post slot_start. Vehicle eligibility by tier and trust_score.",
+      "id": "br_booking",
+      "community": 0,
+      "norm_label": "br-booking: booking business rules"
+    },
+    {
+      "label": "BR-Inspection: Inspection Business Rules",
+      "file": "docs/spec/business-rules/BR-inspection.md",
+      "file_type": "document",
+      "description": "Inspection is digital evidence at every asset handover. 4 mandatory photos (FRONT/BACK/LEFT/RIGHT). Full checklist required. pre_existing_flag valid only with complete inspection + customer confirmation. Check-in: 1 per session, staff must be assigned to branch. RENTAL and BYOC have different checklist formats. Check-out: 2h no-damage timeout, 24h damage auto-confirm. Photo retention: 90 days after COMPLETED, 30 days post incident/dispute resolution.",
+      "id": "br_inspection",
+      "community": 0,
+      "norm_label": "br-inspection: inspection business rules"
+    },
+    {
+      "label": "Business Rules README",
+      "file": "docs/spec/business-rules/README.md",
+      "file_type": "document",
+      "description": "Index of all business rule files. Links each domain file to corresponding technical spec. Format: BR-[DOMAIN]-[NNN] with IF/THEN/NOTE structure.",
+      "id": "br_readme",
+      "community": 0,
+      "norm_label": "business rules readme"
+    },
+    {
+      "label": "Cafe Entity",
+      "file": "docs/spec/01-domain-model.md",
+      "file_type": "rationale",
+      "description": "Branch/location entity. Has per-branch config: operating_hours JSON, track_types, slot_duration_minutes, slot_fee_rate, max_concurrent_bookings, byoc_capacity.",
+      "id": "entity_cafe",
+      "community": 4,
+      "norm_label": "cafe entity"
+    },
+    {
+      "label": "Vehicle Entity",
+      "file": "docs/spec/01-domain-model.md",
+      "file_type": "rationale",
+      "description": "Rental vehicle in fleet. Has tier (STANDARD/PREMIUM/RESTRICTED), status (AVAILABLE/IN_USE/MAINTENANCE/RETIRED), hourly_rate, security_deposit, damage_multiplier, compatible_track_types.",
+      "id": "entity_vehicle",
+      "community": 4,
+      "norm_label": "vehicle entity"
+    },
+    {
+      "label": "Booking Entity",
+      "file": "docs/spec/01-domain-model.md",
+      "file_type": "rationale",
+      "description": "Planned reservation record. No direct vehicle_id. Has snapshot JSON for price/policy immutability. Linked to booking_vehicles for rental vehicles. Has booking_mode (SINGLE/PACKAGE/SUBSCRIPTION) and play_mode (RENTAL/BYOC/MIXED).",
+      "id": "entity_booking",
+      "community": 0,
+      "norm_label": "booking entity"
+    },
+    {
+      "label": "Session Entity",
+      "file": "docs/spec/01-domain-model.md",
+      "file_type": "rationale",
+      "description": "Actual play session created at check-in. A booking can have 0..N sessions. Tracks actual_start_at, planned_end_at, actual_total_amount. Linked to session_participants, session_vehicles, inspections, extension_proposals, incidents.",
+      "id": "entity_session",
+      "community": 0,
+      "norm_label": "session entity"
+    },
+    {
+      "label": "PaymentComponent Entity",
+      "file": "docs/spec/01-domain-model.md",
+      "file_type": "rationale",
+      "description": "Immutable payment ledger entry. Types: SLOT_FEE/RENTAL_FEE/SECURITY_DEPOSIT/EXTENSION_FEE/DAMAGE_CHARGE/FNB_PREORDER/FNB_ON_SITE/PACKAGE_PURCHASE/CONTEST_ENTRY. Status: PENDING/HELD/DISBURSED/REFUNDED/PARTIALLY_REFUNDED/CAPTURED. Amount never updated; create new component for adjustments.",
+      "id": "entity_payment_component",
+      "community": 0,
+      "norm_label": "paymentcomponent entity"
+    },
+    {
+      "label": "Inspection Entity",
+      "file": "docs/spec/01-domain-model.md",
+      "file_type": "rationale",
+      "description": "Digital evidence record at asset handover. Linked to session and optionally session_vehicle. Has type (CHECK_IN/CHECK_OUT/STAFF_HANDOVER), pre_existing_flag, damage_noted, customer_confirmed status.",
+      "id": "entity_inspection",
+      "community": 0,
+      "norm_label": "inspection entity"
+    },
+    {
+      "label": "Incident Entity",
+      "file": "docs/spec/01-domain-model.md",
+      "file_type": "rationale",
+      "description": "Operational incident log within a session. Has status (RECORDED/REVIEWED/RESOLVED/WAIVED), responsible_party, final_amount, resolution_note. Complete when all fields are set.",
+      "id": "entity_incident",
+      "community": 0,
+      "norm_label": "incident entity"
+    },
+    {
+      "label": "Dispute Entity",
+      "file": "docs/spec/01-domain-model.md",
+      "file_type": "rationale",
+      "description": "Formal dispute record. Max 1 per booking. Only Admin can resolve. Uses inspection evidence as baseline. Cannot open after booking COMPLETED.",
+      "id": "entity_dispute",
+      "community": 4,
+      "norm_label": "dispute entity"
+    },
+    {
+      "label": "Payment Component Lifecycle",
+      "file": "docs/spec/03-payment-engine.md",
+      "file_type": "rationale",
+      "description": "Components created at CONFIRMED (SLOT_FEE, RENTAL_FEE, SECURITY_DEPOSIT, FNB_PREORDER). Extension creates EXTENSION_FEE per session. Damage creates DAMAGE_CHARGE. Settlement at session COMPLETED: disburse to Provider, refund deposit to Customer. Platform fee 15% on disbursed amounts.",
+      "id": "payment_component_lifecycle",
+      "community": 0,
+      "norm_label": "payment component lifecycle"
+    },
+    {
+      "label": "Evidence-Based Inspection Principle",
+      "file": "docs/spec/04-inspection-flow.md",
+      "file_type": "rationale",
+      "description": "No valid inspection = no basis for DAMAGE_CHARGE or incident resolution. 4 photos required (FRONT/BACK/LEFT/RIGHT). pre_existing_flag only valid with complete inspection + customer confirmation. Provider loses damage rights if inspection protocol is incomplete.",
+      "id": "inspection_evidence_principle",
+      "community": 0,
+      "norm_label": "evidence-based inspection principle"
+    },
+    {
+      "label": "Booking-Session Data Separation",
+      "file": "docs/spec/00-overview.md",
+      "file_type": "rationale",
+      "description": "Planned data (booking, booking_participants, booking_vehicles) is separate from actual data (session, session_participants, session_vehicles). No vehicle_id directly on bookings. BYOC vehicles only finalized at check-in via session_vehicles.",
+      "id": "booking_session_separation",
+      "community": 0,
+      "norm_label": "booking-session data separation"
+    },
+    {
+      "label": "Cloudinary Photo Storage",
+      "file": "docs/spec/04-inspection-flow.md",
+      "file_type": "rationale",
+      "description": "Inspection photos uploaded to Cloudinary. URL stored in inspection_photos table. Folder convention: inspections/{session_id}/{session_vehicle_id}/{check_in|check_out}/{angle}. Retention: 90 days post COMPLETED, extended during incidents/disputes.",
+      "id": "cloudinary_storage",
+      "community": 3,
+      "norm_label": "cloudinary photo storage"
+    },
+    {
+      "label": "Redis Slot Lock Mechanism",
+      "file": "docs/spec/business-rules/BR-booking.md",
+      "file_type": "rationale",
+      "description": "SET NX for RENTAL slots, INCR counter for BYOC, TTL 1800s. Slot locked in Redis before DB insert to prevent race conditions. Redis TTL releases availability; cron job handles booking status=CANCELLED and promo rollback.",
+      "id": "redis_slot_lock",
+      "community": 0,
+      "norm_label": "redis slot lock mechanism"
+    },
+    {
+      "label": "Platform Fee Model",
+      "file": "docs/spec/03-payment-engine.md",
+      "file_type": "rationale",
+      "description": "15% platform fee on disbursed amounts to Provider (SLOT_FEE + RENTAL_FEE + EXTENSION_FEE + DAMAGE_CHARGE after discount). 0% on SECURITY_DEPOSIT (customer's money). 0% on all F&B. Fee calculated on consummated, post-discount amounts.",
+      "id": "platform_fee_model",
+      "community": 0,
+      "norm_label": "platform fee model"
+    },
+    {
+      "label": "Vehicle Tier System",
+      "file": "docs/spec/business-rules/BR-fleet.md",
+      "file_type": "rationale",
+      "description": "STANDARD (deposit low, 1.0x multiplier, all customers), PREMIUM (medium deposit, 1.5x, eligible customers), RESTRICTED (high deposit, 2.0x, limited/approval required). Eligibility tied to trust_score (details TBD).",
+      "id": "vehicle_tier_system",
+      "community": 4,
+      "norm_label": "vehicle tier system"
+    },
+    {
+      "label": "B2B SaaS Chain Model",
+      "file": "docs/adr/001-tenant-ui-model.md",
+      "file_type": "rationale",
+      "description": "Single enterprise customer (Provider) with multiple branches sharing one platform. Not marketplace, not per-tenant subdomain. All branches discoverable via shared app. Per-branch config for pricing, fleet, F&B menu. PROVIDER sees aggregate chain reports + per-branch drill-down.",
+      "id": "b2b_saas_chain_model",
+      "community": 4,
+      "norm_label": "b2b saas chain model"
+    },
+    {
+      "label": "Express.js Architecture",
+      "file": "docs/adr/002-backend-framework-express.md",
+      "file_type": "rationale",
+      "description": "routes/ -> controllers/ -> services/ -> models/ layered architecture enforced by code review convention. RBAC via requireRole middleware. Validation via zod. Error handling via global AppError middleware. Jobs via node-cron. Storage via Cloudinary.",
+      "id": "expressjs_architecture",
+      "community": 0,
+      "norm_label": "express.js architecture"
+    },
+    {
+      "label": "RCField Architecture Overview",
+      "file": "docs/architecture/RCField_ArchitectureOverview.md",
+      "file_type": "document",
+      "description": "Quick reference for RCField system design, data model, tech stack, state machines, payment engine, inspection flow, key API endpoints, and backend code structure. Last updated 2026-05-17.",
+      "id": "arch_overview_doc",
+      "community": 0,
+      "norm_label": "rcfield architecture overview"
+    },
+    {
+      "label": "Architecture README",
+      "file": "docs/architecture/README.md",
+      "file_type": "document",
+      "description": "Index of architecture documents: 00-system-overview, 01-booking-session, 02-payment-engine, 03-inspection-flow, 04-dispute-resolution. Dev setup and spec file reference.",
+      "id": "arch_readme_doc",
+      "community": 0,
+      "norm_label": "architecture readme"
+    },
+    {
+      "label": "Architecture: System Overview",
+      "file": "docs/architecture/00-system-overview.md",
+      "file_type": "document",
+      "description": "C4 Level 1 and Level 2 diagrams, actor/app matrix, 9 domain modules, tech stack, booking lifecycle data flow, security/auth, external integrations (payment gateway, Cloudinary), and key architectural decisions. Last updated 2026-05-16.",
+      "id": "arch_system_overview_doc",
+      "community": 0,
+      "norm_label": "architecture: system overview"
+    },
+    {
+      "label": "Architecture: Booking & Session",
+      "file": "docs/architecture/01-booking-session.md",
+      "file_type": "document",
+      "description": "Planned vs Actual separation principle: Booking=contract, Session=operations. Entity map, Booking state machine (PENDING\u2192CONFIRMED\u2192COMPLETED/CANCELLED/NO_SHOW), Session state machine (CHECKED_IN\u2192ACTIVE\u2192EXTENDING/CHECKING_OUT\u2192COMPLETED), timeout rules, SessionVehicle vehicle-swap support, booking modes (RENTAL/BYOC/MIXED). Last updated 2026-05-17.",
+      "id": "arch_booking_session_doc",
+      "community": 0,
+      "norm_label": "architecture: booking & session"
+    },
+    {
+      "label": "Booking Data Flow Diagram",
+      "file": "docs/architecture/diagrams/booking-data-flow.md",
+      "file_type": "document",
+      "description": "Tables touched per step across two phases: Phase 1 (booking creation and payment \u2014 bookings, booking_participants, booking_vehicles, fnb_orders, payment_components, payment_transactions) and Phase 2 (session lifecycle \u2014 sessions, session_vehicles, inspections, inspection_photos, incidents, disputes, trust_score_logs, reviews). Happy-path and unhappy-case flows documented.",
+      "id": "booking_data_flow_doc",
+      "community": 0,
+      "norm_label": "booking data flow diagram"
+    },
+    {
+      "label": "Backend Schema Index",
+      "file": "rcfeild-be/SCHEMA.md",
+      "file_type": "document",
+      "description": "Quick-reference index of 26 database tables grouped by domain: USER & AUTH (users, refresh_tokens, password_reset_tokens), CAFE (cafes, cafe_images, cafe_closures, cafe_announcements), STAFF (staff_cafe_assignments), FLEET (vehicles, vehicle_images, vehicle_maintenance_logs), BOOKING (bookings, inspection_records, extension_proposals, disputes), PAYMENT (payment_components, payment_transactions), PROMOTIONS (promotions, promotion_usages), F&B (menu_items, fnb_orders, fnb_order_items), REVIEWS & NOTIFICATIONS (reviews, notification_logs), SYSTEM (feature_flags, trust_score_logs). All enums defined.",
+      "id": "be_schema_doc",
+      "community": 4,
+      "norm_label": "backend schema index"
+    },
+    {
+      "label": "Backend README",
+      "file": "rcfeild-be/README.md",
+      "file_type": "document",
+      "description": "RCField backend setup guide: Node.js 22+, Express.js, PostgreSQL 16 via TypeORM, Redis 7, Zod validation, JWT auth, Cloudinary, Docker Compose. Scripts for dev/build/migration/test. 26 tables, 4 roles, test infrastructure with separate rcfeild_test DB.",
+      "id": "be_readme_doc",
+      "community": 4,
+      "norm_label": "backend readme"
+    },
+    {
+      "label": "Backend Docker Compose",
+      "file": "rcfeild-be/docker-compose.yml",
+      "file_type": "code",
+      "description": "Docker Compose config spinning up PostgreSQL 16 (port 5432, container rcfeild_postgres, DB rcfeild_db) and Redis 7 (port 6379, container rcfeild_redis) with persistent volumes and healthchecks.",
+      "id": "be_docker_compose",
+      "community": 3,
+      "norm_label": "backend docker compose"
+    },
+    {
+      "label": "Backend CLAUDE.md \u2014 Coding Guidelines",
+      "file": "rcfeild-be/CLAUDE.md",
+      "file_type": "document",
+      "description": "AI coding guidelines for the backend: controller convention (endpoint comment above every handler), logger convention (no console.log, use logger from src/config/logger.ts), validation convention (all Zod schemas in src/validate/index.ts grouped by table), enum convention (all enums in src/types/index.ts), and naming convention table.",
+      "id": "be_claude_md",
+      "community": 3,
+      "norm_label": "backend claude.md \u2014 coding guidelines"
+    },
+    {
+      "label": "ERD Core Preview",
+      "file": "docs/diagrams/erd-core-preview.png",
+      "file_type": "image",
+      "description": "Entity-relationship diagram showing core entities. Visible relationships include: User (blue) owns Cafe (green, center), User 1:N makes Booking (green, center), User 1:N at Cafe, Cafe 0:1:N Booking, Booking 1:N to payment/inspection related table (orange, right with FK/confirm columns), Booking 1:N to session_vehicles or similar (blue, bottom-left), Booking 1:N to another table (yellow, bottom-center), Booking 1:0..1 to dispute (pink, bottom-right). Text is small and partially unreadable in image.",
+      "id": "erd_core_preview_img",
+      "community": 4,
+      "norm_label": "erd core preview"
+    },
+    {
+      "label": "RCField Platform",
+      "file": "docs/architecture/00-system-overview.md",
+      "file_type": "document",
+      "description": "B2B SaaS for RC car track chain operator in Vietnam. One provider, multiple branches, shared system. Not a marketplace. Core value: structured digital evidence at every asset handover to eliminate damage disputes.",
+      "id": "rcfield_platform",
+      "community": 3,
+      "norm_label": "rcfield platform"
+    },
+    {
+      "label": "Actor: Customer",
+      "file": "docs/architecture/RCField_ArchitectureOverview.md",
+      "file_type": "document",
+      "description": "Customer role: books slots, pre-orders F&B, makes payments, confirms check-in/out, opens disputes. Uses mobile-first web app. Has trust_score (0-100, default 100) affecting RESTRICTED tier rental eligibility.",
+      "id": "actor_customer",
+      "community": 4,
+      "norm_label": "actor: customer"
+    },
+    {
+      "label": "Actor: Staff",
+      "file": "docs/architecture/RCField_ArchitectureOverview.md",
+      "file_type": "document",
+      "description": "Staff role: performs check-in/out, records F&B orders, proposes extensions, uploads inspection photos. Uses mobile-first web app. Assigned to one cafe per staff_cafe_assignments.",
+      "id": "actor_staff",
+      "community": 4,
+      "norm_label": "actor: staff"
+    },
+    {
+      "label": "Actor: Provider",
+      "file": "docs/architecture/RCField_ArchitectureOverview.md",
+      "file_type": "document",
+      "description": "Provider role: manages all branches (cafes), fleet, F&B menus, views revenue. Uses desktop/tablet web app. Sees aggregate totals plus drill-down per branch.",
+      "id": "actor_provider",
+      "community": 4,
+      "norm_label": "actor: provider"
+    },
+    {
+      "label": "Actor: Admin",
+      "file": "docs/architecture/RCField_ArchitectureOverview.md",
+      "file_type": "document",
+      "description": "Admin role: team RCField (the software vendor). Approves cafes, monitors incident policy, manages feature flags, adjudicates formal disputes. Uses desktop admin portal.",
+      "id": "actor_admin",
+      "community": 4,
+      "norm_label": "actor: admin"
+    },
+    {
+      "label": "Web App (Frontend)",
+      "file": "docs/architecture/00-system-overview.md",
+      "file_type": "document",
+      "description": "ReactJS + TypeScript + Tailwind CSS SPA. Mobile-first. Role-based UI routing from JWT UserRole. All 4 actors share one app. Server state via React Query, client state via Zustand, HTTP via Axios. Vietnamese UI.",
+      "id": "web_app",
+      "community": 4,
+      "norm_label": "web app (frontend)"
+    },
+    {
+      "label": "API Server (Backend)",
+      "file": "docs/architecture/00-system-overview.md",
+      "file_type": "document",
+      "description": "Node.js 20+/22 + Express.js REST API. TypeScript strict mode. Router-per-domain architecture: auth, bookings, sessions, inspections, incidents, payments, fleet, F&B. Middleware stack: logger \u2192 CORS \u2192 JWT \u2192 RBAC. Validation via Zod. Business logic in service layer.",
+      "id": "api_server",
+      "community": 3,
+      "norm_label": "api server (backend)"
+    },
+    {
+      "label": "PostgreSQL Database",
+      "file": "docs/architecture/00-system-overview.md",
+      "file_type": "document",
+      "description": "PostgreSQL 16 accessed via TypeORM. 26 operational tables (Phase 1). All monetary values NUMERIC(15,2). UUID PKs. Soft delete on users, vehicles, menu_items. bookings.snapshot (jsonb) is the sole source for payment calculations.",
+      "id": "postgresql_db",
+      "community": 3,
+      "norm_label": "postgresql database"
+    },
+    {
+      "label": "Redis Cache / Lock",
+      "file": "rcfeild-be/README.md",
+      "file_type": "document",
+      "description": "Redis 7 used for slot locking. Redis key pattern: slot:rental:{cafeId}:{vehicleId}:{date}:{slotStart} (SET NX, TTL 1800s). Also used for session/job queue.",
+      "id": "redis_cache",
+      "community": 3,
+      "norm_label": "redis cache / lock"
+    },
+    {
+      "label": "Payment Gateway (TBD)",
+      "file": "docs/architecture/00-system-overview.md",
+      "file_type": "document",
+      "description": "External payment processor, provider not yet finalized (VNPay / MoMo / VietQR). Handles booking + F&B pre-order payment in one transaction. Server-side signature verification required. Interface abstracted for easy swap.",
+      "id": "payment_gateway",
+      "community": 3,
+      "norm_label": "payment gateway (tbd)"
+    },
+    {
+      "label": "Scheduler / Cron Jobs",
+      "file": "docs/architecture/00-system-overview.md",
+      "file_type": "document",
+      "description": "Node.js cron jobs enforcing timeout rules: PENDING booking 30m auto-cancel, no-show 30m after slot_start, check-in auto-confirm 15m, extension auto-reject 10m, checkout auto-confirm 2h (no damage) or 24h (damage).",
+      "id": "scheduler_jobs",
+      "community": 3,
+      "norm_label": "scheduler / cron jobs"
+    },
+    {
+      "label": "Module: Auth",
+      "file": "docs/architecture/00-system-overview.md",
+      "file_type": "document",
+      "description": "Auth domain module at /auth. JWT access token (15m) + refresh token (7d). RBAC with 4 roles. Endpoints: register, login, refresh, me. All enums in src/types/index.ts, all Zod schemas in src/validate/index.ts.",
+      "id": "module_auth",
+      "community": 3,
+      "norm_label": "module: auth"
+    },
+    {
+      "label": "Module: Booking",
+      "file": "docs/architecture/00-system-overview.md",
+      "file_type": "document",
+      "description": "Booking domain module at /bookings. Manages booking lifecycle and state machine. State transitions must go through BookingService.transition(). Supports RENTAL, BYOC, MIXED modes.",
+      "id": "module_booking",
+      "community": 3,
+      "norm_label": "module: booking"
+    },
+    {
+      "label": "Module: Payment",
+      "file": "docs/architecture/00-system-overview.md",
+      "file_type": "document",
+      "description": "Internal payment service (no direct router). Component-based immutable ledger. Types: SLOT_FEE, RENTAL_FEE, SECURITY_DEPOSIT, EXTENSION_FEE, DAMAGE_CHARGE, FB_PREORDER. Platform fee 15% on consummated components disbursed to Provider (0% on F&B). Settlement per session.",
+      "id": "module_payment",
+      "community": 3,
+      "norm_label": "module: payment"
+    },
+    {
+      "label": "Module: Fleet",
+      "file": "docs/architecture/00-system-overview.md",
+      "file_type": "document",
+      "description": "Fleet domain module at /cafes/:id/vehicles. Vehicle CRUD, tier (STANDARD/PREMIUM/RESTRICTED), status management. Vehicle has hourly_rate, security_deposit, damage_multiplier, compatible_track_types.",
+      "id": "module_fleet",
+      "community": 3,
+      "norm_label": "module: fleet"
+    },
+    {
+      "label": "Module: Inspection",
+      "file": "docs/architecture/00-system-overview.md",
+      "file_type": "document",
+      "description": "Inspection domain module at /bookings/:id/inspections. Check-in/out protocol with 4-angle photo upload to Cloudinary + checklist. Evidence chain: inspections \u2192 inspection_photos \u2192 inspection_checklists. Missing photos/checklist = Provider loses right to charge DAMAGE_CHARGE.",
+      "id": "module_inspection",
+      "community": 3,
+      "norm_label": "module: inspection"
+    },
+    {
+      "label": "Module: Extension",
+      "file": "docs/architecture/00-system-overview.md",
+      "file_type": "document",
+      "description": "Extension domain module at /sessions/:id/extensions. Staff proposes extra time, Customer approves/rejects. 10-minute auto-reject timeout. Fee is post-paid, charged against deposit (max 50%).",
+      "id": "module_extension",
+      "community": 3,
+      "norm_label": "module: extension"
+    },
+    {
+      "label": "Module: Incident",
+      "file": "docs/architecture/00-system-overview.md",
+      "file_type": "document",
+      "description": "Incident domain module at /incidents. Policy-based automated resolution: log responsible_party, final_amount, resolution_note. Phase 1 layer for damage/dispute handling before formal dispute escalation.",
+      "id": "module_incident",
+      "community": 3,
+      "norm_label": "module: incident"
+    },
+    {
+      "label": "Module: F&B",
+      "file": "docs/architecture/00-system-overview.md",
+      "file_type": "document",
+      "description": "F&B domain module at /cafes/:id/menu and /bookings/:id/fnb-orders. Menu management, pre-order (bundled with booking payment), on-site order (customer pays Provider directly, platform not involved). 0% platform fee on F&B.",
+      "id": "module_fnb",
+      "community": 3,
+      "norm_label": "module: f&b"
+    },
+    {
+      "label": "Module: Cafe",
+      "file": "docs/architecture/00-system-overview.md",
+      "file_type": "document",
+      "description": "Cafe discovery module at /cafes. Listing, filtering, branch profile, shareable links (Zalo/FB). Config: track_types, slot_duration_minutes, slot_fee_rate, byoc_capacity. Status: PENDING/ACTIVE/SUSPENDED.",
+      "id": "module_cafe",
+      "community": 3,
+      "norm_label": "module: cafe"
+    },
+    {
+      "label": "Entity: PaymentTransaction",
+      "file": "rcfeild-be/SCHEMA.md",
+      "file_type": "document",
+      "description": "Raw payment gateway log. Columns: booking_id\u2192bookings, gateway, gateway_transaction_id, type (PAYMENT/REFUND), raw_request (jsonb), raw_response (jsonb). Separate from component ledger.",
+      "id": "entity_payment_transaction",
+      "community": 0,
+      "norm_label": "entity: paymenttransaction"
+    },
+    {
+      "label": "Entity: InspectionRecord",
+      "file": "rcfeild-be/SCHEMA.md",
+      "file_type": "document",
+      "description": "Check-in or check-out inspection per booking. Columns: booking_id\u2192bookings, type (CHECK_IN/CHECK_OUT), performed_by\u2192users, photos (jsonb), checklist (jsonb), pre_existing_flag, damage_noted. UNIQUE(booking_id, type).",
+      "id": "entity_inspection_record",
+      "community": 0,
+      "norm_label": "entity: inspectionrecord"
+    },
+    {
+      "label": "Entity: ExtensionProposal",
+      "file": "rcfeild-be/SCHEMA.md",
+      "file_type": "document",
+      "description": "Session extension request. Columns: booking_id\u2192bookings, proposed_by\u2192users, duration_minutes, fee_amount, status (PENDING/APPROVED/REJECTED/EXPIRED). 10-minute auto-reject timeout.",
+      "id": "entity_extension_proposal",
+      "community": 0,
+      "norm_label": "entity: extensionproposal"
+    },
+    {
+      "label": "Entity: Promotion",
+      "file": "rcfeild-be/SCHEMA.md",
+      "file_type": "document",
+      "description": "Discount code. Columns: code (UNIQUE when active), discount_type (PERCENT/FIXED), discount_value, max_discount_amount, applicable_to (ALL/RENTAL/BYOC), cafe_id\u2192cafes (NULL=global chain-wide), uses_count, max_uses, max_uses_per_user.",
+      "id": "entity_promotion",
+      "community": 4,
+      "norm_label": "entity: promotion"
+    },
+    {
+      "label": "Entity: TrustScoreLog",
+      "file": "rcfeild-be/SCHEMA.md",
+      "file_type": "document",
+      "description": "Immutable customer trust score history. Columns: user_id\u2192users, booking_id\u2192bookings (nullable), delta, score_before, score_after, reason (NO_SHOW/DAMAGE_CONFIRMED/DISPUTE_LOST/BOOKING_STREAK/ADMIN_ADJUSTMENT). Trust score (0-100) affects RESTRICTED tier rental eligibility.",
+      "id": "entity_trust_score_log",
+      "community": 4,
+      "norm_label": "entity: trustscorelog"
+    },
+    {
+      "label": "Entity: FnbOrder",
+      "file": "rcfeild-be/SCHEMA.md",
+      "file_type": "document",
+      "description": "F&B order. Types: PRE_ORDER (bundled with booking payment, 0% platform fee) or ON_SITE (customer pays Provider directly, outside platform). Columns: booking_id\u2192bookings, type (PRE_ORDER/ON_SITE), status (PENDING/CONFIRMED/DELIVERED/CANCELLED), created_by\u2192users.",
+      "id": "entity_fnb_order",
+      "community": 0,
+      "norm_label": "entity: fnborder"
+    },
+    {
+      "label": "Entity: FeatureFlag",
+      "file": "rcfeild-be/SCHEMA.md",
+      "file_type": "document",
+      "description": "Feature toggle system. Columns: feature_key (UNIQUE), is_enabled, is_trial, trial_ends_at. Managed by ADMIN role.",
+      "id": "entity_feature_flag",
+      "community": 4,
+      "norm_label": "entity: featureflag"
+    },
+    {
+      "label": "Booking State Machine",
+      "file": "docs/architecture/01-booking-session.md",
+      "file_type": "document",
+      "description": "States: PENDING\u2192CONFIRMED (payment success), PENDING\u2192CANCELLED (30m timeout or customer cancel), CONFIRMED\u2192COMPLETED (all sessions done), CONFIRMED\u2192CANCELLED, CONFIRMED\u2192NO_SHOW (slot_start + 30m no check-in). All transitions via BookingService.transition(bookingId, event).",
+      "id": "booking_state_machine",
+      "community": 0,
+      "norm_label": "booking state machine"
+    },
+    {
+      "label": "Session State Machine",
+      "file": "docs/architecture/01-booking-session.md",
+      "file_type": "document",
+      "description": "States: CHECKED_IN\u2192ACTIVE (check-in complete), CHECKED_IN\u2192CANCELLED; ACTIVE\u2192EXTENDING (extension proposed), ACTIVE\u2192CHECKING_OUT; EXTENDING\u2192ACTIVE (approved/rejected/10m timeout); CHECKING_OUT\u2192COMPLETED (customer confirm or auto-confirm 2h/24h). All transitions via SessionService.transition().",
+      "id": "session_state_machine",
+      "community": 0,
+      "norm_label": "session state machine"
+    },
+    {
+      "label": "Snapshot-First Payment Principle",
+      "file": "docs/architecture/RCField_ArchitectureOverview.md",
+      "file_type": "document",
+      "description": "All payment calculations read from booking.snapshot (jsonb), never from current cafe/vehicle prices. Prices are locked at booking creation time.",
+      "rationale": "Vehicle and slot prices can change over time; snapshot ensures correct billing regardless of price changes after booking.",
+      "id": "snapshot_first_principle",
+      "community": 0,
+      "norm_label": "snapshot-first payment principle"
+    },
+    {
+      "label": "Planned vs Actual Separation",
+      "file": "docs/architecture/01-booking-session.md",
+      "file_type": "document",
+      "description": "Booking = planned contract (booking_participants, booking_vehicles, slot_start/slot_end). Session = actual operations (session_participants, session_vehicles, actual_start_at/actual_end_at). Session created only when Staff checks in, not at booking time.",
+      "rationale": "Separating planned from actual data allows flexible operations (vehicle swaps, participant changes) without corrupting the original booking contract.",
+      "id": "planned_vs_actual_principle",
+      "community": 0,
+      "norm_label": "planned vs actual separation"
+    },
+    {
+      "label": "Evidence-Based Handover",
+      "file": "docs/architecture/RCField_ArchitectureOverview.md",
+      "file_type": "document",
+      "description": "Digital evidence created at every asset handover: 4-angle photos (front/back/left/right) + checklist at check-in and check-out. Evidence chain: inspections \u2192 inspection_photos \u2192 inspection_checklists. Missing evidence = Provider forfeits DAMAGE_CHARGE right.",
+      "rationale": "Core value proposition: structured evidence eliminates damage disputes by providing objective photographic proof.",
+      "id": "evidence_based_handover",
+      "community": 0,
+      "norm_label": "evidence-based handover"
+    },
+    {
+      "label": "Backend Logger (src/config/logger.ts)",
+      "file": "rcfeild-be/CLAUDE.md",
+      "file_type": "code",
+      "description": "Custom logger used throughout backend. Methods: logger.auth(), logger.info(), logger.warn(), logger.error(), logger.debug(). console.log is forbidden.",
+      "id": "be_logger_config",
+      "community": 3,
+      "norm_label": "backend logger (src/config/logger.ts)"
+    },
+    {
+      "label": "Backend Zod Schemas (src/validate/index.ts)",
+      "file": "rcfeild-be/CLAUDE.md",
+      "file_type": "code",
+      "description": "Centralized Zod validation schemas grouped by table. Controllers import from '../validate'. Schemas never defined inside controllers.",
+      "id": "be_validate_index",
+      "community": 3,
+      "norm_label": "backend zod schemas (src/validate/index.ts)"
+    },
+    {
+      "label": "Backend Enums & Types (src/types/index.ts)",
+      "file": "rcfeild-be/CLAUDE.md",
+      "file_type": "code",
+      "description": "Centralized TypeScript enums (BookingStatus, AssetTier, etc.), AppError class, AuthRequest interface. Enums never defined inside entities or services.",
+      "id": "be_types_index",
+      "community": 3,
+      "norm_label": "backend enums & types (src/types/index.ts)"
+    }
+  ],
+  "links": [
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/server.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "server_ts",
+      "target": "src_server_bootstrap",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/migrations/1747180800000-InitialSchema.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_migrations_1747180800000_initialschema_ts",
+      "target": "migrations_1747180800000_initialschema_initialschema1747180800000",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/migrations/1747180800000-InitialSchema.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "migrations_1747180800000_initialschema_initialschema1747180800000",
+      "target": "migrations_1747180800000_initialschema_initialschema1747180800000_up",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/migrations/1747180800000-InitialSchema.ts",
+      "source_location": "L596",
+      "weight": 1.0,
+      "source": "migrations_1747180800000_initialschema_initialschema1747180800000",
+      "target": "migrations_1747180800000_initialschema_initialschema1747180800000_down",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "app_ts",
+      "target": "src_types_index_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/types/index.ts",
+      "source_location": "L152",
+      "weight": 1.0,
+      "source": "src_types_index_ts",
+      "target": "types_index_apperror",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/middlewares/error.middleware.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_middlewares_error_middleware_ts",
+      "target": "src_types_index_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/middlewares/auth.middleware.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "src_middlewares_auth_middleware_ts",
+      "target": "src_types_index_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/models/user.entity.ts",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "entity_user",
+      "target": "src_types_index_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/__tests__/routes/auth.test.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "auth_test_ts",
+      "target": "src_types_index_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/__tests__/routes/bookings.test.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "bookings_test_ts",
+      "target": "src_types_index_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/__tests__/helpers/index.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_types_index_ts",
+      "target": "src_config_database_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/__tests__/helpers/index.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "src_types_index_ts",
+      "target": "src_config_env_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/__tests__/helpers/index.ts",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "src_types_index_ts",
+      "target": "helpers_index_hashpassword",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/__tests__/helpers/index.ts",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "src_types_index_ts",
+      "target": "helpers_index_createtestuser",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/__tests__/helpers/index.ts",
+      "source_location": "L45",
+      "weight": 1.0,
+      "source": "src_types_index_ts",
+      "target": "helpers_index_generatetoken",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/__tests__/helpers/index.ts",
+      "source_location": "L60",
+      "weight": 1.0,
+      "source": "src_types_index_ts",
+      "target": "helpers_index_createtestcafe",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/__tests__/helpers/index.ts",
+      "source_location": "L100",
+      "weight": 1.0,
+      "source": "src_types_index_ts",
+      "target": "helpers_index_createtestvehicle",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/controllers/auth.controller.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "auth_controller_ts",
+      "target": "src_types_index_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/index.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_types_index_ts",
+      "target": "auth_routes_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/auth.service.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "auth_service_ts",
+      "target": "src_types_index_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/types/index.ts",
+      "source_location": "L153",
+      "weight": 1.0,
+      "source": "types_index_apperror",
+      "target": "types_index_apperror_constructor",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/middlewares/error.middleware.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_middlewares_error_middleware_ts",
+      "target": "types_index_apperror",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/middlewares/auth.middleware.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "src_middlewares_auth_middleware_ts",
+      "target": "types_index_apperror",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/auth.service.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "auth_service_ts",
+      "target": "types_index_apperror",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/server.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "server_ts",
+      "target": "src_config_redis_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/config/redis.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_config_redis_ts",
+      "target": "src_config_env_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/config/redis.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_config_redis_ts",
+      "target": "src_config_logger_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/__tests__/jest-setup.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_tests_jest_setup_ts",
+      "target": "src_config_redis_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/__tests__/routes/auth.test.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "auth_test_ts",
+      "target": "src_config_redis_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/auth.service.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "auth_service_ts",
+      "target": "src_config_redis_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/server.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "server_ts",
+      "target": "src_config_logger_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/config/logger.ts",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "src_config_logger_ts",
+      "target": "config_logger_shouldlog",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/config/logger.ts",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "src_config_logger_ts",
+      "target": "config_logger_formattimestamp",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/middlewares/logger.middleware.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_middlewares_logger_middleware_ts",
+      "target": "src_config_logger_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/middlewares/error.middleware.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "src_middlewares_error_middleware_ts",
+      "target": "src_config_logger_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/seeds/seed-users.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "seed_users_ts",
+      "target": "src_config_logger_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/controllers/auth.controller.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "auth_controller_ts",
+      "target": "src_config_logger_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/server.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "server_ts",
+      "target": "src_config_database_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/config/database.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_config_database_ts",
+      "target": "src_config_env_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/__tests__/jest-setup.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_tests_jest_setup_ts",
+      "target": "src_config_database_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/__tests__/routes/auth.test.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "auth_test_ts",
+      "target": "src_config_database_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/seeds/seed-users.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "seed_users_ts",
+      "target": "src_config_database_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/auth.service.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "auth_service_ts",
+      "target": "src_config_database_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/server.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "server_ts",
+      "target": "src_config_env_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/middlewares/auth.middleware.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_middlewares_auth_middleware_ts",
+      "target": "src_config_env_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/auth.service.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "auth_service_ts",
+      "target": "src_config_env_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "app_ts",
+      "target": "src_middlewares_logger_middleware_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/middlewares/logger.middleware.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "src_middlewares_logger_middleware_ts",
+      "target": "middlewares_logger_middleware_maskbody",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/middlewares/logger.middleware.ts",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "src_middlewares_logger_middleware_ts",
+      "target": "middlewares_logger_middleware_requestlogger",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/middlewares/logger.middleware.ts",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "middlewares_logger_middleware_requestlogger",
+      "target": "middlewares_logger_middleware_maskbody",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "app_ts",
+      "target": "middlewares_logger_middleware_requestlogger",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "app_ts",
+      "target": "src_middlewares_error_middleware_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/middlewares/auth.middleware.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "src_middlewares_auth_middleware_ts",
+      "target": "middlewares_auth_middleware_authenticate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/middlewares/auth.middleware.ts",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "src_middlewares_auth_middleware_ts",
+      "target": "middlewares_auth_middleware_authorize",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/auth.routes.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "auth_routes_ts",
+      "target": "src_middlewares_auth_middleware_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/auth.routes.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "auth_routes_ts",
+      "target": "middlewares_auth_middleware_authenticate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/models/user.entity.ts",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "entity_user",
+      "target": "models_user_entity_user",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/auth.service.ts",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "auth_service_ts",
+      "target": "models_user_entity_user",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/__tests__/routes/auth.test.ts",
+      "source_location": "L104",
+      "weight": 1.0,
+      "source": "auth_test_ts",
+      "target": "routes_auth_test_mockgooglesuccess",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/__tests__/routes/auth.test.ts",
+      "source_location": "L112",
+      "weight": 1.0,
+      "source": "auth_test_ts",
+      "target": "routes_auth_test_mockgooglefailure",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/__tests__/routes/auth.test.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "auth_test_ts",
+      "target": "helpers_index_createtestuser",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/__tests__/routes/bookings.test.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "bookings_test_ts",
+      "target": "helpers_index_createtestuser",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/__tests__/helpers/index.ts",
+      "source_location": "L63",
+      "weight": 1.0,
+      "source": "helpers_index_createtestcafe",
+      "target": "helpers_index_createtestuser",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/__tests__/routes/bookings.test.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "bookings_test_ts",
+      "target": "helpers_index_generatetoken",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/__tests__/routes/bookings.test.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "bookings_test_ts",
+      "target": "helpers_index_createtestcafe",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/__tests__/routes/bookings.test.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "bookings_test_ts",
+      "target": "helpers_index_createtestvehicle",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/seeds/seed-users.ts",
+      "source_location": "L19",
+      "weight": 1.0,
+      "source": "seed_users_ts",
+      "target": "seeds_seed_users_seed",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/auth.service.ts",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "auth_service_ts",
+      "target": "services_auth_service_authservice_userrepo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/auth.service.ts",
+      "source_location": "L30",
+      "weight": 1.0,
+      "source": "auth_service_ts",
+      "target": "services_auth_service_authservice_tokenrepo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/auth.service.ts",
+      "source_location": "L34",
+      "weight": 1.0,
+      "source": "auth_service_ts",
+      "target": "services_auth_service_authservice_hashtoken",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/auth.service.ts",
+      "source_location": "L52",
+      "weight": 1.0,
+      "source": "services_auth_service_authservice_issuetokenpair",
+      "target": "services_auth_service_authservice_hashtoken",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/auth.service.ts",
+      "source_location": "L131",
+      "weight": 1.0,
+      "source": "services_auth_service_authservice_refreshtokens",
+      "target": "services_auth_service_authservice_hashtoken",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/auth.service.ts",
+      "source_location": "L150",
+      "weight": 1.0,
+      "source": "services_auth_service_authservice_logout",
+      "target": "services_auth_service_authservice_hashtoken",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/auth.service.ts",
+      "source_location": "L38",
+      "weight": 1.0,
+      "source": "auth_service_ts",
+      "target": "services_auth_service_authservice_issuetokenpair",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/auth.service.ts",
+      "source_location": "L88",
+      "weight": 1.0,
+      "source": "services_auth_service_authservice_loginwithpassword",
+      "target": "services_auth_service_authservice_issuetokenpair",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/auth.service.ts",
+      "source_location": "L126",
+      "weight": 1.0,
+      "source": "services_auth_service_authservice_loginwithgoogle",
+      "target": "services_auth_service_authservice_issuetokenpair",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/auth.service.ts",
+      "source_location": "L146",
+      "weight": 1.0,
+      "source": "services_auth_service_authservice_refreshtokens",
+      "target": "services_auth_service_authservice_issuetokenpair",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/auth.service.ts",
+      "source_location": "L60",
+      "weight": 1.0,
+      "source": "auth_service_ts",
+      "target": "services_auth_service_authservice_loginwithpassword",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/auth.service.ts",
+      "source_location": "L92",
+      "weight": 1.0,
+      "source": "auth_service_ts",
+      "target": "services_auth_service_authservice_loginwithgoogle",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/auth.service.ts",
+      "source_location": "L130",
+      "weight": 1.0,
+      "source": "auth_service_ts",
+      "target": "services_auth_service_authservice_refreshtokens",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/auth.service.ts",
+      "source_location": "L149",
+      "weight": 1.0,
+      "source": "auth_service_ts",
+      "target": "services_auth_service_authservice_logout",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "enforces_logger_usage_over_console",
+      "provenance": "INFERRED",
+      "confidence_score": 0.85,
+      "source": "eslint_config",
+      "target": "config_logger"
+    },
+    {
+      "relation": "configures_globalsetup",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "jest_config",
+      "target": "test_globalsetup"
+    },
+    {
+      "relation": "configures_setupfilesafterenv",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "jest_config",
+      "target": "test_jestsetup"
+    },
+    {
+      "relation": "imports_and_starts",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/server.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "server_ts",
+      "target": "app_ts"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/__tests__/routes/auth.test.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "auth_test_ts",
+      "target": "app_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/__tests__/routes/bookings.test.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "bookings_test_ts",
+      "target": "app_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/__tests__/routes/health.test.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "health_test_ts",
+      "target": "app_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "mounts_middleware",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "app_ts",
+      "target": "middleware_logger"
+    },
+    {
+      "relation": "mounts_error_handler",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "app_ts",
+      "target": "middleware_error"
+    },
+    {
+      "relation": "middleware_available_for_routes",
+      "provenance": "INFERRED",
+      "confidence_score": 0.75,
+      "source": "app_ts",
+      "target": "middleware_auth"
+    },
+    {
+      "relation": "initializes_datasource",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "server_ts",
+      "target": "config_database"
+    },
+    {
+      "relation": "connects_redis",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "server_ts",
+      "target": "config_redis"
+    },
+    {
+      "relation": "reads_env_config",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "server_ts",
+      "target": "config_env"
+    },
+    {
+      "relation": "uses_logger",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "server_ts",
+      "target": "config_logger"
+    },
+    {
+      "relation": "runs_migration_on_test_db",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95,
+      "source": "test_globalsetup",
+      "target": "migration_initialschema"
+    },
+    {
+      "relation": "loads_migration",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95,
+      "source": "config_database",
+      "target": "migration_initialschema"
+    },
+    {
+      "relation": "mirrors_enum_definitions_in_sql",
+      "provenance": "INFERRED",
+      "confidence_score": 0.85,
+      "source": "migration_initialschema",
+      "target": "types_index"
+    },
+    {
+      "relation": "schemas_complement_domain_types",
+      "provenance": "INFERRED",
+      "confidence_score": 0.75,
+      "source": "validate_index",
+      "target": "types_index"
+    },
+    {
+      "relation": "handles_apperror_type",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "middleware_error",
+      "target": "types_index"
+    },
+    {
+      "relation": "uses_types_authpayload_apperror_userrole",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "middleware_auth",
+      "target": "types_index"
+    },
+    {
+      "relation": "uses_enums_userrole_authprovider",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "model_user",
+      "target": "types_index"
+    },
+    {
+      "relation": "platform_fee_pct_relates_to_payment_engine",
+      "provenance": "INFERRED",
+      "confidence_score": 0.65,
+      "source": "config_env",
+      "target": "types_index"
+    },
+    {
+      "relation": "reads_env_config",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "config_redis",
+      "target": "config_env"
+    },
+    {
+      "relation": "uses_logger_on_error",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "config_redis",
+      "target": "config_logger"
+    },
+    {
+      "relation": "quits_redis_after_tests",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "test_jestsetup",
+      "target": "config_redis"
+    },
+    {
+      "relation": "uses_logger",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "middleware_logger",
+      "target": "config_logger"
+    },
+    {
+      "relation": "uses_logger",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "middleware_error",
+      "target": "config_logger"
+    },
+    {
+      "relation": "reads_env_config",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "config_database",
+      "target": "config_env"
+    },
+    {
+      "relation": "uses_appdatasource_for_test_lifecycle",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "test_jestsetup",
+      "target": "config_database"
+    },
+    {
+      "relation": "loads_entity",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95,
+      "source": "config_database",
+      "target": "model_user"
+    },
+    {
+      "relation": "reads_jwt_secret",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "middleware_auth",
+      "target": "config_env"
+    },
+    {
+      "relation": "authenticates_user_entity_role",
+      "provenance": "INFERRED",
+      "confidence_score": 0.85,
+      "source": "middleware_auth",
+      "target": "model_user"
+    },
+    {
+      "relation": "loads_user_entity_for_test_db",
+      "provenance": "INFERRED",
+      "confidence_score": 0.85,
+      "source": "test_globalsetup",
+      "target": "model_user"
+    },
+    {
+      "relation": "runs_before_as_global_setup",
+      "provenance": "INFERRED",
+      "confidence_score": 0.85,
+      "source": "load_env_ts",
+      "target": "auth_test_ts"
+    },
+    {
+      "relation": "runs_before_as_global_setup",
+      "provenance": "INFERRED",
+      "confidence_score": 0.85,
+      "source": "load_env_ts",
+      "target": "bookings_test_ts"
+    },
+    {
+      "relation": "runs_before_as_global_setup",
+      "provenance": "INFERRED",
+      "confidence_score": 0.85,
+      "source": "load_env_ts",
+      "target": "health_test_ts"
+    },
+    {
+      "relation": "integration_tests",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "auth_test_ts",
+      "target": "auth_service_ts"
+    },
+    {
+      "relation": "tests_via_http",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95,
+      "source": "auth_test_ts",
+      "target": "auth_controller_ts"
+    },
+    {
+      "relation": "uses",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "auth_test_ts",
+      "target": "test_helpers_ts"
+    },
+    {
+      "relation": "clears_keys_in_beforeeach",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "auth_test_ts",
+      "target": "redis_client"
+    },
+    {
+      "relation": "mocks_via_jest_mock",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "auth_test_ts",
+      "target": "google_oauth2_client"
+    },
+    {
+      "relation": "asserts_error_code",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "auth_test_ts",
+      "target": "error_code_invalid_credentials"
+    },
+    {
+      "relation": "asserts_error_code",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "auth_test_ts",
+      "target": "error_code_account_locked"
+    },
+    {
+      "relation": "asserts_error_code",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "auth_test_ts",
+      "target": "error_code_google_auth_failed"
+    },
+    {
+      "relation": "asserts_error_code",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "auth_test_ts",
+      "target": "error_code_invalid_refresh_token"
+    },
+    {
+      "relation": "tasks_implemented_in",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "login_tasks_md",
+      "target": "auth_test_ts"
+    },
+    {
+      "relation": "verifies_acceptance_scenarios_from",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95,
+      "source": "auth_test_ts",
+      "target": "login_spec_md"
+    },
+    {
+      "relation": "uses",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "bookings_test_ts",
+      "target": "test_helpers_ts"
+    },
+    {
+      "relation": "creates_fixtures_using",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95,
+      "source": "bookings_test_ts",
+      "target": "entity_user"
+    },
+    {
+      "relation": "uses_for_direct_inserts",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "test_helpers_ts",
+      "target": "app_datasource"
+    },
+    {
+      "relation": "uses",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "test_helpers_ts",
+      "target": "user_role_enum"
+    },
+    {
+      "relation": "tasks_extended",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "login_tasks_md",
+      "target": "test_helpers_ts"
+    },
+    {
+      "relation": "uses",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "seed_users_ts",
+      "target": "app_datasource"
+    },
+    {
+      "relation": "inserts_seed_rows",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "seed_users_ts",
+      "target": "entity_user"
+    },
+    {
+      "relation": "calls",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/controllers/auth.controller.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "auth_controller_ts",
+      "target": "auth_service_ts"
+    },
+    {
+      "relation": "mounts_handlers",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/routes/auth.routes.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "auth_routes_ts",
+      "target": "auth_controller_ts"
+    },
+    {
+      "relation": "imports_and_uses",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "auth_controller_ts",
+      "target": "validate_schemas"
+    },
+    {
+      "relation": "guided_creation_of",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "login_quickstart_md",
+      "target": "auth_controller_ts"
+    },
+    {
+      "relation": "tasks_implemented_in",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "login_tasks_md",
+      "target": "auth_controller_ts"
+    },
+    {
+      "relation": "mounts_at_slash_auth",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "routes_index_ts",
+      "target": "auth_routes_ts"
+    },
+    {
+      "relation": "applies_to_logout",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "auth_routes_ts",
+      "target": "auth_middleware"
+    },
+    {
+      "relation": "applies_to_all_auth_routes",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "auth_routes_ts",
+      "target": "rate_limiter"
+    },
+    {
+      "relation": "implemented_by",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "login_contracts_auth_md",
+      "target": "auth_routes_ts"
+    },
+    {
+      "relation": "guided_creation_of",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "login_quickstart_md",
+      "target": "auth_routes_ts"
+    },
+    {
+      "relation": "tasks_implemented_in",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "login_tasks_md",
+      "target": "auth_routes_ts"
+    },
+    {
+      "relation": "reads_writes",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/auth.service.ts",
+      "source_location": "L9",
+      "weight": 1.0,
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "auth_service_ts",
+      "target": "entity_user"
+    },
+    {
+      "relation": "uses_repositories_from",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "auth_service_ts",
+      "target": "app_datasource"
+    },
+    {
+      "relation": "uses_for_brute_force_counters",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "auth_service_ts",
+      "target": "redis_client"
+    },
+    {
+      "relation": "instantiates_for_token_verification",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "auth_service_ts",
+      "target": "google_oauth2_client"
+    },
+    {
+      "relation": "reads_writes",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "auth_service_ts",
+      "target": "entity_refresh_token"
+    },
+    {
+      "relation": "manages",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "auth_service_ts",
+      "target": "redis_brute_force_key"
+    },
+    {
+      "relation": "throws",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "auth_service_ts",
+      "target": "app_error_class"
+    },
+    {
+      "relation": "uses",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "auth_service_ts",
+      "target": "user_role_enum"
+    },
+    {
+      "relation": "uses",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "auth_service_ts",
+      "target": "auth_provider_enum"
+    },
+    {
+      "relation": "guided_creation_of",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "login_quickstart_md",
+      "target": "auth_service_ts"
+    },
+    {
+      "relation": "tasks_implemented_in",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "login_tasks_md",
+      "target": "auth_service_ts"
+    },
+    {
+      "relation": "implements_decisions_from",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95,
+      "source": "auth_service_ts",
+      "target": "login_research_md"
+    },
+    {
+      "relation": "supplements_workspace_setup",
+      "provenance": "INFERRED",
+      "confidence_score": 0.75,
+      "source": "setup_md",
+      "target": "claude_md"
+    },
+    {
+      "relation": "governed_by_contributing_rules",
+      "provenance": "INFERRED",
+      "confidence_score": 0.75,
+      "source": "readme_md",
+      "target": "login_spec_md"
+    },
+    {
+      "relation": "marks_as_active_feature",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "claude_md",
+      "target": "feature_001_user_login"
+    },
+    {
+      "relation": "references_as_active_plan",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "claude_md",
+      "target": "login_plan_md"
+    },
+    {
+      "relation": "task_breakdown_for",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "login_tasks_md",
+      "target": "feature_001_user_login"
+    },
+    {
+      "relation": "architecture_decisions_for",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "login_research_md",
+      "target": "feature_001_user_login"
+    },
+    {
+      "relation": "decision_to_use",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "login_research_md",
+      "target": "google_oauth2_client"
+    },
+    {
+      "relation": "decision_to_use_redis_ttl",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "login_research_md",
+      "target": "redis_brute_force_key"
+    },
+    {
+      "relation": "specifies",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "login_data_model_md",
+      "target": "entity_user"
+    },
+    {
+      "relation": "specifies",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "login_data_model_md",
+      "target": "entity_refresh_token"
+    },
+    {
+      "relation": "specifies",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "login_data_model_md",
+      "target": "redis_brute_force_key"
+    },
+    {
+      "relation": "plans_implementation_of",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "login_plan_md",
+      "target": "feature_001_user_login"
+    },
+    {
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "login_spec_md",
+      "target": "feature_001_user_login"
+    },
+    {
+      "relation": "validates_quality_of",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "login_requirements_checklist_md",
+      "target": "login_spec_md"
+    },
+    {
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "login_contracts_auth_md",
+      "target": "error_code_invalid_credentials"
+    },
+    {
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "login_contracts_auth_md",
+      "target": "error_code_account_locked"
+    },
+    {
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "login_contracts_auth_md",
+      "target": "error_code_google_auth_failed"
+    },
+    {
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "login_contracts_auth_md",
+      "target": "error_code_invalid_refresh_token"
+    },
+    {
+      "relation": "foreign_key_user_id",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "entity_refresh_token",
+      "target": "entity_user"
+    },
+    {
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "spec_01_domain_model",
+      "target": "entity_user"
+    },
+    {
+      "relation": "creates",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "entity_user",
+      "target": "entity_booking"
+    },
+    {
+      "relation": "owns",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "entity_user",
+      "target": "entity_cafe"
+    },
+    {
+      "relation": "has_many",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "entity_user",
+      "target": "entity_trust_score_log"
+    },
+    {
+      "relation": "depicts",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "erd_core_preview_img",
+      "target": "entity_user"
+    },
+    {
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "be_schema_doc",
+      "target": "entity_user"
+    },
+    {
+      "relation": "manages",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "speckit_guide",
+      "target": "speckit_constitution"
+    },
+    {
+      "relation": "describes",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "speckit_guide",
+      "target": "speckit_workflow"
+    },
+    {
+      "relation": "distilled_from",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "speckit_constitution",
+      "target": "spec_01_domain_model"
+    },
+    {
+      "relation": "distilled_from",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "speckit_constitution",
+      "target": "spec_02_state_machine"
+    },
+    {
+      "relation": "distilled_from",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "speckit_constitution",
+      "target": "spec_03_payment_engine"
+    },
+    {
+      "relation": "decides",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "adr_001_tenant_ui",
+      "target": "b2b_saas_chain_model"
+    },
+    {
+      "relation": "decided_in",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "expressjs_architecture",
+      "target": "adr_002_express"
+    },
+    {
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "arch_system_overview_doc",
+      "target": "adr_002_express"
+    },
+    {
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "booking_lifecycle_sequence",
+      "target": "spec_02_state_machine"
+    },
+    {
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "booking_lifecycle_sequence",
+      "target": "spec_03_payment_engine"
+    },
+    {
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "booking_lifecycle_sequence",
+      "target": "spec_04_inspection_flow"
+    },
+    {
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "booking_lifecycle_sequence",
+      "target": "spec_01_domain_model"
+    },
+    {
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "booking_lifecycle_sequence",
+      "target": "spec_00_overview"
+    },
+    {
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "booking_lifecycle_sequence",
+      "target": "spec_05_api_contracts"
+    },
+    {
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "spec_00_overview",
+      "target": "spec_01_domain_model"
+    },
+    {
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "spec_00_overview",
+      "target": "booking_session_separation"
+    },
+    {
+      "relation": "implements",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "spec_06_database",
+      "target": "spec_01_domain_model"
+    },
+    {
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "spec_02_state_machine",
+      "target": "spec_01_domain_model"
+    },
+    {
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "spec_01_domain_model",
+      "target": "spec_03_payment_engine"
+    },
+    {
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "spec_01_domain_model",
+      "target": "spec_04_inspection_flow"
+    },
+    {
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "spec_01_domain_model",
+      "target": "entity_cafe"
+    },
+    {
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "spec_01_domain_model",
+      "target": "entity_vehicle"
+    },
+    {
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "spec_01_domain_model",
+      "target": "entity_booking"
+    },
+    {
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "spec_01_domain_model",
+      "target": "entity_session"
+    },
+    {
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "spec_01_domain_model",
+      "target": "entity_payment_component"
+    },
+    {
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "spec_01_domain_model",
+      "target": "entity_inspection"
+    },
+    {
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "spec_01_domain_model",
+      "target": "entity_incident"
+    },
+    {
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "spec_01_domain_model",
+      "target": "entity_dispute"
+    },
+    {
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "br_readme",
+      "target": "spec_01_domain_model"
+    },
+    {
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "arch_overview_doc",
+      "target": "spec_01_domain_model"
+    },
+    {
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "arch_system_overview_doc",
+      "target": "spec_01_domain_model"
+    },
+    {
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "arch_booking_session_doc",
+      "target": "spec_01_domain_model"
+    },
+    {
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "spec_02_state_machine",
+      "target": "spec_03_payment_engine"
+    },
+    {
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "spec_02_state_machine",
+      "target": "spec_04_inspection_flow"
+    },
+    {
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "br_booking",
+      "target": "spec_02_state_machine"
+    },
+    {
+      "relation": "governs",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95,
+      "source": "spec_02_state_machine",
+      "target": "entity_booking"
+    },
+    {
+      "relation": "governs",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95,
+      "source": "spec_02_state_machine",
+      "target": "entity_session"
+    },
+    {
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "br_readme",
+      "target": "spec_02_state_machine"
+    },
+    {
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "arch_overview_doc",
+      "target": "spec_02_state_machine"
+    },
+    {
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "arch_system_overview_doc",
+      "target": "spec_02_state_machine"
+    },
+    {
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "arch_booking_session_doc",
+      "target": "spec_02_state_machine"
+    },
+    {
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "spec_03_payment_engine",
+      "target": "snapshot_first_principle"
+    },
+    {
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "spec_03_payment_engine",
+      "target": "payment_component_lifecycle"
+    },
+    {
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "spec_03_payment_engine",
+      "target": "platform_fee_model"
+    },
+    {
+      "relation": "governs",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95,
+      "source": "spec_03_payment_engine",
+      "target": "entity_payment_component"
+    },
+    {
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "br_readme",
+      "target": "spec_03_payment_engine"
+    },
+    {
+      "relation": "extends",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95,
+      "source": "br_payment",
+      "target": "spec_03_payment_engine"
+    },
+    {
+      "relation": "referenced_by",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "br_promotions",
+      "target": "spec_03_payment_engine"
+    },
+    {
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "arch_overview_doc",
+      "target": "spec_03_payment_engine"
+    },
+    {
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "arch_system_overview_doc",
+      "target": "spec_03_payment_engine"
+    },
+    {
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "spec_04_inspection_flow",
+      "target": "inspection_evidence_principle"
+    },
+    {
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "spec_04_inspection_flow",
+      "target": "cloudinary_storage"
+    },
+    {
+      "relation": "governs",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95,
+      "source": "spec_04_inspection_flow",
+      "target": "entity_inspection"
+    },
+    {
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "br_readme",
+      "target": "spec_04_inspection_flow"
+    },
+    {
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "arch_overview_doc",
+      "target": "spec_04_inspection_flow"
+    },
+    {
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "arch_system_overview_doc",
+      "target": "spec_04_inspection_flow"
+    },
+    {
+      "relation": "exposes",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95,
+      "source": "spec_05_api_contracts",
+      "target": "entity_booking"
+    },
+    {
+      "relation": "exposes",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95,
+      "source": "spec_05_api_contracts",
+      "target": "entity_session"
+    },
+    {
+      "relation": "exposes",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95,
+      "source": "spec_05_api_contracts",
+      "target": "entity_inspection"
+    },
+    {
+      "relation": "exposes",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95,
+      "source": "spec_05_api_contracts",
+      "target": "entity_incident"
+    },
+    {
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "arch_overview_doc",
+      "target": "spec_05_api_contracts"
+    },
+    {
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "arch_system_overview_doc",
+      "target": "spec_05_api_contracts"
+    },
+    {
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "be_readme_doc",
+      "target": "spec_06_database"
+    },
+    {
+      "relation": "summarizes",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "be_schema_doc",
+      "target": "spec_06_database"
+    },
+    {
+      "relation": "indexes",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "br_readme",
+      "target": "br_payment"
+    },
+    {
+      "relation": "formalizes",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95,
+      "source": "br_payment",
+      "target": "snapshot_first_principle"
+    },
+    {
+      "relation": "formalizes",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95,
+      "source": "br_payment",
+      "target": "payment_component_lifecycle"
+    },
+    {
+      "relation": "indexes",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "br_readme",
+      "target": "br_fnb"
+    },
+    {
+      "relation": "governs",
+      "provenance": "INFERRED",
+      "confidence_score": 0.85,
+      "source": "br_fnb",
+      "target": "entity_session"
+    },
+    {
+      "relation": "constrains",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "br_fnb",
+      "target": "platform_fee_model"
+    },
+    {
+      "relation": "governs",
+      "provenance": "INFERRED",
+      "confidence_score": 0.85,
+      "source": "br_promotions",
+      "target": "entity_booking"
+    },
+    {
+      "relation": "indexes",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "br_readme",
+      "target": "br_extension"
+    },
+    {
+      "relation": "governs",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95,
+      "source": "br_extension",
+      "target": "entity_session"
+    },
+    {
+      "relation": "creates",
+      "provenance": "INFERRED",
+      "confidence_score": 0.85,
+      "source": "br_extension",
+      "target": "entity_payment_component"
+    },
+    {
+      "relation": "indexes",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "br_readme",
+      "target": "br_fleet"
+    },
+    {
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "br_fleet",
+      "target": "vehicle_tier_system"
+    },
+    {
+      "relation": "governs",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95,
+      "source": "br_fleet",
+      "target": "entity_vehicle"
+    },
+    {
+      "relation": "indexes",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "br_readme",
+      "target": "br_dispute"
+    },
+    {
+      "relation": "governs",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95,
+      "source": "br_dispute",
+      "target": "entity_incident"
+    },
+    {
+      "relation": "governs",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95,
+      "source": "br_dispute",
+      "target": "entity_dispute"
+    },
+    {
+      "relation": "depends_on",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "br_dispute",
+      "target": "inspection_evidence_principle"
+    },
+    {
+      "relation": "indexes",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "br_readme",
+      "target": "br_booking"
+    },
+    {
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "br_booking",
+      "target": "redis_slot_lock"
+    },
+    {
+      "relation": "governs",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95,
+      "source": "br_booking",
+      "target": "entity_booking"
+    },
+    {
+      "relation": "indexes",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "br_readme",
+      "target": "br_inspection"
+    },
+    {
+      "relation": "formalizes",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95,
+      "source": "br_inspection",
+      "target": "inspection_evidence_principle"
+    },
+    {
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "br_inspection",
+      "target": "cloudinary_storage"
+    },
+    {
+      "relation": "governs",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95,
+      "source": "br_inspection",
+      "target": "entity_inspection"
+    },
+    {
+      "relation": "architecture_drives",
+      "provenance": "INFERRED",
+      "confidence_score": 0.85,
+      "source": "b2b_saas_chain_model",
+      "target": "entity_cafe"
+    },
+    {
+      "relation": "has_many",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "entity_cafe",
+      "target": "entity_vehicle"
+    },
+    {
+      "relation": "scoped_to",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "entity_promotion",
+      "target": "entity_cafe"
+    },
+    {
+      "relation": "depicts",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "erd_core_preview_img",
+      "target": "entity_cafe"
+    },
+    {
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "be_schema_doc",
+      "target": "entity_cafe"
+    },
+    {
+      "relation": "manages",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "actor_provider",
+      "target": "entity_cafe"
+    },
+    {
+      "relation": "classified_by",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95,
+      "source": "entity_vehicle",
+      "target": "vehicle_tier_system"
+    },
+    {
+      "relation": "depicts",
+      "provenance": "AMBIGUOUS",
+      "confidence_score": 0.2,
+      "source": "erd_core_preview_img",
+      "target": "entity_vehicle"
+    },
+    {
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "be_schema_doc",
+      "target": "entity_vehicle"
+    },
+    {
+      "relation": "manages",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95,
+      "source": "actor_provider",
+      "target": "entity_vehicle"
+    },
+    {
+      "relation": "has_many",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "entity_booking",
+      "target": "entity_session"
+    },
+    {
+      "relation": "has_one",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "entity_booking",
+      "target": "entity_dispute"
+    },
+    {
+      "relation": "has_many",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "entity_booking",
+      "target": "entity_payment_component"
+    },
+    {
+      "relation": "implements",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "entity_booking",
+      "target": "snapshot_first_principle"
+    },
+    {
+      "relation": "protects",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95,
+      "source": "redis_slot_lock",
+      "target": "entity_booking"
+    },
+    {
+      "relation": "governs",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "booking_session_separation",
+      "target": "entity_booking"
+    },
+    {
+      "relation": "has_many",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "entity_booking",
+      "target": "entity_payment_transaction"
+    },
+    {
+      "relation": "has_many",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "entity_booking",
+      "target": "entity_inspection_record"
+    },
+    {
+      "relation": "has_many",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "entity_booking",
+      "target": "entity_extension_proposal"
+    },
+    {
+      "relation": "has_many",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "entity_booking",
+      "target": "entity_fnb_order"
+    },
+    {
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "entity_booking",
+      "target": "entity_promotion"
+    },
+    {
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "entity_trust_score_log",
+      "target": "entity_booking"
+    },
+    {
+      "relation": "governed_by",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "entity_booking",
+      "target": "booking_state_machine"
+    },
+    {
+      "relation": "depicts",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "erd_core_preview_img",
+      "target": "entity_booking"
+    },
+    {
+      "relation": "describes_flow_for",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "booking_data_flow_doc",
+      "target": "entity_booking"
+    },
+    {
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "be_schema_doc",
+      "target": "entity_booking"
+    },
+    {
+      "relation": "creates",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "actor_customer",
+      "target": "entity_booking"
+    },
+    {
+      "relation": "has_many",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "entity_session",
+      "target": "entity_inspection"
+    },
+    {
+      "relation": "has_many",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "entity_session",
+      "target": "entity_incident"
+    },
+    {
+      "relation": "governs",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "booking_session_separation",
+      "target": "entity_session"
+    },
+    {
+      "relation": "governed_by",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "entity_session",
+      "target": "session_state_machine"
+    },
+    {
+      "relation": "triggers_creation_of",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95,
+      "source": "entity_session",
+      "target": "entity_inspection_record"
+    },
+    {
+      "relation": "describes_flow_for",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "booking_data_flow_doc",
+      "target": "entity_session"
+    },
+    {
+      "relation": "creates",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "actor_staff",
+      "target": "entity_session"
+    },
+    {
+      "relation": "describes_flow_for",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "booking_data_flow_doc",
+      "target": "entity_payment_component"
+    },
+    {
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "be_schema_doc",
+      "target": "entity_payment_component"
+    },
+    {
+      "relation": "manages",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95,
+      "source": "module_payment",
+      "target": "entity_payment_component"
+    },
+    {
+      "relation": "implements",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95,
+      "source": "entity_inspection",
+      "target": "inspection_evidence_principle"
+    },
+    {
+      "relation": "depicts",
+      "provenance": "AMBIGUOUS",
+      "confidence_score": 0.2,
+      "source": "erd_core_preview_img",
+      "target": "entity_dispute"
+    },
+    {
+      "relation": "adjudicates",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "actor_admin",
+      "target": "entity_dispute"
+    },
+    {
+      "relation": "integrates_with",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "rcfield_platform",
+      "target": "cloudinary_storage"
+    },
+    {
+      "relation": "uploads_photos_to",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "api_server",
+      "target": "cloudinary_storage"
+    },
+    {
+      "relation": "stores_photos_in",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "entity_inspection_record",
+      "target": "cloudinary_storage"
+    },
+    {
+      "relation": "uploads_to",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "module_inspection",
+      "target": "cloudinary_storage"
+    },
+    {
+      "relation": "describes",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "arch_overview_doc",
+      "target": "snapshot_first_principle"
+    },
+    {
+      "relation": "describes",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "arch_overview_doc",
+      "target": "evidence_based_handover"
+    },
+    {
+      "relation": "indexes",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "arch_readme_doc",
+      "target": "arch_system_overview_doc"
+    },
+    {
+      "relation": "indexes",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "arch_readme_doc",
+      "target": "arch_booking_session_doc"
+    },
+    {
+      "relation": "describes",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "arch_system_overview_doc",
+      "target": "rcfield_platform"
+    },
+    {
+      "relation": "describes",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "arch_booking_session_doc",
+      "target": "booking_state_machine"
+    },
+    {
+      "relation": "describes",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "arch_booking_session_doc",
+      "target": "session_state_machine"
+    },
+    {
+      "relation": "describes",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "arch_booking_session_doc",
+      "target": "planned_vs_actual_principle"
+    },
+    {
+      "relation": "describes_flow_for",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "booking_data_flow_doc",
+      "target": "entity_inspection_record"
+    },
+    {
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "be_readme_doc",
+      "target": "be_schema_doc"
+    },
+    {
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "be_schema_doc",
+      "target": "entity_inspection_record"
+    },
+    {
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "be_schema_doc",
+      "target": "entity_trust_score_log"
+    },
+    {
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "be_schema_doc",
+      "target": "entity_promotion"
+    },
+    {
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "be_schema_doc",
+      "target": "entity_feature_flag"
+    },
+    {
+      "relation": "provisions",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "be_docker_compose",
+      "target": "postgresql_db"
+    },
+    {
+      "relation": "provisions",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "be_docker_compose",
+      "target": "redis_cache"
+    },
+    {
+      "relation": "defines_convention_for",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "be_claude_md",
+      "target": "be_logger_config"
+    },
+    {
+      "relation": "defines_convention_for",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "be_claude_md",
+      "target": "be_validate_index"
+    },
+    {
+      "relation": "defines_convention_for",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "be_claude_md",
+      "target": "be_types_index"
+    },
+    {
+      "relation": "contains",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "rcfield_platform",
+      "target": "web_app"
+    },
+    {
+      "relation": "contains",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "rcfield_platform",
+      "target": "api_server"
+    },
+    {
+      "relation": "contains",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "rcfield_platform",
+      "target": "postgresql_db"
+    },
+    {
+      "relation": "contains",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "rcfield_platform",
+      "target": "scheduler_jobs"
+    },
+    {
+      "relation": "integrates_with",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "rcfield_platform",
+      "target": "payment_gateway"
+    },
+    {
+      "relation": "uses",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "rcfield_platform",
+      "target": "redis_cache"
+    },
+    {
+      "relation": "uses",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "actor_customer",
+      "target": "web_app"
+    },
+    {
+      "relation": "subject_of",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "actor_customer",
+      "target": "entity_trust_score_log"
+    },
+    {
+      "relation": "uses",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "actor_staff",
+      "target": "web_app"
+    },
+    {
+      "relation": "creates",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "actor_staff",
+      "target": "entity_inspection_record"
+    },
+    {
+      "relation": "uses",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "actor_provider",
+      "target": "web_app"
+    },
+    {
+      "relation": "uses",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "actor_admin",
+      "target": "web_app"
+    },
+    {
+      "relation": "managed_by",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "entity_feature_flag",
+      "target": "actor_admin"
+    },
+    {
+      "relation": "calls",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "web_app",
+      "target": "api_server"
+    },
+    {
+      "relation": "reads_writes",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "api_server",
+      "target": "postgresql_db"
+    },
+    {
+      "relation": "integrates_with",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "api_server",
+      "target": "payment_gateway"
+    },
+    {
+      "relation": "uses_for_slot_locking",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "api_server",
+      "target": "redis_cache"
+    },
+    {
+      "relation": "triggers_timeout_transitions_in",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "scheduler_jobs",
+      "target": "api_server"
+    },
+    {
+      "relation": "contains",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "api_server",
+      "target": "module_auth"
+    },
+    {
+      "relation": "contains",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "api_server",
+      "target": "module_booking"
+    },
+    {
+      "relation": "contains",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "api_server",
+      "target": "module_payment"
+    },
+    {
+      "relation": "contains",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "api_server",
+      "target": "module_fleet"
+    },
+    {
+      "relation": "contains",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "api_server",
+      "target": "module_inspection"
+    },
+    {
+      "relation": "contains",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "api_server",
+      "target": "module_extension"
+    },
+    {
+      "relation": "contains",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "api_server",
+      "target": "module_incident"
+    },
+    {
+      "relation": "contains",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "api_server",
+      "target": "module_fnb"
+    },
+    {
+      "relation": "contains",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "api_server",
+      "target": "module_cafe"
+    },
+    {
+      "relation": "uses",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95,
+      "source": "api_server",
+      "target": "be_logger_config"
+    },
+    {
+      "relation": "uses",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95,
+      "source": "api_server",
+      "target": "be_validate_index"
+    },
+    {
+      "relation": "uses",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95,
+      "source": "api_server",
+      "target": "be_types_index"
+    },
+    {
+      "relation": "required_by",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "module_auth",
+      "target": "module_booking"
+    },
+    {
+      "relation": "depends_on",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "module_booking",
+      "target": "module_payment"
+    },
+    {
+      "relation": "depends_on",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "module_booking",
+      "target": "module_inspection"
+    },
+    {
+      "relation": "depends_on",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "module_booking",
+      "target": "module_extension"
+    },
+    {
+      "relation": "depends_on",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "module_booking",
+      "target": "module_incident"
+    },
+    {
+      "relation": "depends_on",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "module_booking",
+      "target": "module_fnb"
+    },
+    {
+      "relation": "required_by",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "module_fleet",
+      "target": "module_booking"
+    },
+    {
+      "relation": "implements",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "module_payment",
+      "target": "snapshot_first_principle"
+    },
+    {
+      "relation": "depends_on",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "module_cafe",
+      "target": "module_fleet"
+    },
+    {
+      "relation": "implements",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "module_inspection",
+      "target": "evidence_based_handover"
+    },
+    {
+      "relation": "depends_on",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "module_cafe",
+      "target": "module_fnb"
+    },
+    {
+      "relation": "implements",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source": "entity_inspection_record",
+      "target": "evidence_based_handover"
+    }
+  ],
+  "hyperedges": [],
+  "built_at_commit": "1af4d760650bdce6865c36211e8f5ba0e2a94cdd"
+}

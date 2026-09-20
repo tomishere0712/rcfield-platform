@@ -1,0 +1,234 @@
+@startuml figure29_provider_onboarding_class_diagram
+skinparam dpi 300
+skinparam shadowing false
+skinparam roundCorner 4
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam nodesep 100
+skinparam ranksep 60
+skinparam labelDistance 10
+
+hide circle
+hide <<hidden>> circle
+hide <<hidden>> stereotype
+
+skinparam class {
+    BackgroundColor #FFFFFF
+    BorderColor #000000
+    BorderThickness 1.5
+    HeaderBackgroundColor #F7FAFC
+    FontName Arial
+    FontSize 14
+    FontStyle bold
+    FontColor #000000
+    AttributeFontName Arial
+    AttributeFontSize 12
+    AttributeFontColor #000000
+}
+
+skinparam class<<hidden>> {
+    BackgroundColor transparent
+    BorderColor transparent
+    FontColor transparent
+}
+
+skinparam package {
+    BackgroundColor #FAFAFA
+    BorderColor #A0AEC0
+    BorderThickness 1.2
+    FontName Arial
+    FontSize 13
+    FontStyle bold
+    FontColor #000000
+}
+
+skinparam labelBackgroundColor #FFFFFF
+skinparam arrow {
+    Color #000000
+    Thickness 1.4
+    FontSize 12
+    FontColor #000000
+}
+
+top to bottom direction
+
+package "API Controllers" as ApiTier {
+    class ProviderOnboardingController {
+        - onboardingService : ProviderOnboardingService
+        --
+        + submitKyc(input : SubmitKycInput) : ProviderProfileResponse
+        + resubmitKyc(input : ResubmitKycInput) : ProviderProfileResponse
+        + getKycStatus(userId : UUID) : KycStatusResponse
+        + approveKyc(providerId : UUID) : void
+        + rejectKyc(providerId : UUID, reason : String) : void
+    }
+
+    class SubscriptionController {
+        - subscriptionService : SubscriptionService
+        --
+        + listPlans() : SubscriptionPlanResponse[]
+        + getCurrentSubscription(providerId : UUID) : SubscriptionResponse
+        + changePlan(input : ChangePlanInput) : SubscriptionResponse
+        + cancelSubscription(subId : UUID) : void
+    }
+
+    class PaymentRequestController {
+        - paymentRequestService : PaymentRequestService
+        --
+        + submitRequest(input : PaymentRequestInput) : PaymentRequestResponse
+        + confirmRequest(requestId : UUID) : void
+        + rejectRequest(requestId : UUID, reason : String) : void
+        + listMyRequests(providerId : UUID) : PaymentRequestResponse[]
+    }
+    
+    ProviderOnboardingController -[hidden]right-> SubscriptionController
+    SubscriptionController -[hidden]right-> PaymentRequestController
+}
+
+package "Business Services" as ServiceTier {
+    class ProviderOnboardingService {
+        - profileRepository : ProviderProfileRepository
+        --
+        + submitKyc(input : SubmitKycInput) : ProviderProfile
+        + resubmitKyc(input : ResubmitKycInput) : ProviderProfile
+        + getKycStatus(userId : UUID) : KycStatus
+        + approveKyc(providerId : UUID) : void
+        + rejectKyc(providerId : UUID, reason : String) : void
+    }
+
+    class SubscriptionService {
+        - subscriptionRepository : ProviderSubscriptionRepository
+        - planRepository : SubscriptionPlanRepository
+        --
+        + createTrial(providerId : UUID) : ProviderSubscription
+        + activateFromPayment(providerId : UUID, planId : UUID) : ProviderSubscription
+        + checkBranchQuota(providerId : UUID) : Boolean
+        + checkVehicleQuota(providerId : UUID, cafeId : UUID) : Boolean
+    }
+
+    class PaymentRequestService {
+        - requestRepository : PaymentRequestRepository
+        - subscriptionService : SubscriptionService
+        --
+        + createPaymentRequest(providerId : UUID, input : PaymentRequestInput) : PaymentRequest
+        + confirmRequest(requestId : UUID, adminId : UUID) : void
+        + rejectRequest(requestId : UUID, adminId : UUID, reason : String) : void
+    }
+
+    ProviderOnboardingService -[hidden]right-> SubscriptionService
+    SubscriptionService -[hidden]right-> PaymentRequestService
+}
+
+package "Data Repositories" as DataTier {
+    class ProviderProfileRepository {
+        - dataSource : DataSource
+        --
+        + findByUserId(userId : UUID) : ProviderProfile
+        + save(profile : ProviderProfile) : ProviderProfile
+    }
+
+    class ProviderSubscriptionRepository {
+        - dataSource : DataSource
+        --
+        + findByProviderId(providerId : UUID) : ProviderSubscription
+        + save(subscription : ProviderSubscription) : ProviderSubscription
+    }
+
+    class SubscriptionPlanRepository {
+        - dataSource : DataSource
+        --
+        + findAllActive() : SubscriptionPlan[]
+        + findById(id : UUID) : SubscriptionPlan
+    }
+
+    class PaymentRequestRepository {
+        - dataSource : DataSource
+        --
+        + findByProviderId(providerId : UUID) : PaymentRequest[]
+        + save(request : PaymentRequest) : PaymentRequest
+    }
+
+    ProviderProfileRepository -[hidden]right-> ProviderSubscriptionRepository
+    ProviderSubscriptionRepository -[hidden]right-> SubscriptionPlanRepository
+    SubscriptionPlanRepository -[hidden]right-> PaymentRequestRepository
+}
+
+package "Domain Entities" as DomainTier {
+    class ProviderProfile {
+        - id : UUID
+        - businessName : String
+        - taxCode : String
+        - businessLicenseUrl : String
+        - idCardFrontUrl : String
+        - idCardBackUrl : String
+        - kycStatus : KycStatus
+        - trialUsedAt : Date
+        --
+        + isKycApproved() : Boolean
+    }
+
+    class ProviderSubscription {
+        - id : UUID
+        - status : SubscriptionStatus
+        - currentPeriodStart : Date
+        - currentPeriodEnd : Date
+        - autoRenew : Boolean
+        - createdAt : Date
+        --
+        + isValid() : Boolean
+    }
+
+    class SubscriptionPlan {
+        - id : UUID
+        - name : String
+        - tier : PlanTier
+        - maxCafes : Int
+        - maxVehiclesPerCafe : Int
+        - aiMonthlyQuota : Int
+        - priceMonthly : Decimal
+        - priceYearly : Decimal
+        --
+        + isPlanActive() : Boolean
+    }
+
+    class PaymentRequest {
+        - id : UUID
+        - amount : Decimal
+        - paymentProofUrl : String
+        - status : PaymentRequestStatus
+        - verifiedAt : Date
+        --
+        + isApproved() : Boolean
+    }
+
+    ProviderProfile -[hidden]right-> ProviderSubscription
+    ProviderSubscription -[hidden]right-> SubscriptionPlan
+    ProviderProfile -[hidden]down-> PaymentRequest
+}
+
+' Layout ordering enforcement
+ApiTier -[hidden]down-> ServiceTier
+ServiceTier -[hidden]down-> DataTier
+DataTier -[hidden]down-> DomainTier
+
+' Control flow links
+ProviderOnboardingController -down-> ProviderOnboardingService
+SubscriptionController -down-> SubscriptionService
+PaymentRequestController -down-> PaymentRequestService
+
+ProviderOnboardingService -down-> ProviderProfileRepository
+SubscriptionService -down-> ProviderSubscriptionRepository
+SubscriptionService -down-> SubscriptionPlanRepository
+PaymentRequestService <-left- SubscriptionService
+PaymentRequestService -down-> PaymentRequestRepository
+
+ProviderProfileRepository ..> ProviderProfile
+ProviderSubscriptionRepository ..> ProviderSubscription
+SubscriptionPlanRepository ..> SubscriptionPlan
+PaymentRequestRepository ..> PaymentRequest
+
+ProviderProfile "1   " -right- "0..1   " ProviderSubscription
+ProviderSubscription "0..*   " -right- "1   " SubscriptionPlan
+ProviderProfile "1   " *--- "0..*   " PaymentRequest
+
+@enduml

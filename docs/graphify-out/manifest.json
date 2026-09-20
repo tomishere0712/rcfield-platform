@@ -1,0 +1,16 @@
+{
+  "built_at": "2026-05-17T04:23:31.620369Z",
+  "root": "/Users/mr.triss/FPT University/SEP490/rcfeild-spec",
+  "total_files": 69,
+  "total_words": 52513,
+  "graph": {
+    "nodes": 180,
+    "edges": 377,
+    "communities": 10
+  },
+  "outputs": {
+    "graph_json": "graphify-out/graph.json",
+    "graph_html": "graphify-out/graph.html",
+    "report": "graphify-out/GRAPH_REPORT.md"
+  }
+}

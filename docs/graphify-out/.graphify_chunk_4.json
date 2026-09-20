@@ -1,0 +1,1251 @@
+{
+  "nodes": [
+    {
+      "id": "arch_overview_doc",
+      "label": "RCField Architecture Overview",
+      "file": "docs/architecture/RCField_ArchitectureOverview.md",
+      "file_type": "document",
+      "description": "Quick reference for RCField system design, data model, tech stack, state machines, payment engine, inspection flow, key API endpoints, and backend code structure. Last updated 2026-05-17."
+    },
+    {
+      "id": "arch_readme_doc",
+      "label": "Architecture README",
+      "file": "docs/architecture/README.md",
+      "file_type": "document",
+      "description": "Index of architecture documents: 00-system-overview, 01-booking-session, 02-payment-engine, 03-inspection-flow, 04-dispute-resolution. Dev setup and spec file reference."
+    },
+    {
+      "id": "arch_system_overview_doc",
+      "label": "Architecture: System Overview",
+      "file": "docs/architecture/00-system-overview.md",
+      "file_type": "document",
+      "description": "C4 Level 1 and Level 2 diagrams, actor/app matrix, 9 domain modules, tech stack, booking lifecycle data flow, security/auth, external integrations (payment gateway, Cloudinary), and key architectural decisions. Last updated 2026-05-16."
+    },
+    {
+      "id": "arch_booking_session_doc",
+      "label": "Architecture: Booking & Session",
+      "file": "docs/architecture/01-booking-session.md",
+      "file_type": "document",
+      "description": "Planned vs Actual separation principle: Booking=contract, Session=operations. Entity map, Booking state machine (PENDING→CONFIRMED→COMPLETED/CANCELLED/NO_SHOW), Session state machine (CHECKED_IN→ACTIVE→EXTENDING/CHECKING_OUT→COMPLETED), timeout rules, SessionVehicle vehicle-swap support, booking modes (RENTAL/BYOC/MIXED). Last updated 2026-05-17."
+    },
+    {
+      "id": "booking_data_flow_doc",
+      "label": "Booking Data Flow Diagram",
+      "file": "docs/architecture/diagrams/booking-data-flow.md",
+      "file_type": "document",
+      "description": "Tables touched per step across two phases: Phase 1 (booking creation and payment — bookings, booking_participants, booking_vehicles, fnb_orders, payment_components, payment_transactions) and Phase 2 (session lifecycle — sessions, session_vehicles, inspections, inspection_photos, incidents, disputes, trust_score_logs, reviews). Happy-path and unhappy-case flows documented."
+    },
+    {
+      "id": "be_schema_doc",
+      "label": "Backend Schema Index",
+      "file": "rcfeild-be/SCHEMA.md",
+      "file_type": "document",
+      "description": "Quick-reference index of 26 database tables grouped by domain: USER & AUTH (users, refresh_tokens, password_reset_tokens), CAFE (cafes, cafe_images, cafe_closures, cafe_announcements), STAFF (staff_cafe_assignments), FLEET (vehicles, vehicle_images, vehicle_maintenance_logs), BOOKING (bookings, inspection_records, extension_proposals, disputes), PAYMENT (payment_components, payment_transactions), PROMOTIONS (promotions, promotion_usages), F&B (menu_items, fnb_orders, fnb_order_items), REVIEWS & NOTIFICATIONS (reviews, notification_logs), SYSTEM (feature_flags, trust_score_logs). All enums defined."
+    },
+    {
+      "id": "be_readme_doc",
+      "label": "Backend README",
+      "file": "rcfeild-be/README.md",
+      "file_type": "document",
+      "description": "RCField backend setup guide: Node.js 22+, Express.js, PostgreSQL 16 via TypeORM, Redis 7, Zod validation, JWT auth, Cloudinary, Docker Compose. Scripts for dev/build/migration/test. 26 tables, 4 roles, test infrastructure with separate rcfeild_test DB."
+    },
+    {
+      "id": "be_docker_compose",
+      "label": "Backend Docker Compose",
+      "file": "rcfeild-be/docker-compose.yml",
+      "file_type": "code",
+      "description": "Docker Compose config spinning up PostgreSQL 16 (port 5432, container rcfeild_postgres, DB rcfeild_db) and Redis 7 (port 6379, container rcfeild_redis) with persistent volumes and healthchecks."
+    },
+    {
+      "id": "be_claude_md",
+      "label": "Backend CLAUDE.md — Coding Guidelines",
+      "file": "rcfeild-be/CLAUDE.md",
+      "file_type": "document",
+      "description": "AI coding guidelines for the backend: controller convention (endpoint comment above every handler), logger convention (no console.log, use logger from src/config/logger.ts), validation convention (all Zod schemas in src/validate/index.ts grouped by table), enum convention (all enums in src/types/index.ts), and naming convention table."
+    },
+    {
+      "id": "erd_core_preview_img",
+      "label": "ERD Core Preview",
+      "file": "docs/diagrams/erd-core-preview.png",
+      "file_type": "image",
+      "description": "Entity-relationship diagram showing core entities. Visible relationships include: User (blue) owns Cafe (green, center), User 1:N makes Booking (green, center), User 1:N at Cafe, Cafe 0:1:N Booking, Booking 1:N to payment/inspection related table (orange, right with FK/confirm columns), Booking 1:N to session_vehicles or similar (blue, bottom-left), Booking 1:N to another table (yellow, bottom-center), Booking 1:0..1 to dispute (pink, bottom-right). Text is small and partially unreadable in image."
+    },
+    {
+      "id": "rcfield_platform",
+      "label": "RCField Platform",
+      "file": "docs/architecture/00-system-overview.md",
+      "file_type": "document",
+      "description": "B2B SaaS for RC car track chain operator in Vietnam. One provider, multiple branches, shared system. Not a marketplace. Core value: structured digital evidence at every asset handover to eliminate damage disputes."
+    },
+    {
+      "id": "actor_customer",
+      "label": "Actor: Customer",
+      "file": "docs/architecture/RCField_ArchitectureOverview.md",
+      "file_type": "document",
+      "description": "Customer role: books slots, pre-orders F&B, makes payments, confirms check-in/out, opens disputes. Uses mobile-first web app. Has trust_score (0-100, default 100) affecting RESTRICTED tier rental eligibility."
+    },
+    {
+      "id": "actor_staff",
+      "label": "Actor: Staff",
+      "file": "docs/architecture/RCField_ArchitectureOverview.md",
+      "file_type": "document",
+      "description": "Staff role: performs check-in/out, records F&B orders, proposes extensions, uploads inspection photos. Uses mobile-first web app. Assigned to one cafe per staff_cafe_assignments."
+    },
+    {
+      "id": "actor_provider",
+      "label": "Actor: Provider",
+      "file": "docs/architecture/RCField_ArchitectureOverview.md",
+      "file_type": "document",
+      "description": "Provider role: manages all branches (cafes), fleet, F&B menus, views revenue. Uses desktop/tablet web app. Sees aggregate totals plus drill-down per branch."
+    },
+    {
+      "id": "actor_admin",
+      "label": "Actor: Admin",
+      "file": "docs/architecture/RCField_ArchitectureOverview.md",
+      "file_type": "document",
+      "description": "Admin role: team RCField (the software vendor). Approves cafes, monitors incident policy, manages feature flags, adjudicates formal disputes. Uses desktop admin portal."
+    },
+    {
+      "id": "web_app",
+      "label": "Web App (Frontend)",
+      "file": "docs/architecture/00-system-overview.md",
+      "file_type": "document",
+      "description": "ReactJS + TypeScript + Tailwind CSS SPA. Mobile-first. Role-based UI routing from JWT UserRole. All 4 actors share one app. Server state via React Query, client state via Zustand, HTTP via Axios. Vietnamese UI."
+    },
+    {
+      "id": "api_server",
+      "label": "API Server (Backend)",
+      "file": "docs/architecture/00-system-overview.md",
+      "file_type": "document",
+      "description": "Node.js 20+/22 + Express.js REST API. TypeScript strict mode. Router-per-domain architecture: auth, bookings, sessions, inspections, incidents, payments, fleet, F&B. Middleware stack: logger → CORS → JWT → RBAC. Validation via Zod. Business logic in service layer."
+    },
+    {
+      "id": "postgresql_db",
+      "label": "PostgreSQL Database",
+      "file": "docs/architecture/00-system-overview.md",
+      "file_type": "document",
+      "description": "PostgreSQL 16 accessed via TypeORM. 26 operational tables (Phase 1). All monetary values NUMERIC(15,2). UUID PKs. Soft delete on users, vehicles, menu_items. bookings.snapshot (jsonb) is the sole source for payment calculations."
+    },
+    {
+      "id": "redis_cache",
+      "label": "Redis Cache / Lock",
+      "file": "rcfeild-be/README.md",
+      "file_type": "document",
+      "description": "Redis 7 used for slot locking. Redis key pattern: slot:rental:{cafeId}:{vehicleId}:{date}:{slotStart} (SET NX, TTL 1800s). Also used for session/job queue."
+    },
+    {
+      "id": "cloudinary_storage",
+      "label": "Cloudinary (Photo Storage)",
+      "file": "docs/architecture/00-system-overview.md",
+      "file_type": "document",
+      "description": "External service for storing inspection photos. Path convention: inspections/{booking_id}/{check_in|check_out}/{angle}.jpg. 4 mandatory angles: front, back, left, right. Upload before writing DB — reject full inspection request if upload fails. URL stored in DB."
+    },
+    {
+      "id": "payment_gateway",
+      "label": "Payment Gateway (TBD)",
+      "file": "docs/architecture/00-system-overview.md",
+      "file_type": "document",
+      "description": "External payment processor, provider not yet finalized (VNPay / MoMo / VietQR). Handles booking + F&B pre-order payment in one transaction. Server-side signature verification required. Interface abstracted for easy swap."
+    },
+    {
+      "id": "scheduler_jobs",
+      "label": "Scheduler / Cron Jobs",
+      "file": "docs/architecture/00-system-overview.md",
+      "file_type": "document",
+      "description": "Node.js cron jobs enforcing timeout rules: PENDING booking 30m auto-cancel, no-show 30m after slot_start, check-in auto-confirm 15m, extension auto-reject 10m, checkout auto-confirm 2h (no damage) or 24h (damage)."
+    },
+    {
+      "id": "module_auth",
+      "label": "Module: Auth",
+      "file": "docs/architecture/00-system-overview.md",
+      "file_type": "document",
+      "description": "Auth domain module at /auth. JWT access token (15m) + refresh token (7d). RBAC with 4 roles. Endpoints: register, login, refresh, me. All enums in src/types/index.ts, all Zod schemas in src/validate/index.ts."
+    },
+    {
+      "id": "module_booking",
+      "label": "Module: Booking",
+      "file": "docs/architecture/00-system-overview.md",
+      "file_type": "document",
+      "description": "Booking domain module at /bookings. Manages booking lifecycle and state machine. State transitions must go through BookingService.transition(). Supports RENTAL, BYOC, MIXED modes."
+    },
+    {
+      "id": "module_payment",
+      "label": "Module: Payment",
+      "file": "docs/architecture/00-system-overview.md",
+      "file_type": "document",
+      "description": "Internal payment service (no direct router). Component-based immutable ledger. Types: SLOT_FEE, RENTAL_FEE, SECURITY_DEPOSIT, EXTENSION_FEE, DAMAGE_CHARGE, FB_PREORDER. Platform fee 15% on consummated components disbursed to Provider (0% on F&B). Settlement per session."
+    },
+    {
+      "id": "module_fleet",
+      "label": "Module: Fleet",
+      "file": "docs/architecture/00-system-overview.md",
+      "file_type": "document",
+      "description": "Fleet domain module at /cafes/:id/vehicles. Vehicle CRUD, tier (STANDARD/PREMIUM/RESTRICTED), status management. Vehicle has hourly_rate, security_deposit, damage_multiplier, compatible_track_types."
+    },
+    {
+      "id": "module_inspection",
+      "label": "Module: Inspection",
+      "file": "docs/architecture/00-system-overview.md",
+      "file_type": "document",
+      "description": "Inspection domain module at /bookings/:id/inspections. Check-in/out protocol with 4-angle photo upload to Cloudinary + checklist. Evidence chain: inspections → inspection_photos → inspection_checklists. Missing photos/checklist = Provider loses right to charge DAMAGE_CHARGE."
+    },
+    {
+      "id": "module_extension",
+      "label": "Module: Extension",
+      "file": "docs/architecture/00-system-overview.md",
+      "file_type": "document",
+      "description": "Extension domain module at /sessions/:id/extensions. Staff proposes extra time, Customer approves/rejects. 10-minute auto-reject timeout. Fee is post-paid, charged against deposit (max 50%)."
+    },
+    {
+      "id": "module_incident",
+      "label": "Module: Incident",
+      "file": "docs/architecture/00-system-overview.md",
+      "file_type": "document",
+      "description": "Incident domain module at /incidents. Policy-based automated resolution: log responsible_party, final_amount, resolution_note. Phase 1 layer for damage/dispute handling before formal dispute escalation."
+    },
+    {
+      "id": "module_fnb",
+      "label": "Module: F&B",
+      "file": "docs/architecture/00-system-overview.md",
+      "file_type": "document",
+      "description": "F&B domain module at /cafes/:id/menu and /bookings/:id/fnb-orders. Menu management, pre-order (bundled with booking payment), on-site order (customer pays Provider directly, platform not involved). 0% platform fee on F&B."
+    },
+    {
+      "id": "module_cafe",
+      "label": "Module: Cafe",
+      "file": "docs/architecture/00-system-overview.md",
+      "file_type": "document",
+      "description": "Cafe discovery module at /cafes. Listing, filtering, branch profile, shareable links (Zalo/FB). Config: track_types, slot_duration_minutes, slot_fee_rate, byoc_capacity. Status: PENDING/ACTIVE/SUSPENDED."
+    },
+    {
+      "id": "entity_booking",
+      "label": "Entity: Booking",
+      "file": "rcfeild-be/SCHEMA.md",
+      "file_type": "document",
+      "description": "Planned booking contract. Columns: customer_id→users, cafe_id→cafes, vehicle_id→vehicles (null for BYOC), mode (RENTAL/BYOC), source (APP/STAFF_MANUAL), track_type, status (PENDING/CONFIRMED/ACTIVE/EXTENDING/CHECKING_OUT/DISPUTED/COMPLETED/CANCELLED), slot_start, slot_end, slot_count, payment_expires_at, snapshot (jsonb — sole source for payment calculations), promotion_id→promotions, discount_amount."
+    },
+    {
+      "id": "entity_session",
+      "label": "Entity: Session",
+      "file": "docs/architecture/01-booking-session.md",
+      "file_type": "document",
+      "description": "Actual play session. Created only when Staff checks in. Stores actual_start_at, actual_end_at. A booking can have multiple sessions. Transitions via SessionService.transition(). States: CHECKED_IN, ACTIVE, EXTENDING, CHECKING_OUT, COMPLETED, CANCELLED."
+    },
+    {
+      "id": "entity_user",
+      "label": "Entity: User",
+      "file": "rcfeild-be/SCHEMA.md",
+      "file_type": "document",
+      "description": "All users across 4 roles. Columns: id (uuid), email, role (CUSTOMER/PROVIDER/STAFF/ADMIN), trust_score, auth_provider (LOCAL/GOOGLE), deleted_at (soft delete)."
+    },
+    {
+      "id": "entity_cafe",
+      "label": "Entity: Cafe",
+      "file": "rcfeild-be/SCHEMA.md",
+      "file_type": "document",
+      "description": "Branch entity. Columns: provider_id→users, slug (unique), status (PENDING/ACTIVE/SUSPENDED), track_types[], slot_duration_minutes, slot_fee_rate, byoc_capacity."
+    },
+    {
+      "id": "entity_vehicle",
+      "label": "Entity: Vehicle",
+      "file": "rcfeild-be/SCHEMA.md",
+      "file_type": "document",
+      "description": "Fleet vehicle per branch. Columns: cafe_id→cafes, tier (STANDARD/PREMIUM/RESTRICTED), status (AVAILABLE/IN_USE/MAINTENANCE/RETIRED), hourly_rate, security_deposit, damage_multiplier, compatible_track_types[], deleted_at."
+    },
+    {
+      "id": "entity_payment_component",
+      "label": "Entity: PaymentComponent",
+      "file": "rcfeild-be/SCHEMA.md",
+      "file_type": "document",
+      "description": "Immutable payment ledger entry. Columns: booking_id→bookings, type (SLOT_FEE/RENTAL_FEE/SECURITY_DEPOSIT/EXTENSION_FEE/DAMAGE_CHARGE/FB_PREORDER), amount (NUMERIC 15,2), status (PENDING/HELD/DISBURSED/REFUNDED/PARTIALLY_REFUNDED), disbursed_to→users. Never update amount — create new component instead.",
+      "rationale": "Immutable ledger ensures accurate audit trail and enables partial refund without corrupting historical records."
+    },
+    {
+      "id": "entity_payment_transaction",
+      "label": "Entity: PaymentTransaction",
+      "file": "rcfeild-be/SCHEMA.md",
+      "file_type": "document",
+      "description": "Raw payment gateway log. Columns: booking_id→bookings, gateway, gateway_transaction_id, type (PAYMENT/REFUND), raw_request (jsonb), raw_response (jsonb). Separate from component ledger."
+    },
+    {
+      "id": "entity_inspection_record",
+      "label": "Entity: InspectionRecord",
+      "file": "rcfeild-be/SCHEMA.md",
+      "file_type": "document",
+      "description": "Check-in or check-out inspection per booking. Columns: booking_id→bookings, type (CHECK_IN/CHECK_OUT), performed_by→users, photos (jsonb), checklist (jsonb), pre_existing_flag, damage_noted. UNIQUE(booking_id, type)."
+    },
+    {
+      "id": "entity_extension_proposal",
+      "label": "Entity: ExtensionProposal",
+      "file": "rcfeild-be/SCHEMA.md",
+      "file_type": "document",
+      "description": "Session extension request. Columns: booking_id→bookings, proposed_by→users, duration_minutes, fee_amount, status (PENDING/APPROVED/REJECTED/EXPIRED). 10-minute auto-reject timeout."
+    },
+    {
+      "id": "entity_dispute",
+      "label": "Entity: Dispute",
+      "file": "rcfeild-be/SCHEMA.md",
+      "file_type": "document",
+      "description": "Formal dispute per booking (max 1). Columns: booking_id→bookings (UNIQUE), opened_by→users, status (OPEN/UNDER_REVIEW/RESOLVED), resolution_favor (CUSTOMER/PROVIDER), resolved_by→users. Admin (RCField team) adjudicates."
+    },
+    {
+      "id": "entity_promotion",
+      "label": "Entity: Promotion",
+      "file": "rcfeild-be/SCHEMA.md",
+      "file_type": "document",
+      "description": "Discount code. Columns: code (UNIQUE when active), discount_type (PERCENT/FIXED), discount_value, max_discount_amount, applicable_to (ALL/RENTAL/BYOC), cafe_id→cafes (NULL=global chain-wide), uses_count, max_uses, max_uses_per_user."
+    },
+    {
+      "id": "entity_trust_score_log",
+      "label": "Entity: TrustScoreLog",
+      "file": "rcfeild-be/SCHEMA.md",
+      "file_type": "document",
+      "description": "Immutable customer trust score history. Columns: user_id→users, booking_id→bookings (nullable), delta, score_before, score_after, reason (NO_SHOW/DAMAGE_CONFIRMED/DISPUTE_LOST/BOOKING_STREAK/ADMIN_ADJUSTMENT). Trust score (0-100) affects RESTRICTED tier rental eligibility."
+    },
+    {
+      "id": "entity_fnb_order",
+      "label": "Entity: FnbOrder",
+      "file": "rcfeild-be/SCHEMA.md",
+      "file_type": "document",
+      "description": "F&B order. Types: PRE_ORDER (bundled with booking payment, 0% platform fee) or ON_SITE (customer pays Provider directly, outside platform). Columns: booking_id→bookings, type (PRE_ORDER/ON_SITE), status (PENDING/CONFIRMED/DELIVERED/CANCELLED), created_by→users."
+    },
+    {
+      "id": "entity_feature_flag",
+      "label": "Entity: FeatureFlag",
+      "file": "rcfeild-be/SCHEMA.md",
+      "file_type": "document",
+      "description": "Feature toggle system. Columns: feature_key (UNIQUE), is_enabled, is_trial, trial_ends_at. Managed by ADMIN role."
+    },
+    {
+      "id": "booking_state_machine",
+      "label": "Booking State Machine",
+      "file": "docs/architecture/01-booking-session.md",
+      "file_type": "document",
+      "description": "States: PENDING→CONFIRMED (payment success), PENDING→CANCELLED (30m timeout or customer cancel), CONFIRMED→COMPLETED (all sessions done), CONFIRMED→CANCELLED, CONFIRMED→NO_SHOW (slot_start + 30m no check-in). All transitions via BookingService.transition(bookingId, event)."
+    },
+    {
+      "id": "session_state_machine",
+      "label": "Session State Machine",
+      "file": "docs/architecture/01-booking-session.md",
+      "file_type": "document",
+      "description": "States: CHECKED_IN→ACTIVE (check-in complete), CHECKED_IN→CANCELLED; ACTIVE→EXTENDING (extension proposed), ACTIVE→CHECKING_OUT; EXTENDING→ACTIVE (approved/rejected/10m timeout); CHECKING_OUT→COMPLETED (customer confirm or auto-confirm 2h/24h). All transitions via SessionService.transition()."
+    },
+    {
+      "id": "snapshot_first_principle",
+      "label": "Snapshot-First Payment Principle",
+      "file": "docs/architecture/RCField_ArchitectureOverview.md",
+      "file_type": "document",
+      "description": "All payment calculations read from booking.snapshot (jsonb), never from current cafe/vehicle prices. Prices are locked at booking creation time.",
+      "rationale": "Vehicle and slot prices can change over time; snapshot ensures correct billing regardless of price changes after booking."
+    },
+    {
+      "id": "planned_vs_actual_principle",
+      "label": "Planned vs Actual Separation",
+      "file": "docs/architecture/01-booking-session.md",
+      "file_type": "document",
+      "description": "Booking = planned contract (booking_participants, booking_vehicles, slot_start/slot_end). Session = actual operations (session_participants, session_vehicles, actual_start_at/actual_end_at). Session created only when Staff checks in, not at booking time.",
+      "rationale": "Separating planned from actual data allows flexible operations (vehicle swaps, participant changes) without corrupting the original booking contract."
+    },
+    {
+      "id": "evidence_based_handover",
+      "label": "Evidence-Based Handover",
+      "file": "docs/architecture/RCField_ArchitectureOverview.md",
+      "file_type": "document",
+      "description": "Digital evidence created at every asset handover: 4-angle photos (front/back/left/right) + checklist at check-in and check-out. Evidence chain: inspections → inspection_photos → inspection_checklists. Missing evidence = Provider forfeits DAMAGE_CHARGE right.",
+      "rationale": "Core value proposition: structured evidence eliminates damage disputes by providing objective photographic proof."
+    },
+    {
+      "id": "spec_01_domain_model",
+      "label": "Spec: Domain Model",
+      "file": "docs/spec/01-domain-model.md",
+      "file_type": "document",
+      "description": "Source of truth for entity definitions and enums. Referenced by architecture docs before creating any entity or schema."
+    },
+    {
+      "id": "spec_02_state_machine",
+      "label": "Spec: State Machine",
+      "file": "docs/spec/02-state-machine.md",
+      "file_type": "document",
+      "description": "Source of truth for full booking and session state machines including all event enums. Must be read before touching booking lifecycle."
+    },
+    {
+      "id": "spec_03_payment_engine",
+      "label": "Spec: Payment Engine",
+      "file": "docs/spec/03-payment-engine.md",
+      "file_type": "document",
+      "description": "Source of truth for payment component lifecycle, settlement logic, and refund rules R1/R2/R3. Mandatory before implementing any payment logic."
+    },
+    {
+      "id": "spec_04_inspection_flow",
+      "label": "Spec: Inspection Flow",
+      "file": "docs/spec/04-inspection-flow.md",
+      "file_type": "document",
+      "description": "Source of truth for check-in/out protocol, evidence chain requirements, Cloudinary integration. Read before implementing inspection module."
+    },
+    {
+      "id": "spec_05_api_contracts",
+      "label": "Spec: API Contracts",
+      "file": "docs/spec/05-api-contracts.md",
+      "file_type": "document",
+      "description": "Source of truth for all REST API endpoint contracts. Read before creating any new endpoint."
+    },
+    {
+      "id": "spec_06_database",
+      "label": "Spec: Database",
+      "file": "docs/spec/06-database.md",
+      "file_type": "document",
+      "description": "Detailed schema and SQL for all 26 tables. Full source of truth for database structure."
+    },
+    {
+      "id": "adr_express_framework",
+      "label": "ADR: Express.js Backend Framework",
+      "file": "docs/adr/002-backend-framework-express.md",
+      "file_type": "document",
+      "description": "Architecture decision record for choosing Express.js over alternatives.",
+      "rationale": "Team of 4 developers, 4-month timeline — Express is simple enough and safe to deploy quickly."
+    },
+    {
+      "id": "be_logger_config",
+      "label": "Backend Logger (src/config/logger.ts)",
+      "file": "rcfeild-be/CLAUDE.md",
+      "file_type": "code",
+      "description": "Custom logger used throughout backend. Methods: logger.auth(), logger.info(), logger.warn(), logger.error(), logger.debug(). console.log is forbidden."
+    },
+    {
+      "id": "be_validate_index",
+      "label": "Backend Zod Schemas (src/validate/index.ts)",
+      "file": "rcfeild-be/CLAUDE.md",
+      "file_type": "code",
+      "description": "Centralized Zod validation schemas grouped by table. Controllers import from '../validate'. Schemas never defined inside controllers."
+    },
+    {
+      "id": "be_types_index",
+      "label": "Backend Enums & Types (src/types/index.ts)",
+      "file": "rcfeild-be/CLAUDE.md",
+      "file_type": "code",
+      "description": "Centralized TypeScript enums (BookingStatus, AssetTier, etc.), AppError class, AuthRequest interface. Enums never defined inside entities or services."
+    }
+  ],
+  "edges": [
+    {
+      "source": "arch_readme_doc",
+      "target": "arch_system_overview_doc",
+      "relation": "indexes",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "arch_readme_doc",
+      "target": "arch_booking_session_doc",
+      "relation": "indexes",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "arch_overview_doc",
+      "target": "spec_01_domain_model",
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "arch_overview_doc",
+      "target": "spec_02_state_machine",
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "arch_overview_doc",
+      "target": "spec_03_payment_engine",
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "arch_overview_doc",
+      "target": "spec_04_inspection_flow",
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "arch_overview_doc",
+      "target": "spec_05_api_contracts",
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "arch_system_overview_doc",
+      "target": "spec_01_domain_model",
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "arch_system_overview_doc",
+      "target": "spec_02_state_machine",
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "arch_system_overview_doc",
+      "target": "spec_03_payment_engine",
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "arch_system_overview_doc",
+      "target": "spec_04_inspection_flow",
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "arch_system_overview_doc",
+      "target": "spec_05_api_contracts",
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "arch_system_overview_doc",
+      "target": "adr_express_framework",
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "arch_booking_session_doc",
+      "target": "spec_01_domain_model",
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "arch_booking_session_doc",
+      "target": "spec_02_state_machine",
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "arch_booking_session_doc",
+      "target": "booking_state_machine",
+      "relation": "describes",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "arch_booking_session_doc",
+      "target": "session_state_machine",
+      "relation": "describes",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "arch_booking_session_doc",
+      "target": "planned_vs_actual_principle",
+      "relation": "describes",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "arch_overview_doc",
+      "target": "snapshot_first_principle",
+      "relation": "describes",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "arch_overview_doc",
+      "target": "evidence_based_handover",
+      "relation": "describes",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "rcfield_platform",
+      "target": "web_app",
+      "relation": "contains",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "rcfield_platform",
+      "target": "api_server",
+      "relation": "contains",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "rcfield_platform",
+      "target": "postgresql_db",
+      "relation": "contains",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "rcfield_platform",
+      "target": "scheduler_jobs",
+      "relation": "contains",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "rcfield_platform",
+      "target": "cloudinary_storage",
+      "relation": "integrates_with",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "rcfield_platform",
+      "target": "payment_gateway",
+      "relation": "integrates_with",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "rcfield_platform",
+      "target": "redis_cache",
+      "relation": "uses",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "web_app",
+      "target": "api_server",
+      "relation": "calls",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "api_server",
+      "target": "postgresql_db",
+      "relation": "reads_writes",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "api_server",
+      "target": "cloudinary_storage",
+      "relation": "uploads_photos_to",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "api_server",
+      "target": "payment_gateway",
+      "relation": "integrates_with",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "api_server",
+      "target": "redis_cache",
+      "relation": "uses_for_slot_locking",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "scheduler_jobs",
+      "target": "api_server",
+      "relation": "triggers_timeout_transitions_in",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "actor_customer",
+      "target": "web_app",
+      "relation": "uses",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "actor_staff",
+      "target": "web_app",
+      "relation": "uses",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "actor_provider",
+      "target": "web_app",
+      "relation": "uses",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "actor_admin",
+      "target": "web_app",
+      "relation": "uses",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "api_server",
+      "target": "module_auth",
+      "relation": "contains",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "api_server",
+      "target": "module_booking",
+      "relation": "contains",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "api_server",
+      "target": "module_payment",
+      "relation": "contains",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "api_server",
+      "target": "module_fleet",
+      "relation": "contains",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "api_server",
+      "target": "module_inspection",
+      "relation": "contains",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "api_server",
+      "target": "module_extension",
+      "relation": "contains",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "api_server",
+      "target": "module_incident",
+      "relation": "contains",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "api_server",
+      "target": "module_fnb",
+      "relation": "contains",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "api_server",
+      "target": "module_cafe",
+      "relation": "contains",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "module_auth",
+      "target": "module_booking",
+      "relation": "required_by",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "module_booking",
+      "target": "module_payment",
+      "relation": "depends_on",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "module_booking",
+      "target": "module_inspection",
+      "relation": "depends_on",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "module_booking",
+      "target": "module_extension",
+      "relation": "depends_on",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "module_booking",
+      "target": "module_incident",
+      "relation": "depends_on",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "module_booking",
+      "target": "module_fnb",
+      "relation": "depends_on",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "module_cafe",
+      "target": "module_fleet",
+      "relation": "depends_on",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "module_cafe",
+      "target": "module_fnb",
+      "relation": "depends_on",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "module_fleet",
+      "target": "module_booking",
+      "relation": "required_by",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "entity_booking",
+      "target": "entity_session",
+      "relation": "has_many",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "entity_booking",
+      "target": "entity_payment_component",
+      "relation": "has_many",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "entity_booking",
+      "target": "entity_payment_transaction",
+      "relation": "has_many",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "entity_booking",
+      "target": "entity_inspection_record",
+      "relation": "has_many",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "entity_booking",
+      "target": "entity_extension_proposal",
+      "relation": "has_many",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "entity_booking",
+      "target": "entity_dispute",
+      "relation": "has_one",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "entity_booking",
+      "target": "entity_fnb_order",
+      "relation": "has_many",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "entity_booking",
+      "target": "entity_promotion",
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "entity_user",
+      "target": "entity_booking",
+      "relation": "creates",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "entity_user",
+      "target": "entity_cafe",
+      "relation": "owns",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "entity_cafe",
+      "target": "entity_vehicle",
+      "relation": "has_many",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "entity_user",
+      "target": "entity_trust_score_log",
+      "relation": "has_many",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "entity_trust_score_log",
+      "target": "entity_booking",
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "entity_booking",
+      "target": "snapshot_first_principle",
+      "relation": "implements",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "entity_booking",
+      "target": "booking_state_machine",
+      "relation": "governed_by",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "entity_session",
+      "target": "session_state_machine",
+      "relation": "governed_by",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "entity_session",
+      "target": "entity_inspection_record",
+      "relation": "triggers_creation_of",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95
+    },
+    {
+      "source": "entity_inspection_record",
+      "target": "cloudinary_storage",
+      "relation": "stores_photos_in",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "entity_inspection_record",
+      "target": "evidence_based_handover",
+      "relation": "implements",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "module_inspection",
+      "target": "cloudinary_storage",
+      "relation": "uploads_to",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "be_docker_compose",
+      "target": "postgresql_db",
+      "relation": "provisions",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "be_docker_compose",
+      "target": "redis_cache",
+      "relation": "provisions",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "be_readme_doc",
+      "target": "be_schema_doc",
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "be_readme_doc",
+      "target": "spec_06_database",
+      "relation": "references",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "be_claude_md",
+      "target": "be_logger_config",
+      "relation": "defines_convention_for",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "be_claude_md",
+      "target": "be_validate_index",
+      "relation": "defines_convention_for",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "be_claude_md",
+      "target": "be_types_index",
+      "relation": "defines_convention_for",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "api_server",
+      "target": "be_logger_config",
+      "relation": "uses",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95
+    },
+    {
+      "source": "api_server",
+      "target": "be_validate_index",
+      "relation": "uses",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95
+    },
+    {
+      "source": "api_server",
+      "target": "be_types_index",
+      "relation": "uses",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95
+    },
+    {
+      "source": "entity_feature_flag",
+      "target": "actor_admin",
+      "relation": "managed_by",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "entity_promotion",
+      "target": "entity_cafe",
+      "relation": "scoped_to",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "erd_core_preview_img",
+      "target": "entity_user",
+      "relation": "depicts",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "erd_core_preview_img",
+      "target": "entity_cafe",
+      "relation": "depicts",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "erd_core_preview_img",
+      "target": "entity_booking",
+      "relation": "depicts",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "erd_core_preview_img",
+      "target": "entity_vehicle",
+      "relation": "depicts",
+      "provenance": "AMBIGUOUS",
+      "confidence_score": 0.2
+    },
+    {
+      "source": "erd_core_preview_img",
+      "target": "entity_dispute",
+      "relation": "depicts",
+      "provenance": "AMBIGUOUS",
+      "confidence_score": 0.2
+    },
+    {
+      "source": "booking_data_flow_doc",
+      "target": "entity_booking",
+      "relation": "describes_flow_for",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "booking_data_flow_doc",
+      "target": "entity_session",
+      "relation": "describes_flow_for",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "booking_data_flow_doc",
+      "target": "entity_payment_component",
+      "relation": "describes_flow_for",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "booking_data_flow_doc",
+      "target": "entity_inspection_record",
+      "relation": "describes_flow_for",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "be_schema_doc",
+      "target": "spec_06_database",
+      "relation": "summarizes",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "be_schema_doc",
+      "target": "entity_booking",
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "be_schema_doc",
+      "target": "entity_user",
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "be_schema_doc",
+      "target": "entity_vehicle",
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "be_schema_doc",
+      "target": "entity_cafe",
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "be_schema_doc",
+      "target": "entity_payment_component",
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "be_schema_doc",
+      "target": "entity_inspection_record",
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "be_schema_doc",
+      "target": "entity_trust_score_log",
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "be_schema_doc",
+      "target": "entity_promotion",
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "be_schema_doc",
+      "target": "entity_feature_flag",
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "actor_customer",
+      "target": "entity_trust_score_log",
+      "relation": "subject_of",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "actor_customer",
+      "target": "entity_booking",
+      "relation": "creates",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "actor_staff",
+      "target": "entity_session",
+      "relation": "creates",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "actor_staff",
+      "target": "entity_inspection_record",
+      "relation": "creates",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "actor_admin",
+      "target": "entity_dispute",
+      "relation": "adjudicates",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "actor_provider",
+      "target": "entity_cafe",
+      "relation": "manages",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "actor_provider",
+      "target": "entity_vehicle",
+      "relation": "manages",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95
+    },
+    {
+      "source": "module_inspection",
+      "target": "evidence_based_handover",
+      "relation": "implements",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "module_payment",
+      "target": "snapshot_first_principle",
+      "relation": "implements",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "module_payment",
+      "target": "entity_payment_component",
+      "relation": "manages",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95
+    },
+    {
+      "source": "arch_system_overview_doc",
+      "target": "rcfield_platform",
+      "relation": "describes",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    }
+  ],
+  "hyperedges": []
+}

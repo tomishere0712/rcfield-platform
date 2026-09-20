@@ -1,0 +1,360 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1320" height="1060" viewBox="0 0 1320 1060" font-family="Arial, Helvetica, sans-serif">
+<rect width="1320" height="1060" fill="#ffffff"/>
+<g id="relationships">
+<path d="M 130 477 L 130 540" fill="none" stroke="#3a3a3a" stroke-width="1.1"/>
+<line x1="125" y1="484" x2="135" y2="484" stroke="#3a3a3a" stroke-width="1.1"/>
+<path d="M 130 529 L 130 540 M 124 529 L 130 540 M 136 529 L 130 540" fill="none" stroke="#3a3a3a" stroke-width="1.1"/>
+<path d="M 60 430 L 40 430 L 40 430 L 40 830L 60 830" fill="none" stroke="#3a3a3a" stroke-width="1.1"/>
+<line x1="53" y1="425" x2="53" y2="435" stroke="#3a3a3a" stroke-width="1.1"/>
+<path d="M 71 830 L 60 830 M 71 824 L 60 830 M 71 836 L 60 830" fill="none" stroke="#3a3a3a" stroke-width="1.1"/>
+<path d="M 218 719 L 218 760" fill="none" stroke="#3a3a3a" stroke-width="1.1"/>
+<line x1="213" y1="726" x2="223" y2="726" stroke="#3a3a3a" stroke-width="1.1"/>
+<path d="M 218 749 L 218 760 M 212 749 L 218 760 M 224 749 L 218 760" fill="none" stroke="#3a3a3a" stroke-width="1.1"/>
+<path d="M 284 100 L 380 100" fill="none" stroke="#3a3a3a" stroke-width="1.1"/>
+<line x1="291" y1="95" x2="291" y2="105" stroke="#3a3a3a" stroke-width="1.1"/>
+<path d="M 369 100 L 380 100 M 369 94 L 380 100 M 369 106 L 380 100" fill="none" stroke="#3a3a3a" stroke-width="1.1"/>
+<path d="M 284 470 L 340 470 L 340 470 L 340 596 A 4 4 0 0 1 340 604 L 340 816 A 4 4 0 0 1 340 824 L 340 1010L 684 1010 L 684 1010 L 684 864 A 4 4 0 0 0 684 856 L 684 700L 700 700" fill="none" stroke="#3a3a3a" stroke-width="1.1"/>
+<line x1="291" y1="465" x2="291" y2="475" stroke="#3a3a3a" stroke-width="1.1"/>
+<path d="M 689 700 L 700 700 M 689 694 L 700 700 M 689 706 L 700 700" fill="none" stroke="#3a3a3a" stroke-width="1.1"/>
+<path d="M 284 600 L 380 600" fill="none" stroke="#3a3a3a" stroke-width="1.1"/>
+<line x1="291" y1="595" x2="291" y2="605" stroke="#3a3a3a" stroke-width="1.1"/>
+<path d="M 369 600 L 380 600 M 369 594 L 380 600 M 369 606 L 380 600" fill="none" stroke="#3a3a3a" stroke-width="1.1"/>
+<path d="M 284 820 L 380 820" fill="none" stroke="#3a3a3a" stroke-width="1.1"/>
+<line x1="291" y1="815" x2="291" y2="825" stroke="#3a3a3a" stroke-width="1.1"/>
+<path d="M 369 820 L 380 820 M 369 814 L 380 820 M 369 826 L 380 820" fill="none" stroke="#3a3a3a" stroke-width="1.1"/>
+<path d="M 450 267 L 450 540" fill="none" stroke="#3a3a3a" stroke-width="1.1"/>
+<line x1="445" y1="274" x2="455" y2="274" stroke="#3a3a3a" stroke-width="1.1"/>
+<path d="M 450 529 L 450 540 M 444 529 L 450 540 M 456 529 L 450 540" fill="none" stroke="#3a3a3a" stroke-width="1.1"/>
+<path d="M 604 242 L 612 242 L 612 242 L 612 796 A 4 4 0 0 1 612 804 L 612 900L 604 900" fill="none" stroke="#3a3a3a" stroke-width="1.1"/>
+<line x1="611" y1="237" x2="611" y2="247" stroke="#3a3a3a" stroke-width="1.1"/>
+<path d="M 615 900 L 604 900 M 615 894 L 604 900 M 615 906 L 604 900" fill="none" stroke="#3a3a3a" stroke-width="1.1"/>
+<path d="M 604 96 L 700 96" fill="none" stroke="#3a3a3a" stroke-width="1.1"/>
+<line x1="611" y1="91" x2="611" y2="101" stroke="#3a3a3a" stroke-width="1.1"/>
+<path d="M 689 96 L 700 96 M 689 90 L 700 96 M 689 102 L 700 96" fill="none" stroke="#3a3a3a" stroke-width="1.1"/>
+<path d="M 604 133 L 636 133 L 636 133 L 636 165 A 4 4 0 0 1 636 173 L 636 201 A 4 4 0 0 1 636 209 L 636 400L 700 400" fill="none" stroke="#3a3a3a" stroke-width="1.1"/>
+<line x1="611" y1="128" x2="611" y2="138" stroke="#3a3a3a" stroke-width="1.1"/>
+<path d="M 689 400 L 700 400 M 689 394 L 700 400 M 689 406 L 700 400" fill="none" stroke="#3a3a3a" stroke-width="1.1"/>
+<path d="M 604 169 L 648 169 L 648 169 L 648 201 A 4 4 0 0 1 648 209 L 648 396 A 4 4 0 0 1 648 404 L 648 620L 700 620" fill="none" stroke="#3a3a3a" stroke-width="1.1"/>
+<line x1="611" y1="164" x2="611" y2="174" stroke="#3a3a3a" stroke-width="1.1"/>
+<path d="M 689 620 L 700 620 M 689 614 L 700 620 M 689 626 L 700 620" fill="none" stroke="#3a3a3a" stroke-width="1.1"/>
+<path d="M 604 205 L 660 205 L 660 205 L 660 396 A 4 4 0 0 1 660 404 L 660 616 A 4 4 0 0 1 660 624 L 660 796 A 4 4 0 0 1 660 804 L 660 860L 700 860" fill="none" stroke="#3a3a3a" stroke-width="1.1"/>
+<line x1="611" y1="200" x2="611" y2="210" stroke="#3a3a3a" stroke-width="1.1"/>
+<path d="M 689 860 L 700 860 M 689 854 L 700 860 M 689 866 L 700 860" fill="none" stroke="#3a3a3a" stroke-width="1.1"/>
+<path d="M 538 719 L 538 760" fill="none" stroke="#3a3a3a" stroke-width="1.1"/>
+<line x1="533" y1="726" x2="543" y2="726" stroke="#3a3a3a" stroke-width="1.1"/>
+<path d="M 538 749 L 538 760 M 532 749 L 538 760 M 544 749 L 538 760" fill="none" stroke="#3a3a3a" stroke-width="1.1"/>
+<path d="M 604 800 L 672 800 L 672 800 L 672 624 A 4 4 0 0 0 672 616 L 672 404 A 4 4 0 0 0 672 396 L 672 270L 700 270" fill="none" stroke="#3a3a3a" stroke-width="1.1"/>
+<line x1="611" y1="795" x2="611" y2="805" stroke="#3a3a3a" stroke-width="1.1"/>
+<path d="M 689 270 L 700 270 M 689 264 L 700 270 M 689 276 L 700 270" fill="none" stroke="#3a3a3a" stroke-width="1.1"/>
+<path d="M 924 100 L 1020 100" fill="none" stroke="#3a3a3a" stroke-width="1.1"/>
+<line x1="931" y1="95" x2="931" y2="105" stroke="#3a3a3a" stroke-width="1.1"/>
+<path d="M 1009 100 L 1020 100 M 1009 94 L 1020 100 M 1009 106 L 1020 100" fill="none" stroke="#3a3a3a" stroke-width="1.1"/>
+<path d="M 924 170 L 932 170 L 932 170 L 932 236 A 4 4 0 0 1 932 244 L 932 280L 1020 280" fill="none" stroke="#3a3a3a" stroke-width="1.1"/>
+<line x1="931" y1="165" x2="931" y2="175" stroke="#3a3a3a" stroke-width="1.1"/>
+<path d="M 1009 280 L 1020 280 M 1009 274 L 1020 280 M 1009 286 L 1020 280" fill="none" stroke="#3a3a3a" stroke-width="1.1"/>
+<path d="M 924 240 L 944 240 L 944 240 L 944 276 A 4 4 0 0 1 944 284 L 944 440L 1020 440" fill="none" stroke="#3a3a3a" stroke-width="1.1"/>
+<line x1="931" y1="235" x2="931" y2="245" stroke="#3a3a3a" stroke-width="1.1"/>
+<path d="M 1009 440 L 1020 440 M 1009 434 L 1020 440 M 1009 446 L 1020 440" fill="none" stroke="#3a3a3a" stroke-width="1.1"/>
+<path d="M 924 650 L 1020 650" fill="none" stroke="#3a3a3a" stroke-width="1.1"/>
+<line x1="931" y1="645" x2="931" y2="655" stroke="#3a3a3a" stroke-width="1.1"/>
+<path d="M 1009 650 L 1020 650 M 1009 644 L 1020 650 M 1009 656 L 1020 650" fill="none" stroke="#3a3a3a" stroke-width="1.1"/>
+</g>
+<g id="tables">
+<rect x="60" y="60" width="224" height="417" fill="#ffffff" stroke="#1b1b1b" stroke-width="1.2"/>
+<rect x="60" y="60" width="224" height="20" fill="#e8eef5" stroke="#1b1b1b" stroke-width="1.2"/>
+<text x="172.0" y="74" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1b1b1b">bookings</text>
+<line x1="87" y1="80" x2="87" y2="477" stroke="#1b1b1b" stroke-width="0.9"/>
+<text x="65" y="90" font-size="7.5" font-weight="700" fill="#1b1b1b">PK</text>
+<text x="92" y="90" font-size="8.6" fill="#1b1b1b" text-decoration="underline">id: uuid</text>
+<text x="65" y="104" font-size="7.5" font-weight="700" fill="#6b7280">FK</text>
+<text x="92" y="104" font-size="8.6" fill="#1b1b1b">customer_id: uuid</text>
+<text x="65" y="118" font-size="7.5" font-weight="700" fill="#6b7280">FK</text>
+<text x="92" y="118" font-size="8.6" fill="#1b1b1b">cafe_id: uuid</text>
+<text x="65" y="132" font-size="7.5" font-weight="700" fill="#6b7280">FK</text>
+<text x="92" y="132" font-size="8.6" fill="#1b1b1b">track_type_id: uuid</text>
+<text x="65" y="146" font-size="7.5" font-weight="700" fill="#6b7280">FK</text>
+<text x="92" y="146" font-size="8.6" fill="#1b1b1b">track_config_id: uuid</text>
+<text x="92" y="160" font-size="8.6" fill="#1b1b1b">booking_mode: enum</text>
+<text x="92" y="174" font-size="8.6" fill="#1b1b1b">play_mode: enum</text>
+<text x="92" y="188" font-size="8.6" fill="#1b1b1b">source: enum</text>
+<text x="92" y="202" font-size="8.6" fill="#1b1b1b">status: enum</text>
+<text x="92" y="216" font-size="8.6" fill="#1b1b1b">slot_start: timestamp</text>
+<text x="92" y="230" font-size="8.6" fill="#1b1b1b">slot_end: timestamp</text>
+<text x="92" y="244" font-size="8.6" fill="#1b1b1b">slot_count: integer</text>
+<text x="92" y="258" font-size="8.6" fill="#1b1b1b">payment_expires_at: timestamp</text>
+<text x="92" y="272" font-size="8.6" fill="#1b1b1b">snapshot: jsonb</text>
+<text x="65" y="286" font-size="7.5" font-weight="700" fill="#6b7280">FK</text>
+<text x="92" y="286" font-size="8.6" fill="#1b1b1b">promotion_id: uuid</text>
+<text x="92" y="300" font-size="8.6" fill="#1b1b1b">discount_amount: numeric</text>
+<text x="65" y="314" font-size="7.5" font-weight="700" fill="#6b7280">FK</text>
+<text x="92" y="314" font-size="8.6" fill="#1b1b1b">customer_package_id: uuid</text>
+<text x="65" y="328" font-size="7.5" font-weight="700" fill="#6b7280">FK</text>
+<text x="92" y="328" font-size="8.6" fill="#1b1b1b">contest_id: uuid</text>
+<text x="92" y="342" font-size="8.6" fill="#1b1b1b">notes: text</text>
+<text x="65" y="356" font-size="7.5" font-weight="700" fill="#6b7280">FK</text>
+<text x="92" y="356" font-size="8.6" fill="#1b1b1b">cancelled_by: uuid</text>
+<text x="92" y="370" font-size="8.6" fill="#1b1b1b">cancelled_at: timestamp</text>
+<text x="92" y="384" font-size="8.6" fill="#1b1b1b">cancellation_reason: text</text>
+<text x="92" y="398" font-size="8.6" fill="#1b1b1b">completed_at: timestamp</text>
+<text x="92" y="412" font-size="8.6" fill="#1b1b1b">review_dismissed_at: timestamp</text>
+<text x="92" y="426" font-size="8.6" fill="#1b1b1b">review_snoozed_until: timestamp</text>
+<text x="92" y="440" font-size="8.6" fill="#1b1b1b">created_at: timestamp</text>
+<text x="92" y="454" font-size="8.6" fill="#1b1b1b">updated_at: timestamp</text>
+<text x="92" y="468" font-size="8.6" fill="#1b1b1b">deleted_at: timestamp</text>
+<rect x="60" y="540" width="224" height="179" fill="#ffffff" stroke="#1b1b1b" stroke-width="1.2"/>
+<rect x="60" y="540" width="224" height="20" fill="#e8eef5" stroke="#1b1b1b" stroke-width="1.2"/>
+<text x="172.0" y="554" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1b1b1b">booking_participants</text>
+<line x1="87" y1="560" x2="87" y2="719" stroke="#1b1b1b" stroke-width="0.9"/>
+<text x="65" y="570" font-size="7.5" font-weight="700" fill="#1b1b1b">PK</text>
+<text x="92" y="570" font-size="8.6" fill="#1b1b1b" text-decoration="underline">id: uuid</text>
+<text x="65" y="584" font-size="7.5" font-weight="700" fill="#6b7280">FK</text>
+<text x="92" y="584" font-size="8.6" fill="#1b1b1b">booking_id: uuid</text>
+<text x="65" y="598" font-size="7.5" font-weight="700" fill="#6b7280">FK</text>
+<text x="92" y="598" font-size="8.6" fill="#1b1b1b">user_id: uuid</text>
+<text x="92" y="612" font-size="8.6" fill="#1b1b1b">participant_type: enum</text>
+<text x="92" y="626" font-size="8.6" fill="#1b1b1b">display_name: varchar(255)</text>
+<text x="92" y="640" font-size="8.6" fill="#1b1b1b">phone: varchar(20)</text>
+<text x="92" y="654" font-size="8.6" fill="#1b1b1b">guest_name: varchar(255)</text>
+<text x="92" y="668" font-size="8.6" fill="#1b1b1b">guest_phone: varchar(20)</text>
+<text x="92" y="682" font-size="8.6" fill="#1b1b1b">is_primary_responsible: boolean</text>
+<text x="92" y="696" font-size="8.6" fill="#1b1b1b">created_at: timestamp</text>
+<text x="92" y="710" font-size="8.6" fill="#1b1b1b">updated_at: timestamp</text>
+<rect x="60" y="760" width="224" height="221" fill="#ffffff" stroke="#1b1b1b" stroke-width="1.2"/>
+<rect x="60" y="760" width="224" height="20" fill="#e8eef5" stroke="#1b1b1b" stroke-width="1.2"/>
+<text x="172.0" y="774" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1b1b1b">booking_vehicles</text>
+<line x1="87" y1="780" x2="87" y2="981" stroke="#1b1b1b" stroke-width="0.9"/>
+<text x="65" y="790" font-size="7.5" font-weight="700" fill="#1b1b1b">PK</text>
+<text x="92" y="790" font-size="8.6" fill="#1b1b1b" text-decoration="underline">id: uuid</text>
+<text x="65" y="804" font-size="7.5" font-weight="700" fill="#6b7280">FK</text>
+<text x="92" y="804" font-size="8.6" fill="#1b1b1b">booking_id: uuid</text>
+<text x="65" y="818" font-size="7.5" font-weight="700" fill="#6b7280">FK</text>
+<text x="92" y="818" font-size="8.6" fill="#1b1b1b">vehicle_id: uuid</text>
+<text x="65" y="832" font-size="7.5" font-weight="700" fill="#6b7280">FK</text>
+<text x="92" y="832" font-size="8.6" fill="#1b1b1b">assigned_to_participant_id: uuid</text>
+<text x="92" y="846" font-size="8.6" fill="#1b1b1b">hourly_rate_snapshot: numeric</text>
+<text x="92" y="860" font-size="8.6" fill="#1b1b1b">rental_fee_snapshot: numeric</text>
+<text x="92" y="874" font-size="8.6" fill="#1b1b1b">security_deposit_snapshot: numeric</text>
+<text x="92" y="888" font-size="8.6" fill="#1b1b1b">catalog_name_snapshot: varchar(255)</text>
+<text x="92" y="902" font-size="8.6" fill="#1b1b1b">tier_snapshot: varchar(50)</text>
+<text x="92" y="916" font-size="8.6" fill="#1b1b1b">identifier_snapshot: varchar(255)</text>
+<text x="92" y="930" font-size="8.6" fill="#1b1b1b">color_snapshot: varchar(100)</text>
+<text x="92" y="944" font-size="8.6" fill="#1b1b1b">cover_image_url_snapshot: text</text>
+<text x="92" y="958" font-size="8.6" fill="#1b1b1b">created_at: timestamp</text>
+<text x="92" y="972" font-size="8.6" fill="#1b1b1b">updated_at: timestamp</text>
+<rect x="380" y="60" width="224" height="207" fill="#ffffff" stroke="#1b1b1b" stroke-width="1.2"/>
+<rect x="380" y="60" width="224" height="20" fill="#e8eef5" stroke="#1b1b1b" stroke-width="1.2"/>
+<text x="492.0" y="74" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1b1b1b">sessions</text>
+<line x1="407" y1="80" x2="407" y2="267" stroke="#1b1b1b" stroke-width="0.9"/>
+<text x="385" y="90" font-size="7.5" font-weight="700" fill="#1b1b1b">PK</text>
+<text x="412" y="90" font-size="8.6" fill="#1b1b1b" text-decoration="underline">id: uuid</text>
+<text x="385" y="104" font-size="7.5" font-weight="700" fill="#6b7280">FK</text>
+<text x="412" y="104" font-size="8.6" fill="#1b1b1b">booking_id: uuid</text>
+<text x="385" y="118" font-size="7.5" font-weight="700" fill="#6b7280">FK</text>
+<text x="412" y="118" font-size="8.6" fill="#1b1b1b">cafe_id: uuid</text>
+<text x="412" y="132" font-size="8.6" fill="#1b1b1b">status: enum</text>
+<text x="385" y="146" font-size="7.5" font-weight="700" fill="#6b7280">FK</text>
+<text x="412" y="146" font-size="8.6" fill="#1b1b1b">checked_in_by: uuid</text>
+<text x="385" y="160" font-size="7.5" font-weight="700" fill="#6b7280">FK</text>
+<text x="412" y="160" font-size="8.6" fill="#1b1b1b">checked_out_by: uuid</text>
+<text x="412" y="174" font-size="8.6" fill="#1b1b1b">actual_start_at: timestamp</text>
+<text x="412" y="188" font-size="8.6" fill="#1b1b1b">planned_end_at: timestamp</text>
+<text x="412" y="202" font-size="8.6" fill="#1b1b1b">actual_end_at: timestamp</text>
+<text x="412" y="216" font-size="8.6" fill="#1b1b1b">actual_total_amount: numeric</text>
+<text x="412" y="230" font-size="8.6" fill="#1b1b1b">notes: text</text>
+<text x="412" y="244" font-size="8.6" fill="#1b1b1b">created_at: timestamp</text>
+<text x="412" y="258" font-size="8.6" fill="#1b1b1b">updated_at: timestamp</text>
+<rect x="380" y="540" width="224" height="179" fill="#ffffff" stroke="#1b1b1b" stroke-width="1.2"/>
+<rect x="380" y="540" width="224" height="20" fill="#e8eef5" stroke="#1b1b1b" stroke-width="1.2"/>
+<text x="492.0" y="554" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1b1b1b">session_participants</text>
+<line x1="407" y1="560" x2="407" y2="719" stroke="#1b1b1b" stroke-width="0.9"/>
+<text x="385" y="570" font-size="7.5" font-weight="700" fill="#1b1b1b">PK</text>
+<text x="412" y="570" font-size="8.6" fill="#1b1b1b" text-decoration="underline">id: uuid</text>
+<text x="385" y="584" font-size="7.5" font-weight="700" fill="#6b7280">FK</text>
+<text x="412" y="584" font-size="8.6" fill="#1b1b1b">session_id: uuid</text>
+<text x="385" y="598" font-size="7.5" font-weight="700" fill="#6b7280">FK</text>
+<text x="412" y="598" font-size="8.6" fill="#1b1b1b">booking_participant_id: uuid</text>
+<text x="385" y="612" font-size="7.5" font-weight="700" fill="#6b7280">FK</text>
+<text x="412" y="612" font-size="8.6" fill="#1b1b1b">user_id: uuid</text>
+<text x="412" y="626" font-size="8.6" fill="#1b1b1b">display_name: varchar(255)</text>
+<text x="412" y="640" font-size="8.6" fill="#1b1b1b">phone: varchar(20)</text>
+<text x="412" y="654" font-size="8.6" fill="#1b1b1b">role: enum</text>
+<text x="412" y="668" font-size="8.6" fill="#1b1b1b">is_primary_responsible: boolean</text>
+<text x="412" y="682" font-size="8.6" fill="#1b1b1b">checked_in_at: timestamp</text>
+<text x="412" y="696" font-size="8.6" fill="#1b1b1b">created_at: timestamp</text>
+<text x="412" y="710" font-size="8.6" fill="#1b1b1b">updated_at: timestamp</text>
+<rect x="380" y="760" width="224" height="193" fill="#ffffff" stroke="#1b1b1b" stroke-width="1.2"/>
+<rect x="380" y="760" width="224" height="20" fill="#e8eef5" stroke="#1b1b1b" stroke-width="1.2"/>
+<text x="492.0" y="774" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1b1b1b">session_vehicles</text>
+<line x1="407" y1="780" x2="407" y2="953" stroke="#1b1b1b" stroke-width="0.9"/>
+<text x="385" y="790" font-size="7.5" font-weight="700" fill="#1b1b1b">PK</text>
+<text x="412" y="790" font-size="8.6" fill="#1b1b1b" text-decoration="underline">id: uuid</text>
+<text x="385" y="804" font-size="7.5" font-weight="700" fill="#6b7280">FK</text>
+<text x="412" y="804" font-size="8.6" fill="#1b1b1b">session_id: uuid</text>
+<text x="385" y="818" font-size="7.5" font-weight="700" fill="#6b7280">FK</text>
+<text x="412" y="818" font-size="8.6" fill="#1b1b1b">booking_vehicle_id: uuid</text>
+<text x="385" y="832" font-size="7.5" font-weight="700" fill="#6b7280">FK</text>
+<text x="412" y="832" font-size="8.6" fill="#1b1b1b">vehicle_id: uuid</text>
+<text x="385" y="846" font-size="7.5" font-weight="700" fill="#6b7280">FK</text>
+<text x="412" y="846" font-size="8.6" fill="#1b1b1b">assigned_to_participant_id: uuid</text>
+<text x="412" y="860" font-size="8.6" fill="#1b1b1b">vehicle_source: enum</text>
+<text x="412" y="874" font-size="8.6" fill="#1b1b1b">status: enum</text>
+<text x="412" y="888" font-size="8.6" fill="#1b1b1b">started_at: timestamp</text>
+<text x="412" y="902" font-size="8.6" fill="#1b1b1b">returned_at: timestamp</text>
+<text x="412" y="916" font-size="8.6" fill="#1b1b1b">notes: text</text>
+<text x="412" y="930" font-size="8.6" fill="#1b1b1b">created_at: timestamp</text>
+<text x="412" y="944" font-size="8.6" fill="#1b1b1b">updated_at: timestamp</text>
+<rect x="700" y="60" width="224" height="235" fill="#ffffff" stroke="#1b1b1b" stroke-width="1.2"/>
+<rect x="700" y="60" width="224" height="20" fill="#e8eef5" stroke="#1b1b1b" stroke-width="1.2"/>
+<text x="812.0" y="74" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1b1b1b">inspections</text>
+<line x1="727" y1="80" x2="727" y2="295" stroke="#1b1b1b" stroke-width="0.9"/>
+<text x="705" y="90" font-size="7.5" font-weight="700" fill="#1b1b1b">PK</text>
+<text x="732" y="90" font-size="8.6" fill="#1b1b1b" text-decoration="underline">id: uuid</text>
+<text x="705" y="104" font-size="7.5" font-weight="700" fill="#6b7280">FK</text>
+<text x="732" y="104" font-size="8.6" fill="#1b1b1b">session_id: uuid</text>
+<text x="705" y="118" font-size="7.5" font-weight="700" fill="#6b7280">FK</text>
+<text x="732" y="118" font-size="8.6" fill="#1b1b1b">session_vehicle_id: uuid</text>
+<text x="705" y="132" font-size="7.5" font-weight="700" fill="#6b7280">FK</text>
+<text x="732" y="132" font-size="8.6" fill="#1b1b1b">performed_by: uuid</text>
+<text x="732" y="146" font-size="8.6" fill="#1b1b1b">type: enum</text>
+<text x="732" y="160" font-size="8.6" fill="#1b1b1b">subject_type: enum</text>
+<text x="732" y="174" font-size="8.6" fill="#1b1b1b">pre_existing_flag: boolean</text>
+<text x="732" y="188" font-size="8.6" fill="#1b1b1b">damage_noted: boolean</text>
+<text x="732" y="202" font-size="8.6" fill="#1b1b1b">damage_description: text</text>
+<text x="732" y="216" font-size="8.6" fill="#1b1b1b">damage_cost_estimate: numeric</text>
+<text x="732" y="230" font-size="8.6" fill="#1b1b1b">ai_analysis_json: jsonb</text>
+<text x="732" y="244" font-size="8.6" fill="#1b1b1b">customer_confirmed: boolean</text>
+<text x="732" y="258" font-size="8.6" fill="#1b1b1b">customer_confirmed_at: timestamp</text>
+<text x="732" y="272" font-size="8.6" fill="#1b1b1b">created_at: timestamp</text>
+<text x="732" y="286" font-size="8.6" fill="#1b1b1b">updated_at: timestamp</text>
+<rect x="700" y="340" width="224" height="165" fill="#ffffff" stroke="#1b1b1b" stroke-width="1.2"/>
+<rect x="700" y="340" width="224" height="20" fill="#e8eef5" stroke="#1b1b1b" stroke-width="1.2"/>
+<text x="812.0" y="354" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1b1b1b">extension_proposals</text>
+<line x1="727" y1="360" x2="727" y2="505" stroke="#1b1b1b" stroke-width="0.9"/>
+<text x="705" y="370" font-size="7.5" font-weight="700" fill="#1b1b1b">PK</text>
+<text x="732" y="370" font-size="8.6" fill="#1b1b1b" text-decoration="underline">id: uuid</text>
+<text x="705" y="384" font-size="7.5" font-weight="700" fill="#6b7280">FK</text>
+<text x="732" y="384" font-size="8.6" fill="#1b1b1b">session_id: uuid</text>
+<text x="705" y="398" font-size="7.5" font-weight="700" fill="#6b7280">FK</text>
+<text x="732" y="398" font-size="8.6" fill="#1b1b1b">proposed_by: uuid</text>
+<text x="732" y="412" font-size="8.6" fill="#1b1b1b">duration_minutes: integer</text>
+<text x="732" y="426" font-size="8.6" fill="#1b1b1b">fee_amount: numeric</text>
+<text x="732" y="440" font-size="8.6" fill="#1b1b1b">status: enum</text>
+<text x="705" y="454" font-size="7.5" font-weight="700" fill="#6b7280">FK</text>
+<text x="732" y="454" font-size="8.6" fill="#1b1b1b">responded_by: uuid</text>
+<text x="732" y="468" font-size="8.6" fill="#1b1b1b">responded_at: timestamp</text>
+<text x="732" y="482" font-size="8.6" fill="#1b1b1b">created_at: timestamp</text>
+<text x="732" y="496" font-size="8.6" fill="#1b1b1b">updated_at: timestamp</text>
+<rect x="700" y="550" width="224" height="193" fill="#ffffff" stroke="#1b1b1b" stroke-width="1.2"/>
+<rect x="700" y="550" width="224" height="20" fill="#e8eef5" stroke="#1b1b1b" stroke-width="1.2"/>
+<text x="812.0" y="564" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1b1b1b">fnb_orders</text>
+<line x1="727" y1="570" x2="727" y2="743" stroke="#1b1b1b" stroke-width="0.9"/>
+<text x="705" y="580" font-size="7.5" font-weight="700" fill="#1b1b1b">PK</text>
+<text x="732" y="580" font-size="8.6" fill="#1b1b1b" text-decoration="underline">id: uuid</text>
+<text x="705" y="594" font-size="7.5" font-weight="700" fill="#6b7280">FK</text>
+<text x="732" y="594" font-size="8.6" fill="#1b1b1b">booking_id: uuid</text>
+<text x="705" y="608" font-size="7.5" font-weight="700" fill="#6b7280">FK</text>
+<text x="732" y="608" font-size="8.6" fill="#1b1b1b">session_id: uuid</text>
+<text x="732" y="622" font-size="8.6" fill="#1b1b1b">order_type: varchar(20)</text>
+<text x="732" y="636" font-size="8.6" fill="#1b1b1b">status: enum</text>
+<text x="732" y="650" font-size="8.6" fill="#1b1b1b">total_amount: numeric</text>
+<text x="705" y="664" font-size="7.5" font-weight="700" fill="#6b7280">FK</text>
+<text x="732" y="664" font-size="8.6" fill="#1b1b1b">created_by: uuid</text>
+<text x="705" y="678" font-size="7.5" font-weight="700" fill="#6b7280">FK</text>
+<text x="732" y="678" font-size="8.6" fill="#1b1b1b">confirmed_by: uuid</text>
+<text x="732" y="692" font-size="8.6" fill="#1b1b1b">confirmed_at: timestamp</text>
+<text x="732" y="706" font-size="8.6" fill="#1b1b1b">notes: text</text>
+<text x="732" y="720" font-size="8.6" fill="#1b1b1b">created_at: timestamp</text>
+<text x="732" y="734" font-size="8.6" fill="#1b1b1b">updated_at: timestamp</text>
+<rect x="700" y="790" width="224" height="179" fill="#ffffff" stroke="#1b1b1b" stroke-width="1.2"/>
+<rect x="700" y="790" width="224" height="20" fill="#e8eef5" stroke="#1b1b1b" stroke-width="1.2"/>
+<text x="812.0" y="804" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1b1b1b">vehicle_maintenance_logs</text>
+<line x1="727" y1="810" x2="727" y2="969" stroke="#1b1b1b" stroke-width="0.9"/>
+<text x="705" y="820" font-size="7.5" font-weight="700" fill="#1b1b1b">PK</text>
+<text x="732" y="820" font-size="8.6" fill="#1b1b1b" text-decoration="underline">id: uuid</text>
+<text x="705" y="834" font-size="7.5" font-weight="700" fill="#6b7280">FK</text>
+<text x="732" y="834" font-size="8.6" fill="#1b1b1b">vehicle_id: uuid</text>
+<text x="705" y="848" font-size="7.5" font-weight="700" fill="#6b7280">FK</text>
+<text x="732" y="848" font-size="8.6" fill="#1b1b1b">related_session_id: uuid</text>
+<text x="732" y="862" font-size="8.6" fill="#1b1b1b">type: enum</text>
+<text x="732" y="876" font-size="8.6" fill="#1b1b1b">status: varchar(50)</text>
+<text x="732" y="890" font-size="8.6" fill="#1b1b1b">description: text</text>
+<text x="732" y="904" font-size="8.6" fill="#1b1b1b">cost: numeric</text>
+<text x="705" y="918" font-size="7.5" font-weight="700" fill="#6b7280">FK</text>
+<text x="732" y="918" font-size="8.6" fill="#1b1b1b">performed_by: uuid</text>
+<text x="732" y="932" font-size="8.6" fill="#1b1b1b">performed_at: timestamp</text>
+<text x="732" y="946" font-size="8.6" fill="#1b1b1b">next_scheduled_at: timestamp</text>
+<text x="732" y="960" font-size="8.6" fill="#1b1b1b">created_at: timestamp</text>
+<rect x="1020" y="60" width="224" height="137" fill="#ffffff" stroke="#1b1b1b" stroke-width="1.2"/>
+<rect x="1020" y="60" width="224" height="20" fill="#e8eef5" stroke="#1b1b1b" stroke-width="1.2"/>
+<text x="1132.0" y="74" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1b1b1b">inspection_checklists</text>
+<line x1="1047" y1="80" x2="1047" y2="197" stroke="#1b1b1b" stroke-width="0.9"/>
+<text x="1025" y="90" font-size="7.5" font-weight="700" fill="#1b1b1b">PK</text>
+<text x="1052" y="90" font-size="8.6" fill="#1b1b1b" text-decoration="underline">id: uuid</text>
+<text x="1025" y="104" font-size="7.5" font-weight="700" fill="#6b7280">FK</text>
+<text x="1052" y="104" font-size="8.6" fill="#1b1b1b">inspection_id: uuid</text>
+<text x="1052" y="118" font-size="8.6" fill="#1b1b1b">item_key: varchar(100)</text>
+<text x="1052" y="132" font-size="8.6" fill="#1b1b1b">item_label: varchar(255)</text>
+<text x="1052" y="146" font-size="8.6" fill="#1b1b1b">status: enum</text>
+<text x="1052" y="160" font-size="8.6" fill="#1b1b1b">note: text</text>
+<text x="1052" y="174" font-size="8.6" fill="#1b1b1b">created_at: timestamp</text>
+<text x="1052" y="188" font-size="8.6" fill="#1b1b1b">updated_at: timestamp</text>
+<rect x="1020" y="220" width="224" height="123" fill="#ffffff" stroke="#1b1b1b" stroke-width="1.2"/>
+<rect x="1020" y="220" width="224" height="20" fill="#e8eef5" stroke="#1b1b1b" stroke-width="1.2"/>
+<text x="1132.0" y="234" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1b1b1b">inspection_photos</text>
+<line x1="1047" y1="240" x2="1047" y2="343" stroke="#1b1b1b" stroke-width="0.9"/>
+<text x="1025" y="250" font-size="7.5" font-weight="700" fill="#1b1b1b">PK</text>
+<text x="1052" y="250" font-size="8.6" fill="#1b1b1b" text-decoration="underline">id: uuid</text>
+<text x="1025" y="264" font-size="7.5" font-weight="700" fill="#6b7280">FK</text>
+<text x="1052" y="264" font-size="8.6" fill="#1b1b1b">inspection_id: uuid</text>
+<text x="1052" y="278" font-size="8.6" fill="#1b1b1b">angle: enum</text>
+<text x="1052" y="292" font-size="8.6" fill="#1b1b1b">url: text</text>
+<text x="1025" y="306" font-size="7.5" font-weight="700" fill="#6b7280">FK</text>
+<text x="1052" y="306" font-size="8.6" fill="#1b1b1b">uploaded_by: uuid</text>
+<text x="1052" y="320" font-size="8.6" fill="#1b1b1b">metadata: jsonb</text>
+<text x="1052" y="334" font-size="8.6" fill="#1b1b1b">created_at: timestamp</text>
+<rect x="1020" y="366" width="224" height="151" fill="#ffffff" stroke="#1b1b1b" stroke-width="1.2"/>
+<rect x="1020" y="366" width="224" height="20" fill="#e8eef5" stroke="#1b1b1b" stroke-width="1.2"/>
+<text x="1132.0" y="380" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1b1b1b">damage_line_items</text>
+<line x1="1047" y1="386" x2="1047" y2="517" stroke="#1b1b1b" stroke-width="0.9"/>
+<text x="1025" y="396" font-size="7.5" font-weight="700" fill="#1b1b1b">PK</text>
+<text x="1052" y="396" font-size="8.6" fill="#1b1b1b" text-decoration="underline">id: uuid</text>
+<text x="1025" y="410" font-size="7.5" font-weight="700" fill="#6b7280">FK</text>
+<text x="1052" y="410" font-size="8.6" fill="#1b1b1b">inspection_id: uuid</text>
+<text x="1052" y="424" font-size="8.6" fill="#1b1b1b">part_type: enum</text>
+<text x="1052" y="438" font-size="8.6" fill="#1b1b1b">custom_part_name: varchar(255)</text>
+<text x="1052" y="452" font-size="8.6" fill="#1b1b1b">parts_price: numeric</text>
+<text x="1052" y="466" font-size="8.6" fill="#1b1b1b">labor_price: numeric</text>
+<text x="1052" y="480" font-size="8.6" fill="#1b1b1b">created_at: timestamp</text>
+<text x="1052" y="494" font-size="8.6" fill="#1b1b1b">updated_at: timestamp</text>
+<text x="1052" y="508" font-size="8.6" fill="#1b1b1b">deleted_at: timestamp</text>
+<rect x="1020" y="560" width="224" height="179" fill="#ffffff" stroke="#1b1b1b" stroke-width="1.2"/>
+<rect x="1020" y="560" width="224" height="20" fill="#e8eef5" stroke="#1b1b1b" stroke-width="1.2"/>
+<text x="1132.0" y="574" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1b1b1b">fnb_order_items</text>
+<line x1="1047" y1="580" x2="1047" y2="739" stroke="#1b1b1b" stroke-width="0.9"/>
+<text x="1025" y="590" font-size="7.5" font-weight="700" fill="#1b1b1b">PK</text>
+<text x="1052" y="590" font-size="8.6" fill="#1b1b1b" text-decoration="underline">id: uuid</text>
+<text x="1025" y="604" font-size="7.5" font-weight="700" fill="#6b7280">FK</text>
+<text x="1052" y="604" font-size="8.6" fill="#1b1b1b">fnb_order_id: uuid</text>
+<text x="1025" y="618" font-size="7.5" font-weight="700" fill="#6b7280">FK</text>
+<text x="1052" y="618" font-size="8.6" fill="#1b1b1b">menu_item_id: uuid</text>
+<text x="1025" y="632" font-size="7.5" font-weight="700" fill="#6b7280">FK</text>
+<text x="1052" y="632" font-size="8.6" fill="#1b1b1b">menu_item_variant_id: uuid</text>
+<text x="1052" y="646" font-size="8.6" fill="#1b1b1b">item_name_snapshot: varchar(255)</text>
+<text x="1052" y="660" font-size="8.6" fill="#1b1b1b">variant_name_snapshot: varchar(80)</text>
+<text x="1052" y="674" font-size="8.6" fill="#1b1b1b">quantity: integer</text>
+<text x="1052" y="688" font-size="8.6" fill="#1b1b1b">unit_price: numeric</text>
+<text x="1052" y="702" font-size="8.6" fill="#1b1b1b">subtotal: numeric</text>
+<text x="1052" y="716" font-size="8.6" fill="#1b1b1b">notes: text</text>
+<text x="1052" y="730" font-size="8.6" fill="#1b1b1b">created_at: timestamp</text>
+</g>
+<rect x="1060" y="790" width="222" height="152" fill="#fbfbfb" stroke="#6b7280" stroke-width="0.9"/>
+<text x="1070" y="808" font-size="9.5" font-weight="700" fill="#1b1b1b">Legend</text>
+<text x="1070" y="824" font-size="8" fill="#6b7280">PK  primary key        FK  foreign key</text>
+<text x="1070" y="837" font-size="8" fill="#6b7280">─│  one side (1)     ─≻  many side (N)</text>
+<text x="1070" y="850" font-size="8" fill="#6b7280"></text>
+<text x="1070" y="863" font-size="8" fill="#6b7280">Foreign keys leaving this block:</text>
+<text x="1070" y="876" font-size="8" fill="#6b7280">users, cafes, vehicles, track_types,</text>
+<text x="1070" y="889" font-size="8" fill="#6b7280">cafe_track_configs, promotions, contests,</text>
+<text x="1070" y="902" font-size="8" fill="#6b7280">customer_packages, menu_items,</text>
+<text x="1070" y="915" font-size="8" fill="#6b7280">menu_item_variants</text>
+</svg>

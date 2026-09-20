@@ -1,0 +1,13 @@
+graphify-out/raw/
+.graphify/
+__pycache__/
+*.pyc
+.DS_Store
+rcfield-be/
+rcfield-fe/
+rcfeild-be/
+rcfeild-fe/
+.agents/
+.be-notes/
+rcfield-mobile/
+*.jar

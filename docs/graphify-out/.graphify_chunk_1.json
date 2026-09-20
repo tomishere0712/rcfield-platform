@@ -1,0 +1,336 @@
+{
+  "nodes": [
+    {
+      "id": "eslint_config",
+      "label": "eslint.config.js",
+      "file": "rcfeild-be/eslint.config.js",
+      "file_type": "code",
+      "description": "ESLint configuration enforcing TypeScript strict rules: no-any, no-floating-promises, no-console (must use logger), no-require-imports. Relaxes floating-promises and console rules for test files."
+    },
+    {
+      "id": "jest_config",
+      "label": "jest.config.ts",
+      "file": "rcfeild-be/jest.config.ts",
+      "file_type": "code",
+      "description": "Jest configuration using ts-jest preset. Sets globalSetup for DB creation+migration, setupFilesAfterEnv for per-file DB/Redis lifecycle, and moduleNameMapper for @/ path alias."
+    },
+    {
+      "id": "app_ts",
+      "label": "app.ts",
+      "file": "rcfeild-be/src/app.ts",
+      "file_type": "code",
+      "description": "Express application factory. Mounts helmet, cors, json parser, requestLogger middleware, rate limiter (100 req/15min), and all routes under /api/v1. Registers errorMiddleware as final handler."
+    },
+    {
+      "id": "server_ts",
+      "label": "server.ts",
+      "file": "rcfeild-be/src/server.ts",
+      "file_type": "code",
+      "description": "Bootstrap entry point. Initializes AppDataSource (PostgreSQL), connects Redis, then starts Express app. Calls process.exit(1) on any bootstrap failure."
+    },
+    {
+      "id": "migration_initialschema",
+      "label": "InitialSchema migration",
+      "file": "rcfeild-be/src/migrations/1747180800000-InitialSchema.ts",
+      "file_type": "code",
+      "description": "Full database schema migration creating 26 tables and all enum types: users, refresh_tokens, password_reset_tokens, cafes, cafe_images, cafe_closures, cafe_announcements, staff_cafe_assignments, vehicles, vehicle_images, feature_flags, promotions, menu_items, bookings, promotion_usages, payment_components, payment_transactions, inspection_records, extension_proposals, disputes, fnb_orders, fnb_order_items, trust_score_logs, notification_logs, vehicle_maintenance_logs, reviews. Seeds 7 feature flags."
+    },
+    {
+      "id": "validate_index",
+      "label": "validate/index.ts",
+      "file": "rcfeild-be/src/validate/index.ts",
+      "file_type": "code",
+      "description": "Central Zod validation schema registry. Exports LoginSchema, GoogleSchema, RefreshSchema, LogoutSchema. All request body schemas live here per convention."
+    },
+    {
+      "id": "types_index",
+      "label": "types/index.ts",
+      "file": "rcfeild-be/src/types/index.ts",
+      "file_type": "code",
+      "description": "Central enum and type registry. Defines UserRole, AuthProvider, TrustScoreReason, CafeStatus, TrackType, AssetTier, VehicleStatus, BookingMode, BookingSource, BookingStatus, PaymentComponentType, PaymentComponentStatus, DiscountType, InspectionType, DisputeStatus, FnbOrderType, FnbOrderStatus, NotificationChannel, AppError class, AuthPayload interface, AuthRequest interface."
+    },
+    {
+      "id": "config_redis",
+      "label": "config/redis.ts",
+      "file": "rcfeild-be/src/config/redis.ts",
+      "file_type": "code",
+      "description": "Exports ioredis client instance configured from env. Uses lazyConnect:true. Logs connection errors via logger."
+    },
+    {
+      "id": "config_logger",
+      "label": "config/logger.ts",
+      "file": "rcfeild-be/src/config/logger.ts",
+      "file_type": "code",
+      "description": "Custom logger module. Provides structured logging with level filtering (debug/info/warn/error). Specialized methods: http, server, database, auth, debug, info, warn, error. Timestamps in Asia/Ho_Chi_Minh timezone."
+    },
+    {
+      "id": "config_database",
+      "label": "config/database.ts",
+      "file": "rcfeild-be/src/config/database.ts",
+      "file_type": "code",
+      "description": "Exports AppDataSource (TypeORM DataSource) for PostgreSQL. synchronize=false, entities loaded from models/**/*.entity.{ts,js}, migrations from migrations/**/*.{ts,js}."
+    },
+    {
+      "id": "config_env",
+      "label": "config/env.ts",
+      "file": "rcfeild-be/src/config/env.ts",
+      "file_type": "code",
+      "description": "Typed environment configuration object. Sections: db (PostgreSQL), jwt (access+refresh tokens), redis, cloudinary, google (OAuth clientId), platform (feePct=0.15, paymentWindowMinutes=30, slotLockTtlSeconds=1800)."
+    },
+    {
+      "id": "middleware_logger",
+      "label": "middlewares/logger.middleware.ts",
+      "file": "rcfeild-be/src/middlewares/logger.middleware.ts",
+      "file_type": "code",
+      "description": "Express requestLogger middleware. Masks sensitive fields (password, token, refresh_token, id_token, access_token) in request body logs. Intercepts res.json to log HTTP method, path, status, duration. Logs 4xx+ responses as warnings."
+    },
+    {
+      "id": "middleware_error",
+      "label": "middlewares/error.middleware.ts",
+      "file": "rcfeild-be/src/middlewares/error.middleware.ts",
+      "file_type": "code",
+      "description": "Express error handler middleware. Handles ZodError (400 VALIDATION_ERROR), AppError (custom status), and unhandled errors (500 INTERNAL_SERVER_ERROR). Must be registered last in app."
+    },
+    {
+      "id": "middleware_auth",
+      "label": "middlewares/auth.middleware.ts",
+      "file": "rcfeild-be/src/middlewares/auth.middleware.ts",
+      "file_type": "code",
+      "description": "JWT authentication and RBAC authorization middleware. authenticate() verifies Bearer token using env.jwt.secret and attaches AuthPayload to req.user. authorize(...roles) checks req.user.role against allowed roles."
+    },
+    {
+      "id": "model_user",
+      "label": "models/user.entity.ts (User)",
+      "file": "rcfeild-be/src/models/user.entity.ts",
+      "file_type": "code",
+      "description": "TypeORM User entity mapped to 'users' table. Fields: id (uuid), email, full_name, phone, password_hash, auth_provider (AuthProvider enum), role (UserRole enum), trust_score (numeric 5,2 default 100), is_active, created_at, updated_at, deleted_at (soft delete)."
+    },
+    {
+      "id": "test_globalsetup",
+      "label": "__tests__/global-setup.ts",
+      "file": "rcfeild-be/src/__tests__/global-setup.ts",
+      "file_type": "code",
+      "description": "Jest globalSetup function. Creates rcfeild_test database if not exists (connects to 'postgres' db first). Then initializes DataSource on rcfeild_test and runs all migrations. Runs once before all test suites."
+    },
+    {
+      "id": "test_jestsetup",
+      "label": "__tests__/jest-setup.ts",
+      "file": "rcfeild-be/src/__tests__/jest-setup.ts",
+      "file_type": "code",
+      "description": "Jest setupFilesAfterEnv. beforeAll: initializes AppDataSource if not ready. beforeEach: TRUNCATE all 23 tables with RESTART IDENTITY CASCADE to reset test state. afterAll: destroys AppDataSource and quits Redis."
+    }
+  ],
+  "edges": [
+    {
+      "source": "app_ts",
+      "target": "middleware_logger",
+      "relation": "mounts_middleware",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "app_ts",
+      "target": "middleware_error",
+      "relation": "mounts_error_handler",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "server_ts",
+      "target": "app_ts",
+      "relation": "imports_and_starts",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "server_ts",
+      "target": "config_database",
+      "relation": "initializes_datasource",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "server_ts",
+      "target": "config_redis",
+      "relation": "connects_redis",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "server_ts",
+      "target": "config_env",
+      "relation": "reads_env_config",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "server_ts",
+      "target": "config_logger",
+      "relation": "uses_logger",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "config_redis",
+      "target": "config_env",
+      "relation": "reads_env_config",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "config_redis",
+      "target": "config_logger",
+      "relation": "uses_logger_on_error",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "config_database",
+      "target": "config_env",
+      "relation": "reads_env_config",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "middleware_logger",
+      "target": "config_logger",
+      "relation": "uses_logger",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "middleware_error",
+      "target": "types_index",
+      "relation": "handles_apperror_type",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "middleware_error",
+      "target": "config_logger",
+      "relation": "uses_logger",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "middleware_auth",
+      "target": "config_env",
+      "relation": "reads_jwt_secret",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "middleware_auth",
+      "target": "types_index",
+      "relation": "uses_types_authpayload_apperror_userrole",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "model_user",
+      "target": "types_index",
+      "relation": "uses_enums_userrole_authprovider",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "test_jestsetup",
+      "target": "config_database",
+      "relation": "uses_appdatasource_for_test_lifecycle",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "test_jestsetup",
+      "target": "config_redis",
+      "relation": "quits_redis_after_tests",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "test_globalsetup",
+      "target": "migration_initialschema",
+      "relation": "runs_migration_on_test_db",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95
+    },
+    {
+      "source": "jest_config",
+      "target": "test_globalsetup",
+      "relation": "configures_globalsetup",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "jest_config",
+      "target": "test_jestsetup",
+      "relation": "configures_setupfilesafterenv",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "config_database",
+      "target": "migration_initialschema",
+      "relation": "loads_migration",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95
+    },
+    {
+      "source": "config_database",
+      "target": "model_user",
+      "relation": "loads_entity",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95
+    },
+    {
+      "source": "migration_initialschema",
+      "target": "types_index",
+      "relation": "mirrors_enum_definitions_in_sql",
+      "provenance": "INFERRED",
+      "confidence_score": 0.85
+    },
+    {
+      "source": "validate_index",
+      "target": "types_index",
+      "relation": "schemas_complement_domain_types",
+      "provenance": "INFERRED",
+      "confidence_score": 0.75
+    },
+    {
+      "source": "eslint_config",
+      "target": "config_logger",
+      "relation": "enforces_logger_usage_over_console",
+      "provenance": "INFERRED",
+      "confidence_score": 0.85
+    },
+    {
+      "source": "config_env",
+      "target": "types_index",
+      "relation": "platform_fee_pct_relates_to_payment_engine",
+      "provenance": "INFERRED",
+      "confidence_score": 0.65
+    },
+    {
+      "source": "middleware_auth",
+      "target": "model_user",
+      "relation": "authenticates_user_entity_role",
+      "provenance": "INFERRED",
+      "confidence_score": 0.85
+    },
+    {
+      "source": "test_globalsetup",
+      "target": "model_user",
+      "relation": "loads_user_entity_for_test_db",
+      "provenance": "INFERRED",
+      "confidence_score": 0.85
+    },
+    {
+      "source": "app_ts",
+      "target": "middleware_auth",
+      "relation": "middleware_available_for_routes",
+      "provenance": "INFERRED",
+      "confidence_score": 0.75
+    }
+  ],
+  "hyperedges": []
+}

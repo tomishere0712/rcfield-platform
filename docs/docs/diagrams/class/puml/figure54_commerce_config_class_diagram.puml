@@ -1,0 +1,217 @@
+@startuml
+skinparam dpi 300
+skinparam shadowing false
+skinparam roundCorner 4
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam nodesep 110
+skinparam ranksep 80
+skinparam labelDistance 3.5
+skinparam labelAngle 60
+
+hide circle
+hide <<hidden>> circle
+
+skinparam package {
+    BackgroundColor #FAFAFA
+    BorderColor #A0AEC0
+    BorderThickness 1.2
+    FontName Arial
+    FontSize 13
+    FontStyle bold
+    FontColor #000000
+}
+
+skinparam class {
+    BackgroundColor #FFFFFF
+    BorderColor #000000
+    BorderThickness 1.5
+    HeaderBackgroundColor #F7FAFC
+    FontName Arial
+    FontSize 14
+    FontStyle bold
+    FontColor #000000
+    AttributeFontName Arial
+    AttributeFontSize 12
+    AttributeFontColor #000000
+}
+
+skinparam labelBackgroundColor #FFFFFF
+skinparam arrow {
+    Color #000000
+    Thickness 1.4
+    FontSize 12
+    FontColor #000000
+}
+
+top to bottom direction
+
+package "API Controllers" {
+    class MenuCategoryController {
+        - menuService : MenuService
+        + createCategory(input : CreateCategoryInput) : CategoryResponse
+        + updateCategory(id : UUID, input : UpdateCategoryInput) : CategoryResponse
+        + listCategories(cafeId : UUID) : CategoryResponse[]
+    }
+
+    class MenuItemController {
+        - menuService : MenuService
+        + createItem(input : CreateItemInput) : ItemResponse
+        + updateItem(id : UUID, input : UpdateItemInput) : ItemResponse
+        + listItems(cafeId : UUID) : ItemResponse[]
+        + toggleItemAvailability(id : UUID) : void
+    }
+
+    class PackageController {
+        - packageService : PackageService
+        + createPackage(input : CreatePackageInput) : PackageResponse
+        + listPackages(cafeId : UUID) : PackageResponse[]
+        + purchasePackage(packageId : UUID, customerId : UUID) : CustomerPackageResponse
+    }
+
+    class PromotionController {
+        - promotionService : PromotionService
+        + createPromotion(input : CreatePromotionInput) : PromotionResponse
+        + validateCode(code : String, cafeId : UUID) : PromotionResponse
+        + listPromotions(cafeId : UUID) : PromotionResponse[]
+    }
+}
+
+package "Business Services" {
+    class MenuService {
+        - categoryRepository : MenuCategoryRepository
+        - itemRepository : MenuItemRepository
+        + createCategory(cafeId : UUID, name : String) : MenuCategory
+        + createItem(categoryId : UUID, input : CreateItemInput) : MenuItem
+        + updateItemPrice(itemId : UUID, price : Decimal) : MenuItem
+        + toggleAvailability(itemId : UUID) : Boolean
+    }
+
+    class PackageService {
+        - packageRepository : PackageRepository
+        + createPackage(cafeId : UUID, input : CreatePackageInput) : PlayPackage
+        + purchasePackage(packageId : UUID, customerId : UUID) : CustomerPackage
+        + usePackageCredits(customerPackageId : UUID, hours : Int) : void
+    }
+
+    class PromotionService {
+        - promotionRepository : PromotionRepository
+        + createPromotion(cafeId : UUID, input : CreatePromotionInput) : Promotion
+        + validatePromotion(code : String, orderValue : Decimal) : Promotion
+        + calculateDiscount(promotionId : UUID, amount : Decimal) : Decimal
+    }
+}
+
+package "Data Repositories" {
+    class MenuCategoryRepository {
+        - dataSource : DataSource
+        + findById(id : UUID) : MenuCategory
+        + findByCafe(cafeId : UUID) : MenuCategory[]
+        + save(category : MenuCategory) : MenuCategory
+    }
+
+    class MenuItemRepository {
+        - dataSource : DataSource
+        + findById(id : UUID) : MenuItem
+        + findByCategory(categoryId : UUID) : MenuItem[]
+        + save(item : MenuItem) : MenuItem
+    }
+
+    class PackageRepository {
+        - dataSource : DataSource
+        + findById(id : UUID) : PlayPackage
+        + findByCafe(cafeId : UUID) : PlayPackage[]
+        + save(pkg : PlayPackage) : PlayPackage
+    }
+
+    class PromotionRepository {
+        - dataSource : DataSource
+        + findById(id : UUID) : Promotion
+        + findByCode(code : String) : Promotion
+        + save(promotion : Promotion) : Promotion
+    }
+}
+
+package "Domain Entities" {
+    class MenuCategory {
+        - id : UUID
+        - cafeId : UUID
+        - name : String
+        - displayOrder : Int
+        - isActive : Boolean
+        + activate() : void
+    }
+
+    class MenuItem {
+        - id : UUID
+        - name : String
+        - basePrice : Decimal
+        - isAvailable : Boolean
+        + getPrice() : Decimal
+    }
+
+    class MenuItemVariant {
+        - id : UUID
+        - variantName : String
+        - priceAdjustment : Decimal
+        + getFinalPrice(basePrice : Decimal) : Decimal
+    }
+
+    class PlayPackage {
+        - id : UUID
+        - cafeId : UUID
+        - name : String
+        - totalHours : Int
+        - price : Decimal
+        - validityDays : Int
+        + isValid() : Boolean
+    }
+
+    class CustomerPackage {
+        - id : UUID
+        - customerId : UUID
+        - remainingHours : Int
+        - expiredAt : Date
+        - status : PackageStatus
+        + consumeHours(hours : Int) : void
+    }
+
+    class Promotion {
+        - id : UUID
+        - cafeId : UUID
+        - code : String
+        - discountType : DiscountType
+        - discountValue : Decimal
+        - minOrderValue : Decimal
+        - maxDiscount : Decimal
+        - startAt : Date
+        - endAt : Date
+        + isApplicable(amount : Decimal) : Boolean
+    }
+}
+
+' Controller Associations
+MenuCategoryController --> MenuService
+MenuItemController --> MenuService
+PackageController --> PackageService
+PromotionController --> PromotionService
+
+' Service Associations
+MenuService --> MenuCategoryRepository
+MenuService --> MenuItemRepository
+PackageService --> PackageRepository
+PromotionService --> PromotionRepository
+
+' Repository Dependencies
+MenuCategoryRepository ..> MenuCategory
+MenuItemRepository ..> MenuItem
+PackageRepository ..> PlayPackage
+PackageRepository ..> CustomerPackage
+PromotionRepository ..> Promotion
+
+' Entity Compositions & Associations (with explicit roles and space-padded multiplicities)
+MenuCategory "  1  \n " *--- "  0..*  \n " MenuItem : "+items   "
+MenuItem "  1  \n " *--- "  0..*  \n " MenuItemVariant : "+variants   "
+PlayPackage "  1  \n " --- "  0..*  \n " CustomerPackage : "+issuedPackages   "
+
+@enduml

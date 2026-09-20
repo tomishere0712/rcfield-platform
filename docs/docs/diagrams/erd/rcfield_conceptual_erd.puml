@@ -1,0 +1,324 @@
+@startuml rcfield_conceptual_erd
+skinparam dpi 300
+skinparam shadowing false
+skinparam roundCorner 0
+skinparam linetype ortho
+skinparam nodesep 40
+skinparam ranksep 50
+
+skinparam rectangle {
+    BackgroundColor #FFF2A8
+    BorderColor #000000
+    BorderThickness 1.2
+    FontName Arial
+    FontSize 12
+    FontStyle bold
+    FontColor #000000
+}
+
+skinparam diamond {
+    BackgroundColor #F8B4C4
+    BorderColor #000000
+    BorderThickness 1.2
+    FontName Arial
+    FontSize 11
+    FontColor #000000
+}
+
+skinparam arrow {
+    Color #000000
+    Thickness 1.1
+    FontName Arial
+    FontSize 11
+    FontStyle bold
+    FontColor #000000
+}
+
+title RC Field - Complete Conceptual ERD (70 Tables - Chen Notation)
+
+' ── 70 Entities (Yellow Boxes) ──
+rectangle "RefreshToken" as E_RefreshToken
+rectangle "PasswordResetToken" as E_PasswordResetToken
+rectangle "PushToken" as E_PushToken
+rectangle "Notification" as E_Notification
+rectangle "StaffInviteToken" as E_StaffInviteToken
+rectangle "FeatureFlag" as E_FeatureFlag
+rectangle "AiAnalysisLog" as E_AiAnalysisLog
+rectangle "AchievementDefinition" as E_AchievementDef
+rectangle "KbDocument" as E_KbDoc
+rectangle "KbChunk" as E_KbChunk
+rectangle "User" as E_User
+rectangle "ProviderProfile" as E_ProviderProfile
+rectangle "ProviderSubscription" as E_ProviderSub
+rectangle "SubscriptionPlan" as E_SubPlan
+rectangle "PaymentRequest" as E_PaymentRequest
+rectangle "Package" as E_Package
+rectangle "CustomerPackage" as E_CustomerPackage
+rectangle "StaffCafeAssignment" as E_StaffAssignment
+rectangle "Cafe" as E_Cafe
+rectangle "CafeImage" as E_CafeImage
+rectangle "CafePaymentSetting" as E_CafePaymentSetting
+rectangle "CafePricingRule" as E_CafePricingRule
+rectangle "CafeChannel" as E_CafeChannel
+rectangle "AmenityCatalog" as E_AmenityCatalog
+rectangle "FeaturedPopup" as E_FeaturedPopup
+rectangle "Promotion" as E_Promotion
+rectangle "Review" as E_Review
+rectangle "CafeHolidayOverride" as E_HolidayOverride
+rectangle "HolidayDate" as E_HolidayDate
+rectangle "TrackType" as E_TrackType
+rectangle "CafeTrackConfig" as E_CafeTrackConfig
+rectangle "VehicleCatalog" as E_VehicleCatalog
+rectangle "VehicleCatalogImage" as E_VehicleCatalogImage
+rectangle "Vehicle" as E_Vehicle
+rectangle "VehicleMaintenanceLog" as E_VehicleMaintenance
+rectangle "MenuCategory" as E_MenuCategory
+rectangle "MenuItem" as E_MenuItem
+rectangle "MenuItemVariant" as E_MenuItemVariant
+rectangle "MenuItemComponent" as E_MenuItemComponent
+rectangle "FnbOrder" as E_FnbOrder
+rectangle "FnbOrderItem" as E_FnbOrderItem
+rectangle "Booking" as E_Booking
+rectangle "BookingParticipant" as E_BookingParticipant
+rectangle "BookingVehicle" as E_BookingVehicle
+rectangle "ExtensionProposal" as E_ExtensionProposal
+rectangle "PaymentComponent" as E_PaymentComponent
+rectangle "PaymentTransaction" as E_PaymentTransaction
+rectangle "BankTransaction" as E_BankTransaction
+rectangle "Session" as E_Session
+rectangle "SessionParticipant" as E_SessionParticipant
+rectangle "SessionVehicle" as E_SessionVehicle
+rectangle "RaceRecord" as E_RaceRecord
+rectangle "Inspection" as E_Inspection
+rectangle "InspectionChecklist" as E_InspectionChecklist
+rectangle "InspectionPhoto" as E_InspectionPhoto
+rectangle "DamageLineItem" as E_DamageLineItem
+rectangle "ContestTemplate" as E_ContestTemplate
+rectangle "ContestFormat" as E_ContestFormat
+rectangle "ContestType" as E_ContestType
+rectangle "ContestCafe" as E_ContestCafe
+rectangle "ContestAuditLog" as E_ContestAuditLog
+rectangle "Contest" as E_Contest
+rectangle "ContestRegistration" as E_ContestRegistration
+rectangle "ContestMatch" as E_ContestMatch
+rectangle "ContestMatchParticipant" as E_ContestMatchPart
+rectangle "ContestFeePlan" as E_ContestFeePlan
+rectangle "ContestFeeOrder" as E_ContestFeeOrder
+rectangle "ContestLedgerEntry" as E_ContestLedger
+rectangle "ContestStaffAssignment" as E_ContestStaff
+rectangle "ContestBan" as E_ContestBan
+
+' ── Relationships (Pink Diamonds) ──
+diamond "Has" as R_User_Refresh
+diamond "Requests" as R_User_PassReset
+diamond "Holds" as R_User_Push
+diamond "Receives" as R_User_Notif
+diamond "Issues" as R_User_StaffInv
+diamond "Contains" as R_Doc_Chunk
+diamond "Has" as R_User_ProviderProf
+diamond "Subscribes" as R_Provider_Sub
+diamond "Defines" as R_Plan_Sub
+diamond "Submits" as R_User_PayReq
+diamond "Purchases" as R_User_CustPkg
+diamond "Instantiates" as R_Pkg_CustPkg
+diamond "Assigned to" as R_User_Staff
+diamond "Belongs to" as R_Staff_Cafe
+diamond "Owns" as R_User_Cafe
+diamond "Contains" as R_Cafe_Image
+diamond "Configures" as R_Cafe_PaySet
+diamond "Applies" as R_Cafe_Pricing
+diamond "Connects" as R_Cafe_Channel
+diamond "Offers" as R_Cafe_Amenity
+diamond "Displays" as R_Cafe_Popup
+diamond "Issues" as R_Cafe_Promo
+diamond "Writes" as R_User_Review
+diamond "Receives" as R_Cafe_Review
+diamond "Overrides" as R_Cafe_Holiday
+diamond "Contains" as R_Holiday_Dates
+diamond "Configures" as R_Cafe_Track
+diamond "Sets" as R_Cafe_TrackCfg
+diamond "Has" as R_Catalog_Img
+diamond "Classifies" as R_Catalog_Veh
+diamond "Operates" as R_Cafe_Veh
+diamond "Logs" as R_Veh_Maint
+diamond "Offers" as R_Cafe_MenuCat
+diamond "Contains" as R_Cat_MenuItem
+diamond "Has" as R_Item_Variant
+diamond "Composes" as R_Item_Comp
+diamond "Orders" as R_Booking_Fnb
+diamond "Contains" as R_Fnb_OrderItem
+diamond "Includes" as R_Item_FnbItem
+diamond "Places" as R_User_Booking
+diamond "Hosts" as R_Cafe_Booking
+diamond "Includes" as R_Booking_Part
+diamond "Reserves" as R_Booking_Veh
+diamond "Requests" as R_Booking_Ext
+diamond "Generates" as R_Booking_PayComp
+diamond "Processes" as R_Booking_PayTx
+diamond "Reconciles" as R_Bank_PayTx
+diamond "Schedules" as R_Booking_Session
+diamond "Involves" as R_Session_Part
+diamond "Uses" as R_Session_Veh
+diamond "Records" as R_Session_Race
+diamond "Undergoes" as R_Session_Inspect
+diamond "Checklists" as R_Inspect_Chklist
+diamond "Photos" as R_Inspect_Photo
+diamond "Assesses" as R_Inspect_Damage
+diamond "Organizes" as R_Cafe_Contest
+diamond "Co-hosts" as R_Contest_Cafe
+diamond "Instantiates" as R_Tpl_Contest
+diamond "Defines" as R_Fmt_Contest
+diamond "Classifies" as R_Type_Contest
+diamond "Logs" as R_Contest_Audit
+diamond "Registers" as R_User_ContestReg
+diamond "Enrolls" as R_Contest_Reg
+diamond "Contains" as R_Contest_Match
+diamond "Competes" as R_Match_Part
+diamond "Offers" as R_Contest_FeePlan
+diamond "Bills" as R_FeePlan_Order
+diamond "Tracks" as R_Contest_Ledger
+diamond "Assigns" as R_Contest_Staff
+diamond "Bans" as R_Contest_Ban
+
+' ── Connections with Cardinalities (1, M) ──
+E_User -- "1" R_User_Refresh
+R_User_Refresh -- "M" E_RefreshToken
+E_User -- "1" R_User_PassReset
+R_User_PassReset -- "M" E_PasswordResetToken
+E_User -- "1" R_User_Push
+R_User_Push -- "M" E_PushToken
+E_User -- "1" R_User_Notif
+R_User_Notif -- "M" E_Notification
+E_User -- "1" R_User_StaffInv
+R_User_StaffInv -- "M" E_StaffInviteToken
+E_KbDoc -- "1" R_Doc_Chunk
+R_Doc_Chunk -- "M" E_KbChunk
+E_User -- "1" R_User_ProviderProf
+R_User_ProviderProf -- "1" E_ProviderProfile
+E_ProviderProfile -- "1" R_Provider_Sub
+R_Provider_Sub -- "M" E_ProviderSub
+E_SubPlan -- "1" R_Plan_Sub
+R_Plan_Sub -- "M" E_ProviderSub
+E_User -- "1" R_User_PayReq
+R_User_PayReq -- "M" E_PaymentRequest
+E_User -- "1" R_User_CustPkg
+R_User_CustPkg -- "M" E_CustomerPackage
+E_Package -- "1" R_Pkg_CustPkg
+R_Pkg_CustPkg -- "M" E_CustomerPackage
+E_User -- "1" R_User_Staff
+R_User_Staff -- "M" E_StaffAssignment
+E_StaffAssignment -- "M" R_Staff_Cafe
+R_Staff_Cafe -- "1" E_Cafe
+E_User -- "1" R_User_Cafe
+R_User_Cafe -- "M" E_Cafe
+E_Cafe -- "1" R_Cafe_Image
+R_Cafe_Image -- "M" E_CafeImage
+E_Cafe -- "1" R_Cafe_PaySet
+R_Cafe_PaySet -- "1" E_CafePaymentSetting
+E_Cafe -- "1" R_Cafe_Pricing
+R_Cafe_Pricing -- "M" E_CafePricingRule
+E_Cafe -- "1" R_Cafe_Channel
+R_Cafe_Channel -- "M" E_CafeChannel
+E_Cafe -- "1" R_Cafe_Amenity
+R_Cafe_Amenity -- "M" E_AmenityCatalog
+E_Cafe -- "1" R_Cafe_Popup
+R_Cafe_Popup -- "M" E_FeaturedPopup
+E_Cafe -- "1" R_Cafe_Promo
+R_Cafe_Promo -- "M" E_Promotion
+E_User -- "1" R_User_Review
+R_User_Review -- "M" E_Review
+E_Cafe -- "1" R_Cafe_Review
+R_Cafe_Review -- "M" E_Review
+E_Cafe -- "1" R_Cafe_Holiday
+R_Cafe_Holiday -- "M" E_HolidayOverride
+E_HolidayOverride -- "1" R_Holiday_Dates
+R_Holiday_Dates -- "M" E_HolidayDate
+E_Cafe -- "1" R_Cafe_Track
+R_Cafe_Track -- "M" E_TrackType
+E_Cafe -- "1" R_Cafe_TrackCfg
+R_Cafe_TrackCfg -- "M" E_CafeTrackConfig
+E_VehicleCatalog -- "1" R_Catalog_Img
+R_Catalog_Img -- "M" E_VehicleCatalogImage
+E_VehicleCatalog -- "1" R_Catalog_Veh
+R_Catalog_Veh -- "M" E_Vehicle
+E_Cafe -- "1" R_Cafe_Veh
+R_Cafe_Veh -- "M" E_Vehicle
+E_Vehicle -- "1" R_Veh_Maint
+R_Veh_Maint -- "M" E_VehicleMaintenance
+E_Cafe -- "1" R_Cafe_MenuCat
+R_Cafe_MenuCat -- "M" E_MenuCategory
+E_MenuCategory -- "1" R_Cat_MenuItem
+R_Cat_MenuItem -- "M" E_MenuItem
+E_MenuItem -- "1" R_Item_Variant
+R_Item_Variant -- "M" E_MenuItemVariant
+E_MenuItem -- "1" R_Item_Comp
+R_Item_Comp -- "M" E_MenuItemComponent
+E_Booking -- "1" R_Booking_Fnb
+R_Booking_Fnb -- "M" E_FnbOrder
+E_FnbOrder -- "1" R_Fnb_OrderItem
+R_Fnb_OrderItem -- "M" E_FnbOrderItem
+E_MenuItem -- "1" R_Item_FnbItem
+R_Item_FnbItem -- "M" E_FnbOrderItem
+E_User -- "1" R_User_Booking
+R_User_Booking -- "M" E_Booking
+E_Cafe -- "1" R_Cafe_Booking
+R_Cafe_Booking -- "M" E_Booking
+E_Booking -- "1" R_Booking_Part
+R_Booking_Part -- "M" E_BookingParticipant
+E_Booking -- "1" R_Booking_Veh
+R_Booking_Veh -- "M" E_BookingVehicle
+E_Booking -- "1" R_Booking_Ext
+R_Booking_Ext -- "M" E_ExtensionProposal
+E_Booking -- "1" R_Booking_PayComp
+R_Booking_PayComp -- "M" E_PaymentComponent
+E_Booking -- "1" R_Booking_PayTx
+R_Booking_PayTx -- "M" E_PaymentTransaction
+E_BankTransaction -- "1" R_Bank_PayTx
+R_Bank_PayTx -- "M" E_PaymentTransaction
+E_Booking -- "1" R_Booking_Session
+R_Booking_Session -- "M" E_Session
+E_Session -- "1" R_Session_Part
+R_Session_Part -- "M" E_SessionParticipant
+E_Session -- "1" R_Session_Veh
+R_Session_Veh -- "M" E_SessionVehicle
+E_Session -- "1" R_Session_Race
+R_Session_Race -- "M" E_RaceRecord
+E_Session -- "1" R_Session_Inspect
+R_Session_Inspect -- "M" E_Inspection
+E_Inspection -- "1" R_Inspect_Chklist
+R_Inspect_Chklist -- "M" E_InspectionChecklist
+E_Inspection -- "1" R_Inspect_Photo
+R_Inspect_Photo -- "M" E_InspectionPhoto
+E_Inspection -- "1" R_Inspect_Damage
+R_Inspect_Damage -- "M" E_DamageLineItem
+E_Cafe -- "1" R_Cafe_Contest
+R_Cafe_Contest -- "M" E_Contest
+E_ContestCafe -- "M" R_Contest_Cafe
+R_Contest_Cafe -- "1" E_Contest
+E_ContestTemplate -- "1" R_Tpl_Contest
+R_Tpl_Contest -- "M" E_Contest
+E_ContestFormat -- "1" R_Fmt_Contest
+R_Fmt_Contest -- "M" E_Contest
+E_ContestType -- "1" R_Type_Contest
+R_Type_Contest -- "M" E_Contest
+E_Contest -- "1" R_Contest_Audit
+R_Contest_Audit -- "M" E_ContestAuditLog
+E_User -- "1" R_User_ContestReg
+R_User_ContestReg -- "M" E_ContestRegistration
+E_Contest -- "1" R_Contest_Reg
+R_Contest_Reg -- "M" E_ContestRegistration
+E_Contest -- "1" R_Contest_Match
+R_Contest_Match -- "M" E_ContestMatch
+E_ContestMatch -- "1" R_Match_Part
+R_Match_Part -- "M" E_ContestMatchPart
+E_Contest -- "1" R_Contest_FeePlan
+R_Contest_FeePlan -- "M" E_ContestFeePlan
+E_ContestFeePlan -- "1" R_FeePlan_Order
+R_FeePlan_Order -- "M" E_ContestFeeOrder
+E_Contest -- "1" R_Contest_Ledger
+R_Contest_Ledger -- "M" E_ContestLedger
+E_Contest -- "1" R_Contest_Staff
+R_Contest_Staff -- "M" E_ContestStaff
+E_Contest -- "1" R_Contest_Ban
+R_Contest_Ban -- "M" E_ContestBan
+@enduml

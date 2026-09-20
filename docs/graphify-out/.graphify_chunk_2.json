@@ -1,0 +1,722 @@
+{
+  "nodes": [
+    {
+      "id": "load_env_ts",
+      "label": "load-env.ts",
+      "file": "rcfeild-be/src/__tests__/load-env.ts",
+      "file_type": "code",
+      "description": "Jest global setup that loads .env.test before any module import, ensuring DB_NAME=rcfeild_test during the test run."
+    },
+    {
+      "id": "global_teardown_ts",
+      "label": "global-teardown.ts",
+      "file": "rcfeild-be/src/__tests__/global-teardown.ts",
+      "file_type": "code",
+      "description": "Jest global teardown stub. Currently a no-op but contains commented logic to DROP DATABASE rcfeild_test after all tests."
+    },
+    {
+      "id": "auth_test_ts",
+      "label": "auth.test.ts",
+      "file": "rcfeild-be/src/__tests__/routes/auth.test.ts",
+      "file_type": "code",
+      "description": "Integration tests for all auth endpoints: POST /api/v1/auth/login, /google, /refresh, /logout. Covers success, INVALID_CREDENTIALS, ACCOUNT_LOCKED, brute-force lockout, token rotation, and idempotent logout."
+    },
+    {
+      "id": "bookings_test_ts",
+      "label": "bookings.test.ts",
+      "file": "rcfeild-be/src/__tests__/routes/bookings.test.ts",
+      "file_type": "code",
+      "description": "Integration test template for booking endpoints. All test cases are marked .todo — no implementation yet. Sets up customer, cafe, and vehicle fixtures in beforeEach."
+    },
+    {
+      "id": "health_test_ts",
+      "label": "health.test.ts",
+      "file": "rcfeild-be/src/__tests__/routes/health.test.ts",
+      "file_type": "code",
+      "description": "Smoke test verifying GET /api/v1/health returns 200 with message 'RCField API is running'."
+    },
+    {
+      "id": "test_helpers_ts",
+      "label": "test helpers/index.ts",
+      "file": "rcfeild-be/src/__tests__/helpers/index.ts",
+      "file_type": "code",
+      "description": "Test helper factories: createTestUser, createTestCafe, createTestVehicle, generateToken, hashPassword. Inserts rows directly via AppDataSource.query to bypass service layer."
+    },
+    {
+      "id": "seed_users_ts",
+      "label": "seed-users.ts",
+      "file": "rcfeild-be/src/seeds/seed-users.ts",
+      "file_type": "code",
+      "description": "One-time DB seeder that creates ADMIN, PROVIDER, STAFF, CUSTOMER accounts using bcrypt-hashed passwords. Skips rows that already exist."
+    },
+    {
+      "id": "auth_controller_ts",
+      "label": "auth.controller.ts",
+      "file": "rcfeild-be/src/controllers/auth.controller.ts",
+      "file_type": "code",
+      "description": "Express controller exposing login, googleLogin, refresh, logout handlers. Parses input via Zod schemas imported from validate/, delegates to authService, propagates errors to next()."
+    },
+    {
+      "id": "routes_index_ts",
+      "label": "routes/index.ts",
+      "file": "rcfeild-be/src/routes/index.ts",
+      "file_type": "code",
+      "description": "Root Express router. Mounts GET /health and auth sub-router at /auth. Stubs for cafes, bookings, vehicles, inspections, payments, fnb are commented out."
+    },
+    {
+      "id": "auth_routes_ts",
+      "label": "auth.routes.ts",
+      "file": "rcfeild-be/src/routes/auth.routes.ts",
+      "file_type": "code",
+      "description": "Auth Express router. Applies express-rate-limit (100 req / 15 min per IP). Mounts POST /login, /google, /refresh (public) and POST /logout (requires authenticate middleware)."
+    },
+    {
+      "id": "auth_service_ts",
+      "label": "auth.service.ts",
+      "file": "rcfeild-be/src/services/auth.service.ts",
+      "file_type": "code",
+      "description": "Core auth business logic: loginWithPassword (bcrypt + Redis brute-force), loginWithGoogle (OAuth2Client token verification + upsert), refreshTokens (rotation + theft detection), logout (idempotent revoke). Private issueTokenPair generates JWT + opaque refresh token."
+    },
+    {
+      "id": "setup_md",
+      "label": "SETUP.md",
+      "file": "rcfeild-spec/SETUP.md",
+      "file_type": "document",
+      "description": "Workspace bootstrap guide: cloning both repos, editor setup, Graphify and GitNexus setup commands, GitHub org and branch protection setup."
+    },
+    {
+      "id": "readme_md",
+      "label": "README.md",
+      "file": "rcfeild-spec/README.md",
+      "file_type": "document",
+      "description": "rcfield-spec repo overview: source of truth for business logic, spec file index, Graphify setup, contributing rules (spec changes must accompany code changes in same PR)."
+    },
+    {
+      "id": "claude_md",
+      "label": "CLAUDE.md",
+      "file": "rcfeild-spec/CLAUDE.md",
+      "file_type": "document",
+      "description": "AI agent instruction file for the RCField workspace. Defines workspace layout, project overview, roles (ADMIN/PROVIDER/STAFF/CUSTOMER), tech stack, coding conventions, Git workflow, and quick business rules summary."
+    },
+    {
+      "id": "login_quickstart_md",
+      "label": "001-user-login/quickstart.md",
+      "file": "rcfeild-spec/specs/001-user-login/quickstart.md",
+      "file_type": "document",
+      "description": "Step-by-step implementation guide for the user-login feature: prerequisites, dependency install, implementation order (entities → service → controller → routes → rate-limiting → tests), key code patterns for token issuance and brute-force."
+    },
+    {
+      "id": "login_tasks_md",
+      "label": "001-user-login/tasks.md",
+      "file": "rcfeild-spec/specs/001-user-login/tasks.md",
+      "file_type": "document",
+      "description": "Task breakdown for user-login feature across 7 phases (Setup, Foundational, US1-US4, Polish). All 28 tasks marked [x] complete. Includes parallel-execution hints and dependency graph."
+    },
+    {
+      "id": "login_research_md",
+      "label": "001-user-login/research.md",
+      "file": "rcfeild-spec/specs/001-user-login/research.md",
+      "file_type": "document",
+      "description": "Architecture decision records for user-login: Google OAuth ID-token approach, SHA-256 refresh token storage, Redis TTL brute-force, refresh token rotation + theft detection, is_active vs Redis lockout separation, HS256 JWT with opaque refresh tokens.",
+      "rationale": "ID-token approach chosen over server-side code exchange (no redirect endpoint needed, fits React SPA pattern). SHA-256 chosen over bcrypt for refresh tokens (speed) and over raw storage (DB compromise protection). Redis TTL chosen over DB columns for brute-force (zero cron overhead, auto-expires). Refresh token rotation + theft detection follows RFC 6819."
+    },
+    {
+      "id": "login_data_model_md",
+      "label": "001-user-login/data-model.md",
+      "file": "rcfeild-spec/specs/001-user-login/data-model.md",
+      "file_type": "document",
+      "description": "Data model spec for user-login: User entity (users table) and RefreshToken entity (refresh_tokens table) column definitions, Redis key patterns for brute-force, PostgreSQL enum values (user_role, auth_provider), and entity relationships."
+    },
+    {
+      "id": "login_plan_md",
+      "label": "001-user-login/plan.md",
+      "file": "rcfeild-spec/specs/001-user-login/plan.md",
+      "file_type": "document",
+      "description": "Implementation plan for user-login: technical context (TypeScript 5.x, Node.js 22+, Jest+Supertest against rcfeild_test), constitution check (RBAC enforcement required for logout), project structure mapping spec docs to source files."
+    },
+    {
+      "id": "login_spec_md",
+      "label": "001-user-login/spec.md",
+      "file": "rcfeild-spec/specs/001-user-login/spec.md",
+      "file_type": "document",
+      "description": "Feature specification for user login. Defines 4 user stories: email/password login (P1), Google OAuth (P2), token refresh (P2), logout (P3). Includes FR-001 to FR-012, acceptance scenarios, edge cases, and success criteria SC-001 to SC-006."
+    },
+    {
+      "id": "login_requirements_checklist_md",
+      "label": "001-user-login/checklists/requirements.md",
+      "file": "rcfeild-spec/specs/001-user-login/checklists/requirements.md",
+      "file_type": "document",
+      "description": "Spec quality checklist for user-login. All items pass: no implementation details in spec, requirements testable, success criteria measurable, edge cases identified, no NEEDS_CLARIFICATION markers. Spec cleared for /speckit-plan."
+    },
+    {
+      "id": "login_contracts_auth_md",
+      "label": "001-user-login/contracts/auth.md",
+      "file": "rcfeild-spec/specs/001-user-login/contracts/auth.md",
+      "file_type": "document",
+      "description": "API contract definitions for /api/v1/auth: POST /login, /google, /refresh, /logout. Specifies request schemas, response shapes (success and all error codes), and per-endpoint business rules (Redis counter logic, SHA-256 hashing, revocation on logout)."
+    },
+    {
+      "id": "entity_user",
+      "label": "User Entity",
+      "file": "rcfeild-spec/specs/001-user-login/data-model.md",
+      "file_type": "document",
+      "description": "TypeORM entity mapping to the users table. Columns: id (UUID PK), email (unique), password_hash (nullable), role (user_role enum), auth_provider (auth_provider enum), google_id (nullable), is_active, trust_score, created_at, updated_at, deleted_at (soft delete)."
+    },
+    {
+      "id": "entity_refresh_token",
+      "label": "RefreshToken Entity",
+      "file": "rcfeild-spec/specs/001-user-login/data-model.md",
+      "file_type": "document",
+      "description": "TypeORM entity mapping to the refresh_tokens table. Columns: id (UUID PK), user_id (FK → users), token (SHA-256 hash of raw token), expires_at, created_at, revoked_at (nullable). Valid when revoked_at IS NULL AND expires_at > now()."
+    },
+    {
+      "id": "redis_brute_force_key",
+      "label": "Redis auth:failed key",
+      "file": "rcfeild-spec/specs/001-user-login/data-model.md",
+      "file_type": "document",
+      "description": "Redis key pattern auth:failed:{email} with 900s TTL. Stores integer count of consecutive failed logins per account. Count >= 5 triggers ACCOUNT_LOCKED (403). Auto-expires — no admin intervention needed."
+    },
+    {
+      "id": "error_code_invalid_credentials",
+      "label": "INVALID_CREDENTIALS error code",
+      "file": "rcfeild-spec/specs/001-user-login/contracts/auth.md",
+      "file_type": "document",
+      "description": "HTTP 401 error returned for both wrong password and non-existent email. Intentionally identical message to avoid account enumeration (FR-006)."
+    },
+    {
+      "id": "error_code_account_locked",
+      "label": "ACCOUNT_LOCKED error code",
+      "file": "rcfeild-spec/specs/001-user-login/contracts/auth.md",
+      "file_type": "document",
+      "description": "HTTP 403 error returned for both is_active=false (permanent admin lockout) and Redis counter >= 5 (temporary brute-force lockout). Same response shape prevents revealing reason for lockout."
+    },
+    {
+      "id": "error_code_google_auth_failed",
+      "label": "GOOGLE_AUTH_FAILED error code",
+      "file": "rcfeild-spec/specs/001-user-login/contracts/auth.md",
+      "file_type": "document",
+      "description": "HTTP 401 error returned when google-auth-library OAuth2Client.verifyIdToken() throws or returns no email payload."
+    },
+    {
+      "id": "error_code_invalid_refresh_token",
+      "label": "INVALID_REFRESH_TOKEN error code",
+      "file": "rcfeild-spec/specs/001-user-login/contracts/auth.md",
+      "file_type": "document",
+      "description": "HTTP 401 error for refresh token not found, expired, or already revoked. Reusing a revoked token also triggers full session wipe for the user (theft detection)."
+    },
+    {
+      "id": "auth_middleware",
+      "label": "authenticate middleware",
+      "file": "rcfeild-be/src/routes/auth.routes.ts",
+      "file_type": "code",
+      "description": "JWT validation middleware imported from middlewares/auth.middleware.ts. Applied only to POST /logout in the auth router. Populates req.user with userId, email, and role."
+    },
+    {
+      "id": "rate_limiter",
+      "label": "authLimiter (express-rate-limit)",
+      "file": "rcfeild-be/src/routes/auth.routes.ts",
+      "file_type": "code",
+      "description": "Per-IP rate limiter applied to all /auth routes: 100 requests per 15 minutes (windowMs: 900000). Returns 429 TOO_MANY_REQUESTS on breach."
+    },
+    {
+      "id": "user_role_enum",
+      "label": "UserRole enum",
+      "file": "rcfeild-be/src/types/index.ts",
+      "file_type": "code",
+      "description": "Enum with values CUSTOMER, PROVIDER, STAFF, ADMIN. Used in JWT payload, User entity, and RBAC guards."
+    },
+    {
+      "id": "auth_provider_enum",
+      "label": "AuthProvider enum",
+      "file": "rcfeild-be/src/types/index.ts",
+      "file_type": "code",
+      "description": "Enum with values LOCAL, GOOGLE. Stored in users.auth_provider column. Determines login method available to the account."
+    },
+    {
+      "id": "app_error_class",
+      "label": "AppError class",
+      "file": "rcfeild-be/src/types/index.ts",
+      "file_type": "code",
+      "description": "Custom error class thrown throughout services. Constructor: (message, statusCode, code). Caught by global error middleware and serialised to JSON error responses."
+    },
+    {
+      "id": "validate_schemas",
+      "label": "Zod validation schemas",
+      "file": "rcfeild-be/src/validate/index.ts",
+      "file_type": "code",
+      "description": "Centralised Zod schemas: LoginSchema (email + min-8 password), GoogleSchema (id_token), RefreshSchema (refresh_token), LogoutSchema (refresh_token). Imported by controllers — never defined inline."
+    },
+    {
+      "id": "app_datasource",
+      "label": "AppDataSource",
+      "file": "rcfeild-be/src/config/database.ts",
+      "file_type": "code",
+      "description": "TypeORM DataSource for PostgreSQL. Entities array includes User and RefreshToken. Used by repositories in auth.service.ts and directly by test helpers."
+    },
+    {
+      "id": "redis_client",
+      "label": "redis (ioredis client)",
+      "file": "rcfeild-be/src/config/redis.ts",
+      "file_type": "code",
+      "description": "ioredis client exported as redis. Used in auth.service.ts for brute-force counters (INCR, EXPIRE, DEL, GET) and in auth.test.ts to clear keys between tests."
+    },
+    {
+      "id": "google_oauth2_client",
+      "label": "OAuth2Client (google-auth-library)",
+      "file": "rcfeild-be/src/services/auth.service.ts",
+      "file_type": "code",
+      "description": "google-auth-library OAuth2Client used for server-side ID token verification. Instantiated per-request in loginWithGoogle() with GOOGLE_CLIENT_ID as audience."
+    },
+    {
+      "id": "feature_001_user_login",
+      "label": "Feature 001: User Login",
+      "file": "rcfeild-spec/specs/001-user-login/spec.md",
+      "file_type": "document",
+      "description": "Complete authentication feature: email/password login, Google OAuth, token refresh with rotation, logout. Status: all 28 tasks complete. Target: rcfeild-be backend."
+    }
+  ],
+  "edges": [
+    {
+      "source": "auth_test_ts",
+      "target": "auth_service_ts",
+      "relation": "integration_tests",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "auth_test_ts",
+      "target": "auth_controller_ts",
+      "relation": "tests_via_http",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95
+    },
+    {
+      "source": "auth_test_ts",
+      "target": "test_helpers_ts",
+      "relation": "uses",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "auth_test_ts",
+      "target": "redis_client",
+      "relation": "clears_keys_in_beforeeach",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "auth_test_ts",
+      "target": "google_oauth2_client",
+      "relation": "mocks_via_jest_mock",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "auth_test_ts",
+      "target": "error_code_invalid_credentials",
+      "relation": "asserts_error_code",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "auth_test_ts",
+      "target": "error_code_account_locked",
+      "relation": "asserts_error_code",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "auth_test_ts",
+      "target": "error_code_google_auth_failed",
+      "relation": "asserts_error_code",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "auth_test_ts",
+      "target": "error_code_invalid_refresh_token",
+      "relation": "asserts_error_code",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "auth_controller_ts",
+      "target": "auth_service_ts",
+      "relation": "calls",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "auth_controller_ts",
+      "target": "validate_schemas",
+      "relation": "imports_and_uses",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "auth_routes_ts",
+      "target": "auth_controller_ts",
+      "relation": "mounts_handlers",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "auth_routes_ts",
+      "target": "auth_middleware",
+      "relation": "applies_to_logout",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "auth_routes_ts",
+      "target": "rate_limiter",
+      "relation": "applies_to_all_auth_routes",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "routes_index_ts",
+      "target": "auth_routes_ts",
+      "relation": "mounts_at_slash_auth",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "auth_service_ts",
+      "target": "app_datasource",
+      "relation": "uses_repositories_from",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "auth_service_ts",
+      "target": "redis_client",
+      "relation": "uses_for_brute_force_counters",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "auth_service_ts",
+      "target": "google_oauth2_client",
+      "relation": "instantiates_for_token_verification",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "auth_service_ts",
+      "target": "entity_user",
+      "relation": "reads_writes",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "auth_service_ts",
+      "target": "entity_refresh_token",
+      "relation": "reads_writes",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "auth_service_ts",
+      "target": "redis_brute_force_key",
+      "relation": "manages",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "auth_service_ts",
+      "target": "app_error_class",
+      "relation": "throws",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "auth_service_ts",
+      "target": "user_role_enum",
+      "relation": "uses",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "auth_service_ts",
+      "target": "auth_provider_enum",
+      "relation": "uses",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "entity_refresh_token",
+      "target": "entity_user",
+      "relation": "foreign_key_user_id",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "test_helpers_ts",
+      "target": "app_datasource",
+      "relation": "uses_for_direct_inserts",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "test_helpers_ts",
+      "target": "user_role_enum",
+      "relation": "uses",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "seed_users_ts",
+      "target": "app_datasource",
+      "relation": "uses",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "seed_users_ts",
+      "target": "entity_user",
+      "relation": "inserts_seed_rows",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "bookings_test_ts",
+      "target": "test_helpers_ts",
+      "relation": "uses",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "load_env_ts",
+      "target": "auth_test_ts",
+      "relation": "runs_before_as_global_setup",
+      "provenance": "INFERRED",
+      "confidence_score": 0.85
+    },
+    {
+      "source": "load_env_ts",
+      "target": "bookings_test_ts",
+      "relation": "runs_before_as_global_setup",
+      "provenance": "INFERRED",
+      "confidence_score": 0.85
+    },
+    {
+      "source": "load_env_ts",
+      "target": "health_test_ts",
+      "relation": "runs_before_as_global_setup",
+      "provenance": "INFERRED",
+      "confidence_score": 0.85
+    },
+    {
+      "source": "login_spec_md",
+      "target": "feature_001_user_login",
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "login_plan_md",
+      "target": "feature_001_user_login",
+      "relation": "plans_implementation_of",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "login_tasks_md",
+      "target": "feature_001_user_login",
+      "relation": "task_breakdown_for",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "login_research_md",
+      "target": "feature_001_user_login",
+      "relation": "architecture_decisions_for",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "login_data_model_md",
+      "target": "entity_user",
+      "relation": "specifies",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "login_data_model_md",
+      "target": "entity_refresh_token",
+      "relation": "specifies",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "login_data_model_md",
+      "target": "redis_brute_force_key",
+      "relation": "specifies",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "login_contracts_auth_md",
+      "target": "error_code_invalid_credentials",
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "login_contracts_auth_md",
+      "target": "error_code_account_locked",
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "login_contracts_auth_md",
+      "target": "error_code_google_auth_failed",
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "login_contracts_auth_md",
+      "target": "error_code_invalid_refresh_token",
+      "relation": "defines",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "login_contracts_auth_md",
+      "target": "auth_routes_ts",
+      "relation": "implemented_by",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "login_quickstart_md",
+      "target": "auth_service_ts",
+      "relation": "guided_creation_of",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "login_quickstart_md",
+      "target": "auth_controller_ts",
+      "relation": "guided_creation_of",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "login_quickstart_md",
+      "target": "auth_routes_ts",
+      "relation": "guided_creation_of",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "login_requirements_checklist_md",
+      "target": "login_spec_md",
+      "relation": "validates_quality_of",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "claude_md",
+      "target": "feature_001_user_login",
+      "relation": "marks_as_active_feature",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "claude_md",
+      "target": "login_plan_md",
+      "relation": "references_as_active_plan",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "login_research_md",
+      "target": "google_oauth2_client",
+      "relation": "decision_to_use",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "login_research_md",
+      "target": "redis_brute_force_key",
+      "relation": "decision_to_use_redis_ttl",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "login_tasks_md",
+      "target": "auth_service_ts",
+      "relation": "tasks_implemented_in",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "login_tasks_md",
+      "target": "auth_controller_ts",
+      "relation": "tasks_implemented_in",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "login_tasks_md",
+      "target": "auth_routes_ts",
+      "relation": "tasks_implemented_in",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "login_tasks_md",
+      "target": "auth_test_ts",
+      "relation": "tasks_implemented_in",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "login_tasks_md",
+      "target": "test_helpers_ts",
+      "relation": "tasks_extended",
+      "provenance": "EXTRACTED",
+      "confidence_score": 1.0
+    },
+    {
+      "source": "readme_md",
+      "target": "login_spec_md",
+      "relation": "governed_by_contributing_rules",
+      "provenance": "INFERRED",
+      "confidence_score": 0.75
+    },
+    {
+      "source": "setup_md",
+      "target": "claude_md",
+      "relation": "supplements_workspace_setup",
+      "provenance": "INFERRED",
+      "confidence_score": 0.75
+    },
+    {
+      "source": "bookings_test_ts",
+      "target": "entity_user",
+      "relation": "creates_fixtures_using",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95
+    },
+    {
+      "source": "auth_service_ts",
+      "target": "login_research_md",
+      "relation": "implements_decisions_from",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95
+    },
+    {
+      "source": "auth_test_ts",
+      "target": "login_spec_md",
+      "relation": "verifies_acceptance_scenarios_from",
+      "provenance": "INFERRED",
+      "confidence_score": 0.95
+    }
+  ],
+  "hyperedges": []
+}

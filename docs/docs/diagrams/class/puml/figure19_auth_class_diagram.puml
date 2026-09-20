@@ -1,0 +1,162 @@
+@startuml
+skinparam dpi 300
+skinparam shadowing false
+skinparam roundCorner 4
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam nodesep 60
+skinparam ranksep 70
+
+hide circle
+
+skinparam package {
+    BackgroundColor #FAFAFA
+    BorderColor #A0AEC0
+    BorderThickness 1.2
+    FontName Arial
+    FontSize 13
+    FontStyle bold
+    FontColor #000000
+}
+
+skinparam class {
+    BackgroundColor #FFFFFF
+    BorderColor #000000
+    BorderThickness 1.5
+    HeaderBackgroundColor #F7FAFC
+    FontName Arial
+    FontSize 14
+    FontStyle bold
+    FontColor #000000
+    AttributeFontName Arial
+    AttributeFontSize 12
+    AttributeFontColor #000000
+}
+
+skinparam labelBackgroundColor #FFFFFF
+skinparam arrow {
+    Color #000000
+    Thickness 1.4
+    FontSize 12
+    FontColor #000000
+}
+
+top to bottom direction
+
+package "API Controllers" {
+    class AuthController {
+        - authService : AuthService
+        - tokenService : TokenService
+        + login(input : LoginInput) : LoginResponse
+        + loginWithGoogle(input : GoogleLoginInput) : LoginResponse
+        + register(input : RegisterInput) : LoginResponse
+        + refreshToken(input : RefreshTokenInput) : TokenResponse
+        + logout(userId : String) : void
+        + getMe(userId : String) : UserProfileResponse
+        + updateMe(userId : String, input : UpdateProfileInput) : UserProfileResponse
+        + changePassword(input : ChangePasswordInput) : void
+        + forgotPassword(input : ForgotPasswordInput) : void
+        + resetPassword(input : ResetPasswordInput) : void
+    }
+}
+
+package "Business Services" {
+    class AuthService {
+        - userRepository : UserRepository
+        - tokenService : TokenService
+        - emailService : BrevoEmailService
+        + loginWithPassword(email : String, pass : String) : LoginResult
+        + loginWithGoogle(idToken : String) : LoginResult
+        + registerWithPassword(input : RegisterInput) : LoginResult
+        + requestPasswordReset(email : String) : void
+        + resetPassword(input : ResetPasswordInput) : void
+        + getMe(userId : String) : UserProfileResponse
+        + updateMe(userId : String, input : UpdateProfileInput) : User
+    }
+
+    class TokenService {
+        - refreshTokenRepository : RefreshTokenRepository
+        + generateAccessToken(user : User) : String
+        + generateRefreshToken(user : User) : String
+        + verifyAccessToken(token : String) : TokenPayload
+        + rotateRefreshToken(rawToken : String) : TokenPair
+        + revokeRefreshToken(userId : String, token : String) : void
+    }
+
+    class BrevoEmailService {
+        - apiKey : String
+        + sendVerificationEmail(to : String, token : String) : void
+        + sendPasswordResetEmail(to : String, token : String) : void
+        + sendStaffInviteEmail(to : String, inviteUrl : String) : void
+    }
+}
+
+package "Data Repositories" {
+    class UserRepository {
+        - dataSource : DataSource
+        + findById(id : UUID) : User
+        + findByEmail(email : String) : User
+        + findByGoogleId(googleId : String) : User
+        + save(user : User) : User
+    }
+}
+
+package "Domain Entities" {
+    class User {
+        - id : UUID
+        - email : String
+        - passwordHash : String
+        - fullName : String
+        - phone : String
+        - role : UserRole
+        - status : UserStatus
+        - avatarUrl : String
+        - googleId : String
+        - favoriteCafeIds : UUID[]
+        - createdAt : Date
+        - updatedAt : Date
+        + isAccountActive() : Boolean
+        + hasRole(requiredRole : UserRole) : Boolean
+    }
+
+    class ProviderProfile {
+        - id : UUID
+        - businessName : String
+        - businessLicenseUrl : String
+        - idCardFrontUrl : String
+        - idCardBackUrl : String
+        - kycStatus : KycStatus
+        - bankAccount : JsonObject
+        - verifiedAt : Date
+        + isKycApproved() : Boolean
+    }
+
+    class RefreshToken {
+        - id : UUID
+        - tokenHash : String
+        - expiresAt : Date
+        - revokedAt : Date
+        - createdAt : Date
+        + isExpired() : Boolean
+        + isRevoked() : Boolean
+    }
+}
+
+' Controller to Service directed associations
+AuthController --> AuthService
+AuthController --> TokenService
+
+' Service directed associations
+AuthService --> UserRepository
+AuthService --> TokenService
+AuthService --> BrevoEmailService
+
+' Repository to Entity dependency
+UserRepository ..> User
+UserRepository ..> ProviderProfile
+
+' Entity relationships (with explicit roles and multiplicities)
+User "1   " *--- "0..1   " ProviderProfile : "+profile   "
+User "1   " *--- "0..*   " RefreshToken : "+tokens   "
+
+@enduml

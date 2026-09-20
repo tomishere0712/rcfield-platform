@@ -1,0 +1,227 @@
+@startuml figure42_provider_ops_class_diagram
+skinparam dpi 300
+skinparam shadowing false
+skinparam roundCorner 4
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam nodesep 60
+skinparam ranksep 70
+
+hide circle
+hide <<hidden>> circle
+hide <<hidden>> stereotype
+
+skinparam class {
+    BackgroundColor #FFFFFF
+    BorderColor #000000
+    BorderThickness 1.5
+    HeaderBackgroundColor #F7FAFC
+    FontName Arial
+    FontSize 14
+    FontStyle bold
+    FontColor #000000
+    AttributeFontName Arial
+    AttributeFontSize 12
+    AttributeFontColor #000000
+}
+
+skinparam package {
+    BackgroundColor #FAFAFA
+    BorderColor #A0AEC0
+    BorderThickness 1.2
+    FontName Arial
+    FontSize 13
+    FontStyle bold
+    FontColor #000000
+}
+
+skinparam labelBackgroundColor #FFFFFF
+skinparam arrow {
+    Color #000000
+    Thickness 1.4
+    FontSize 12
+    FontColor #000000
+}
+
+top to bottom direction
+
+package "API Controllers" as ApiTier {
+    class CafeController {
+        - cafeService : CafeService
+        --
+        + createCafe(input : CreateCafeInput) : CafeResponse
+        + updateCafe(id : UUID, input : UpdateCafeInput) : CafeResponse
+        + uploadImages(id : UUID, files : File[]) : CafeImageResponse[]
+        + getCafeDetail(id : UUID) : CafeDetailResponse
+    }
+
+    class PricingController {
+        - pricingService : PricingService
+        --
+        + createPricingRule(input : PricingRuleInput) : PricingRuleResponse
+        + previewDynamicPrice(input : PreviewPriceInput) : PriceEstimateResponse
+        + listPricingRules(cafeId : UUID) : PricingRuleResponse[]
+    }
+
+    class VehicleCatalogController {
+        - vehicleService : VehicleService
+        --
+        + createCatalog(input : CreateCatalogInput) : CatalogResponse
+        + updateCatalog(id : UUID, input : UpdateCatalogInput) : CatalogResponse
+        + uploadCatalogImages(id : UUID, files : File[]) : void
+        + listCatalogs(cafeId : UUID) : CatalogResponse[]
+    }
+
+    class VehicleController {
+        - vehicleService : VehicleService
+        --
+        + createVehicle(input : CreateVehicleInput) : VehicleResponse
+        + updateVehicleStatus(id : UUID, status : VehicleStatus) : void
+        + logMaintenance(id : UUID, input : MaintenanceInput) : void
+        + listFleet(cafeId : UUID) : VehicleResponse[]
+    }
+
+    CafeController -[hidden]right-> PricingController
+    PricingController -[hidden]right-> VehicleCatalogController
+    VehicleCatalogController -[hidden]right-> VehicleController
+}
+
+package "Business Services" as ServiceTier {
+    class CafeService {
+        - cafeRepository : CafeRepository
+        - trackRepository : TrackConfigRepository
+        --
+        + createBranch(providerId : UUID, input : CreateCafeInput) : Cafe
+        + updateBranch(id : UUID, input : UpdateCafeInput) : Cafe
+        + getBranchDetails(id : UUID) : Cafe
+    }
+
+    class PricingService {
+        - pricingRuleRepository : PricingRuleRepository
+        --
+        + calculateEffectiveRate(cafeId : UUID, trackTypeId : UUID, time : Date) : Decimal
+        + getWeekendMultiplier(cafeId : UUID, time : Date) : Decimal
+        + getPeakHourMultiplier(cafeId : UUID, time : Date) : Decimal
+    }
+
+    class VehicleService {
+        - catalogRepository : CatalogRepository
+        - vehicleRepository : VehicleRepository
+        - maintenanceRepository : MaintenanceRepository
+        --
+        + provisionVehicle(catalogId : UUID, serial : String) : Vehicle
+        + recordMaintenance(input : MaintenanceInput) : VehicleMaintenanceLog
+        + listFleet(cafeId : UUID) : Vehicle[]
+    }
+
+    CafeService -[hidden]right-> PricingService
+    PricingService -[hidden]right-> VehicleService
+}
+
+package "Domain Entities" as DomainTier {
+    class Cafe {
+        - id : UUID
+        - providerId : UUID
+        - name : String
+        - address : String
+        - latitude : Decimal
+        - longitude : Decimal
+        - phone : String
+        - openTime : Time
+        - closeTime : Time
+        - status : CafeStatus
+        - depositRate : Decimal
+        --
+        + isOpen() : Boolean
+    }
+
+    class VehicleCatalog {
+        - id : UUID
+        - name : String
+        - scale : String
+        - brand : String
+        - tier : VehicleTier
+        - hourlyRate : Decimal
+        - depositAmount : Decimal
+        --
+        + isAvailable() : Boolean
+    }
+
+    class CafeTrackConfig {
+        - id : UUID
+        - trackTypeId : UUID
+        - trackName : String
+        - maxCapacity : Int
+        - slotFeeRate : Decimal
+        - images : JsonArray
+        --
+        + getHourlyRate() : Decimal
+    }
+
+    class CafePricingRule {
+        - id : UUID
+        - ruleType : RuleType
+        - multiplier : Decimal
+        - dayOfWeek : Int
+        - startHour : Time
+        - endHour : Time
+        - isActive : Boolean
+        --
+        + isRuleActive() : Boolean
+    }
+
+    class Vehicle {
+        - id : UUID
+        - serialNumber : String
+        - status : VehicleStatus
+        - isByoc : Boolean
+        - ownerId : UUID
+        - totalRuntimeHours : Decimal
+        --
+        + needsMaintenance() : Boolean
+    }
+
+    class VehicleMaintenanceLog {
+        - id : UUID
+        - maintenanceType : String
+        - cost : Decimal
+        - description : String
+        - performedAt : Date
+        --
+        + isCompleted() : Boolean
+    }
+
+    Cafe -[hidden]right-> VehicleCatalog
+    Cafe -[hidden]down-> CafeTrackConfig
+    CafeTrackConfig -[hidden]right-> CafePricingRule
+    CafePricingRule -[hidden]right-> Vehicle
+    VehicleCatalog -[hidden]down-> Vehicle
+    Vehicle -[hidden]down-> VehicleMaintenanceLog
+}
+
+' Layout ordering enforcement
+ApiTier -[hidden]down-> ServiceTier
+ServiceTier -[hidden]down-> DomainTier
+
+' Controller to Service Associations (Directed Association --> as per Rule 4)
+CafeController --> CafeService
+PricingController --> PricingService
+VehicleCatalogController --> VehicleService
+VehicleController --> VehicleService
+
+' Service to Entity Dependencies (Dependency ..> as per Rule 4)
+CafeService ..> Cafe
+CafeService ..> CafeTrackConfig
+PricingService ..> CafePricingRule
+VehicleService ..> VehicleCatalog
+VehicleService ..> Vehicle
+VehicleService ..> VehicleMaintenanceLog
+
+' Entity Compositions (with explicit roles and 3-space padded multiplicities as per Rule 3 & 5)
+Cafe "1   " *--- "0..*   " CafeTrackConfig : "+tracks   "
+Cafe "1   " *--- "0..*   " CafePricingRule : "+pricingRules   "
+Cafe "1   " *--- "0..*   " VehicleCatalog : "+catalogs   "
+VehicleCatalog "1   " *--- "0..*   " Vehicle : "+vehicles   "
+Vehicle "1   " *--- "0..*   " VehicleMaintenanceLog : "+maintenanceLogs   "
+
+@enduml

@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "codegraph": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "@colbymchenry/codegraph",
+        "serve",
+        "--mcp",
+        "--path",
+        "/Users/mr.triss/FPT University/SEP490/rcfeild-spec/rcfeild-be"
+      ]
+    }
+  }
+}

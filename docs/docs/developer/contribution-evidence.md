@@ -16,8 +16,10 @@ Khoảng thời gian: **13/05/2026 → 15/08/2026** (14 tuần). Tổng **717 co
 |---|---:|---:|---|---|
 | Bùi Trọng Trí | 211 | 14/14 | 2026-05-13 | 2026-08-15 |
 | Huỳnh Hữu Toàn | 204 | 11/14 | 2026-05-16 | 2026-07-31 |
-| Nguyễn Vĩnh Phúc | 155 | 12/14 | 2026-05-23 | 2026-08-14 |
+| Nguyễn Vĩnh Phúc | 155 (322 toàn kỳ)* | 12/14 | 2026-05-23 | 2026-08-14 |
 | Thanh Tùng | 147 | 12/14 | 2026-05-23 | 2026-08-12 |
+
+> *\*Ghi chú toàn kỳ:* Bảng trên thống kê trong giai đoạn đồ án 14 tuần đầu tại 2 kho backend và frontend. Tính đến hết giai đoạn hoàn thiện sản phẩm (bao gồm ứng dụng di động `mobile/`, tài liệu kiến trúc UML/ERD, và triển khai Cloud Production), tổng số commit của **Nguyễn Vĩnh Phúc** đạt **322 commit** trên toàn bộ nền tảng.
 
 ## 2. Phân bổ theo kho
 
@@ -75,14 +77,13 @@ Suy ra từ đường dẫn file mà mỗi người sửa nhiều nhất — dù
 
 **Nguyễn Vĩnh Phúc**
 
-- `FE/pages/provider` — 129 lượt sửa file
-- `FE/pages/staff` — 82 lượt sửa file
-- `FE/pages/customer` — 67 lượt sửa file
-- `BE/services` — 59 lượt sửa file
-- `BE/__tests__` — 49 lượt sửa file
-- `FE/pages/booking` — 38 lượt sửa file
-- `BE/controllers` — 34 lượt sửa file
-- `BE/models` — 28 lượt sửa file
+- `FE/pages/staff` — 82 lượt sửa file (Staff Portal, Walk-in POS, VietQR modal, cash calculator, session inspection)
+- `FE/pages/provider` — 129 lượt sửa file (Fleet & Catalog, dynamic track types, cafe selectors, onboarding)
+- `FE/pages/customer` & `FE/pages/booking` — 105 lượt sửa file (Leaflet discovery, booking wizard, BYOC inspection & overdue alerts)
+- `Mobile (React Native / Expo)` — Phát triển ứng dụng di động: Staff session tools, Camera inspection (`expo-camera`), Customer booking detail (`BookingDetailScreen.tsx`), Push notifications (`expo-notifications`), WebSocket sync, EAS Build Android APK
+- `BE/services` & `BE/controllers` — 93 lượt sửa file (Vòng đời play sessions, inspection APIs, walk-in & BYOC endpoints, post-paid checkout)
+- `BE/__tests__` & `BE/models` — 77 lượt sửa file (Jest test suites, entities, migrations, seed scripts)
+- `Kiến trúc & DevOps` — 10 sơ đồ UML 2 Class Diagrams, Conceptual ERD, Upstash Redis TLS, triển khai hệ thống Cloud 24/7 (Vercel, Render Docker, Neon, Upstash)
 
 **Thanh Tùng**
 

@@ -138,12 +138,31 @@ npx expo start
 **RCField** was developed as a capstone project (**SEP490**) by a team of software engineering students at FPT University.
 
 ### 👤 Individual Contribution — [Nguyen Vinh Phuc](https://github.com/tomishere0712)
-- **Primary Focus — Frontend Web (ReactJS)**:
-  - Spearheaded the design and implementation of the single-page web application using **React 19**, **Vite**, **TypeScript (Strict)**, and **Tailwind CSS v4**.
-  - Architected the server-state strategy with **TanStack Query v5** (caching, optimistic UI updates, cache invalidation) and client-state with **Zustand**.
-  - Built interactive venue discovery with **Leaflet**, multi-step booking wizard, dynamic form validation using **React Hook Form + Zod**, and real-time VietQR payment confirmation.
-  - Developed responsive data-driven dashboards using **Radix UI** primitives and **Recharts**.
-- **Cross-Stack Contributions (Fullstack & Mobile)**:
-  - **Mobile (React Native / Expo)**: Contributed to customer booking flows, venue exploration, and integrated device camera QR scanning for counter staff check-in.
-  - **Backend (Node.js / Express / TypeORM)**: Collaborated on RESTful API design, database schema modeling (PostgreSQL), webhook handling, and data seeding scripts.
+> **Role:** Frontend Core & Cross-Stack Contributor | **322 Commits** across all repositories
+
+#### ⚛️ Primary Focus: Frontend Web (ReactJS) — ~70%
+- **Staff Operations & Counter POS Portal:**
+  - Architected `StaffShell`, layout frames, and role-based operational contexts for venue staff.
+  - Built walk-in booking wizard with visual `DailySlotGrid`, dynamic VietQR payment modal with auto-polling, and cash confirmation modal featuring an integrated quick-change calculator.
+  - Implemented play session lifecycle (`StaffSessionDetailPage`), vehicle handover/return inspections with photo proofing, damage assessment, and vehicle swap UX.
+- **BYOC & Customer Booking Experience:**
+  - Developed end-to-end BYOC (Bring Your Own Car) flow with realtime inspection status banners, overdue alert handling, and counter settlement.
+  - Created interactive venue discovery map using **Leaflet** and multi-step booking wizard with real-time pricing and F&B package calculations.
+  - Built favorites system with local storage sync and API persistence.
+- **State Management & Data Architecture:**
+  - Implemented server-state caching, background revalidation, and optimistic UI updates via **TanStack Query v5**.
+  - Built global client state with **Zustand**; enforced strict TypeScript typing (eliminated unsafe casts across public, customer, provider, staff, and admin portals).
+  - Integrated real-time notifications and session events using **Socket.IO** client with custom notification bell UI.
+
+#### 🚀 Key Plus 1: Backend Engineering (Node.js & PostgreSQL) — ~15%
+- **Session Lifecycle & Post-Paid Settlements:** Implemented backend entities, migrations, and controllers for active play sessions, vehicle damage inspections, and secondary post-paid checkouts (F&B orders / overtime charges).
+- **Master Data, Caching & Events:** Built cafe favoriting service, booking timeout cron jobs, Socket.IO event emitters, and configured **Upstash Redis TLS** cloud integration.
+
+#### 📱 Key Plus 2: Mobile Application (React Native / Expo) — ~15%
+- **Staff Counter & Inspection Tools:** Ported staff check-in, walk-in VietQR modal, and inspection workflows to mobile with native camera capture (`expo-camera`, `expo-image-picker`).
+- **Realtime Sync & CI/CD:** Integrated push notifications (`expo-notifications`), WebSocket alerts, deep linking from notifications & VNPay redirects, and automated Android standalone APK builds via **EAS Build**.
+
+#### 📐 System Architecture & DevOps
+- **Architecture Design:** Authored **10 UML 2 Class Diagrams** (PlantUML) and **Conceptual ERD** covering the entire platform domain.
+- **24/7 Cloud Deployment:** Deployed and maintained the zero-cost production stack on **Vercel** (Frontend), **Render Docker** (API), **Neon** (PostgreSQL 16 SSL), and **Upstash** (Redis TLS).
 

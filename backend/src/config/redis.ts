@@ -108,6 +108,7 @@ export const redis =
         host: env.redis.host,
         port: env.redis.port,
         password: env.redis.password,
+        tls: env.redis.tls ? {} : undefined,
         lazyConnect: true,
       });
 

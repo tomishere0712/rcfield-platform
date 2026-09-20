@@ -11,6 +11,7 @@ const connection = {
   host: env.redis.host,
   port: env.redis.port,
   ...(env.redis.password && { password: env.redis.password }),
+  ...(env.redis.tls && { tls: {} }),
 };
 
 let fbChatQueue: Queue<FbChatJobData> | null = null;

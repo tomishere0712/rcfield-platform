@@ -67,6 +67,7 @@ export const env = {
     port: parseInt(process.env.REDIS_PORT ?? '6379', 10),
     password: process.env.REDIS_PASSWORD || undefined,
     required: parseBoolean(process.env.REDIS_REQUIRED, true),
+    tls: parseBoolean(process.env.REDIS_TLS, false),
   },
 
   cloudinary: {

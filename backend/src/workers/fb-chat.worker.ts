@@ -9,6 +9,7 @@ const connection = {
   host: env.redis.host,
   port: env.redis.port,
   ...(env.redis.password && { password: env.redis.password }),
+  ...(env.redis.tls && { tls: {} }),
 };
 
 const LOCK_TTL_SEC = 30;

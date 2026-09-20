@@ -7,9 +7,11 @@ import type {
   RegisterRequest,
   UserRole,
 } from '@/features/auth/types/auth.types';
+import { router } from 'expo-router';
 import { secureTokenStorage } from '@/shared/lib/secure-storage';
 import { setTokenRevokedCallback } from '@/shared/lib/api';
 import { unregisterCurrentPushTokenAsync } from '@/shared/lib/push-notifications';
+import { queryClient } from '@/shared/lib/query-client';
 
 interface AuthState {
   accessToken: string | null;
@@ -153,6 +155,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       // Local logout should still succeed if the remote session already expired.
     } finally {
       await secureTokenStorage.clearTokens();
+      queryClient.clear();
       set({
         accessToken: null,
         assignedCafeId: null,
@@ -190,4 +193,8 @@ export const useAuthStore = create<AuthState>((set) => ({
 // Đăng ký callback xử lý khi token bị thu hồi hoặc hết hạn (gọi từ Axios response interceptor)
 setTokenRevokedCallback(() => {
   void useAuthStore.getState().logout();
+  if (router.canDismiss()) {
+    router.dismissAll();
+  }
+  router.replace('/(auth)/login');
 });

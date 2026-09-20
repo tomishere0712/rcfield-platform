@@ -386,6 +386,9 @@ export function ProfileScreen() {
             text: 'OK',
             onPress: async () => {
               await logout();
+              if (router.canDismiss()) {
+                router.dismissAll();
+              }
               router.replace('/(auth)/login');
             },
           },
@@ -415,6 +418,9 @@ export function ProfileScreen() {
           style: 'destructive',
           onPress: async () => {
             await logout();
+            if (router.canDismiss()) {
+              router.dismissAll();
+            }
             router.replace('/(auth)/login');
           },
         },

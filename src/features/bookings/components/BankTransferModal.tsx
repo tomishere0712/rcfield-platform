@@ -100,8 +100,9 @@ export function BankTransferModal({
     if (!visible || !bookingId || isPaid) return;
 
     const unsubscribe = wsClient.subscribe((event, data) => {
-      const targetBookingId = data?.bookingId || data?.booking_id;
-      if (!targetBookingId || targetBookingId === bookingId) {
+      const targetBookingId =
+        data?.bookingId || data?.booking_id || data?.data?.bookingId || data?.data?.booking_id;
+      if (targetBookingId && targetBookingId === bookingId) {
         if (
           [
             'CUSTOMER_PAYMENT_CONFIRMED',

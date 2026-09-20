@@ -87,9 +87,10 @@ export function LoginScreen() {
       });
       
       // Kiểm tra role để redirect phù hợp với Mobile
-      if (user.role === 'customer') {
-        router.replace('/(tabs)');
-      } else if (user.role === 'staff') {
+      if (user.role === 'customer' || user.role === 'staff') {
+        if (router.canDismiss()) {
+          router.dismissAll();
+        }
         router.replace('/(tabs)');
       } else {
         Alert.alert(
@@ -163,6 +164,9 @@ export function LoginScreen() {
         try {
           const user = await loginGoogle(tokenStr);
           if (user.role === 'customer' || user.role === 'staff') {
+            if (router.canDismiss()) {
+              router.dismissAll();
+            }
             router.replace('/(tabs)');
           } else {
             Alert.alert(
@@ -195,6 +199,9 @@ export function LoginScreen() {
                 try {
                   const user = await login({ email: 'customer@gmail.com', password: '123456' });
                   if (user.role === 'customer' || user.role === 'staff') {
+                    if (router.canDismiss()) {
+                      router.dismissAll();
+                    }
                     router.replace('/(tabs)');
                   }
                 } catch {

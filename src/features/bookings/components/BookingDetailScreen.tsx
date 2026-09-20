@@ -43,6 +43,7 @@ import { bookingWizardApi } from '@/features/bookings/api/booking-wizard.api';
 import { getDisplayBookingStatus, isCheckInWindowExpired } from '@/features/bookings/lib/check-in-window';
 import { getSessionOperationalTiming } from '@/features/staff/lib/session-operational-timing';
 import { wsClient } from '@/shared/lib/websocket';
+import { useAuthStore } from '@/shared/store/auth-store';
 import { Text } from '@/shared/ui/Text';
 import { cn } from '@/shared/lib/utils';
 import { getVnpayReturnUrl } from '@/shared/lib/vnpay-return-url';
@@ -118,6 +119,29 @@ function formatTimeOnlyStep(dateInput: Date | string) {
 export function BookingDetailScreen({ bookingId }: BookingDetailScreenProps) {
   const router = useRouter();
   const { colorScheme } = useColorScheme();
+
+  const handleBack = useCallback(() => {
+    if (router.canGoBack()) {
+      router.back();
+    } else {
+      router.replace('/(tabs)/bookings');
+    }
+  }, [router]);
+
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const currentUser = useAuthStore((state) => state.user);
+  const prevUserIdRef = useRef<string | null>(currentUser?.id ?? null);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      handleBack();
+      return;
+    }
+    if (prevUserIdRef.current && currentUser?.id && prevUserIdRef.current !== currentUser.id) {
+      handleBack();
+    }
+    prevUserIdRef.current = currentUser?.id ?? null;
+  }, [isAuthenticated, currentUser?.id, handleBack]);
 
   const [booking, setBooking] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -267,7 +291,15 @@ export function BookingDetailScreen({ bookingId }: BookingDetailScreenProps) {
     );
   };
 
-  const loadBookingDetail = useCallback(async () => {
+  const [isScreenFocused, setIsScreenFocused] = useState(true);
+
+  const loadBookingDetail = useCallback(async (isSilent = false) => {
+    const authState = useAuthStore.getState();
+    if (!authState.isAuthenticated || !authState.accessToken) {
+      setLoading(false);
+      return;
+    }
+
     try {
       const data = await bookingWizardApi.getBooking(bookingId);
       setBooking(data);
@@ -281,9 +313,16 @@ export function BookingDetailScreen({ bookingId }: BookingDetailScreenProps) {
       } else {
         setSessionDetail(null);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Failed to load booking detail:', error);
-      Alert.alert('Lỗi', 'Không thể tải thông tin chi tiết lượt đặt sân.');
+      const status = error?.response?.status;
+      if (status === 401 || status === 403 || status === 404) {
+        setBooking(null);
+        setSessionDetail(null);
+      }
+      if (!isSilent && status !== 401 && status !== 403) {
+        Alert.alert('Lỗi', 'Không thể tải thông tin chi tiết lượt đặt sân.');
+      }
     } finally {
       setLoading(false);
     }
@@ -291,7 +330,12 @@ export function BookingDetailScreen({ bookingId }: BookingDetailScreenProps) {
 
   useFocusEffect(
     useCallback(() => {
-      loadBookingDetail();
+      setIsScreenFocused(true);
+      void loadBookingDetail(false);
+
+      return () => {
+        setIsScreenFocused(false);
+      };
     }, [loadBookingDetail])
   );
 
@@ -300,15 +344,19 @@ export function BookingDetailScreen({ bookingId }: BookingDetailScreenProps) {
   bookingRef.current = booking;
 
   useEffect(() => {
+    if (!isScreenFocused || !isAuthenticated) return;
+
     const unsubscribe = wsClient.subscribe((event, data) => {
-      const targetBookingId = data?.bookingId || data?.booking_id;
-      const targetSessionId = data?.sessionId || data?.session_id;
+      const targetBookingId =
+        data?.bookingId || data?.booking_id || data?.data?.bookingId || data?.data?.booking_id;
+      const targetSessionId =
+        data?.sessionId || data?.session_id || data?.data?.sessionId || data?.data?.session_id;
 
       // Chỉ reload nếu sự kiện thuộc về booking hoặc session hiện tại
       const isCurrentBooking = targetBookingId && targetBookingId === bookingId;
       const isCurrentSession = targetSessionId && bookingRef.current?.session?.id === targetSessionId;
 
-      if (isCurrentBooking || isCurrentSession || !targetBookingId) {
+      if (isCurrentBooking || isCurrentSession) {
         if (
           [
             'SESSION_CHECKIN_INSPECTION',
@@ -333,7 +381,7 @@ export function BookingDetailScreen({ bookingId }: BookingDetailScreenProps) {
           ].includes(event)
         ) {
           console.log(`[BookingDetailScreen] WebSocket event '${event}' received for current booking, reloading...`);
-          loadBookingDetail();
+          void loadBookingDetail(true);
         }
       }
     });
@@ -341,9 +389,11 @@ export function BookingDetailScreen({ bookingId }: BookingDetailScreenProps) {
     return () => {
       unsubscribe();
     };
-  }, [bookingId, loadBookingDetail]);
+  }, [isScreenFocused, isAuthenticated, bookingId, loadBookingDetail]);
 
   useEffect(() => {
+    if (!isScreenFocused || !isAuthenticated) return;
+
     const sessionStatus = booking?.session?.status;
     const bookingStatus = booking?.status;
     const shouldPoll =
@@ -354,17 +404,17 @@ export function BookingDetailScreen({ bookingId }: BookingDetailScreenProps) {
     if (!shouldPoll) return;
 
     const interval = setInterval(() => {
-      loadBookingDetail();
+      void loadBookingDetail(true);
     }, 10_000);
 
     return () => clearInterval(interval);
-  }, [booking?.session?.status, booking?.status, loadBookingDetail]);
+  }, [isScreenFocused, isAuthenticated, booking?.session?.status, booking?.status, loadBookingDetail]);
 
   useEffect(() => {
     const handleAppStateChange = (nextAppState: AppStateStatus) => {
-      if (nextAppState === 'active') {
+      if (nextAppState === 'active' && isScreenFocused && isAuthenticated) {
         console.log('[BookingDetailScreen] App status is active, reloading booking detail...');
-        loadBookingDetail();
+        void loadBookingDetail(true);
       }
     };
 
@@ -372,7 +422,7 @@ export function BookingDetailScreen({ bookingId }: BookingDetailScreenProps) {
     return () => {
       subscription.remove();
     };
-  }, [loadBookingDetail]);
+  }, [isScreenFocused, isAuthenticated, loadBookingDetail]);
 
   // Hủy Lịch Đặt
   const handleCancelBooking = async () => {
@@ -529,7 +579,7 @@ export function BookingDetailScreen({ bookingId }: BookingDetailScreenProps) {
         <Text className="text-slate-900 dark:text-white text-lg font-bold mt-4">Không tìm thấy đơn đặt sân</Text>
         <Pressable
           className="mt-6 px-6 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 active:bg-slate-200 dark:active:bg-slate-700"
-          onPress={() => router.navigate('/(tabs)/bookings')}
+          onPress={handleBack}
         >
           <Text className="text-slate-900 dark:text-white text-xs font-bold">Quay lại danh sách</Text>
         </Pressable>
@@ -777,9 +827,7 @@ export function BookingDetailScreen({ bookingId }: BookingDetailScreenProps) {
       <View className="px-5 pt-3 pb-4 flex-row items-center justify-between border-b border-slate-200 dark:border-slate-800/80 bg-white dark:bg-[#0b0f19]">
         <Pressable
           className="size-9 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 justify-center items-center active:bg-slate-100 dark:active:bg-slate-800"
-          onPress={() => {
-            router.navigate('/(tabs)/bookings');
-          }}
+          onPress={handleBack}
         >
           <ArrowLeft color={colorScheme === 'dark' ? '#ffffff' : '#475569'} size={18} />
         </Pressable>

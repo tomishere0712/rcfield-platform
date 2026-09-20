@@ -22,6 +22,7 @@ import { useColorScheme } from 'nativewind';
 import { bookingWizardApi } from '@/features/bookings/api/booking-wizard.api';
 import { getStatusLabel } from '@/features/bookings/lib/status-label';
 import { wsClient } from '@/shared/lib/websocket';
+import { useAuthStore } from '@/shared/store/auth-store';
 import { ImageZoomModal } from '@/shared/ui/ImageZoomModal';
 import { Text } from '@/shared/ui/Text';
 
@@ -146,16 +147,26 @@ export default function InspectionReviewScreen() {
   }, [inspection, sessionDetail]);
 
   // Load chi tiết session
-  const fetchSessionDetail = useCallback(async () => {
-    setLoading(true);
+  const fetchSessionDetail = useCallback(async (isSilent = false) => {
+    if (!useAuthStore.getState().isAuthenticated) {
+      setLoading(false);
+      return;
+    }
+    if (!isSilent) setLoading(true);
     try {
       if (normalizedSessionId) {
         const data = await bookingWizardApi.getSessionDetail(normalizedSessionId);
         setSessionDetail(data);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Failed to load session detail for inspection:', error);
-      Alert.alert('Lỗi', 'Không thể tải thông tin biên bản kiểm xe.');
+      const status = error?.response?.status;
+      if (status === 401 || status === 403 || status === 404) {
+        setSessionDetail(null);
+      }
+      if (!isSilent && status !== 401 && status !== 403) {
+        Alert.alert('Lỗi', 'Không thể tải thông tin biên bản kiểm xe.');
+      }
     } finally {
       setLoading(false);
     }
@@ -167,8 +178,9 @@ export default function InspectionReviewScreen() {
 
   useEffect(() => {
     const unsubscribe = wsClient.subscribe((event, data) => {
-      const targetSessionId = data?.sessionId || data?.session_id;
-      if (!targetSessionId || targetSessionId === normalizedSessionId) {
+      const targetSessionId =
+        data?.sessionId || data?.session_id || data?.data?.sessionId || data?.data?.session_id;
+      if (targetSessionId && targetSessionId === normalizedSessionId) {
         if (
           [
             'SESSION_CHECKOUT_INSPECTION',
@@ -180,7 +192,7 @@ export default function InspectionReviewScreen() {
           ].includes(event)
         ) {
           console.log(`[InspectionReviewScreen] WebSocket event '${event}' received, reloading inspection...`);
-          fetchSessionDetail();
+          fetchSessionDetail(true);
         }
       }
     });

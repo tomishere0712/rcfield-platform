@@ -1,0 +1,38 @@
+{
+  "cli": {
+    "version": ">= 12.0.0",
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal"
+    },
+    "preview": {
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://api.rcfield.site/api/v1",
+        "EXPO_PUBLIC_ENV": "production",
+        "EXPO_PUBLIC_GOOGLE_CLIENT_ID": "669137140227-jnsh1g2i0ugjhcol20pel1ce1gqgi8gs.apps.googleusercontent.com",
+        "EXPO_PUBLIC_GOOGLE_CLIENT_ID_ANDROID": "669137140227-jnsh1g2i0ugjhcol20pel1ce1gqgi8gs.apps.googleusercontent.com"
+      }
+    },
+    "production": {
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://api.rcfield.site/api/v1",
+        "EXPO_PUBLIC_ENV": "production",
+        "EXPO_PUBLIC_GOOGLE_CLIENT_ID": "669137140227-jnsh1g2i0ugjhcol20pel1ce1gqgi8gs.apps.googleusercontent.com",
+        "EXPO_PUBLIC_GOOGLE_CLIENT_ID_ANDROID": "669137140227-jnsh1g2i0ugjhcol20pel1ce1gqgi8gs.apps.googleusercontent.com"
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}

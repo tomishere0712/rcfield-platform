@@ -1,0 +1,45 @@
+# Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
+
+# node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# expo
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+
+# native build folders (managed workflow creates these dynamically during prebuild)
+ios/
+android/
+
+# environment variables
+.env
+.env*.local
+
+# test
+coverage/
+
+# mac os
+.DS_Store
+
+# signing keys & credentials
+*.jks
+*.keystore
+*.p12
+*.p8
+*.key
+*.pem
+*.mobileprovision
+*.apk
+*.aab
+*.ipa
+*.plist
+
+# metro
+.metro-health-check*
+
+# typescript
+*.tsbuildinfo

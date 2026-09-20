@@ -169,9 +169,26 @@ The application will be accessible at: `http://localhost:5173`
 
 ---
 
+## 🚀 Triển khai & Vận hành (Production Deployment)
+
+Frontend được cấu hình triển khai tự động (Continuous Deployment) trên **Vercel** thông qua Git integration:
+
+- **Live URL**: [https://rcfield-platform.vercel.app](https://rcfield-platform.vercel.app)
+- **Nền tảng**: Vercel Global Edge Network (CDN tốc độ cao toàn cầu)
+- **Framework Preset**: Vite
+- **Root Directory**: `frontend`
+- **Build Command**: `npm run build` (`tsc -b && vite build`)
+- **Output Directory**: `dist`
+- **Node.js Version**: `20.x`
+- **Biến môi trường (Environment Variables)**:
+  - `VITE_API_BASE_URL`: `https://rcfield-api.onrender.com/api/v1`
+
+---
+
 ## 💡 Engineering Practices
 
 - **Zero `any` Policy**: Strict TypeScript checking enabled across all components, hooks, and API services.
 - **Component Colocation**: Feature-specific styles, hooks, and sub-components are colocated with their parent feature.
 - **Accessible UI**: Keyboard navigable dialogs, dropdowns, and form elements powered by Radix UI.
 - **Clean API Layer**: Centralized Axios client with automatic bearer token injection and standard error handling.
+

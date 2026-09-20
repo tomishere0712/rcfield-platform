@@ -79,3 +79,17 @@ Sau khi chạy lệnh nạp dữ liệu mẫu ở backend (`npm run seed:all`), 
 | **Provider** | `provider@gmail.com` | `123456` | Quản lý chi nhánh, catalog xe, phân quyền nhân viên, thống kê doanh thu |
 | **Staff** | `staff@gmail.com` | `123456` | Quét mã QR check-in, kiểm tra bàn giao xe với ảnh inspection |
 | **Customer** | `customer@gmail.com` | `123456` | Tìm sân, đặt slot/thuê xe, quét QR thanh toán, xem lịch sử phiên chơi |
+
+---
+
+## ☁️ Môi trường Triển khai Thực tế (Live Cloud Deployment)
+
+Bên cạnh môi trường local development, toàn bộ nền tảng đã được triển khai độc lập và hoạt động 24/7 trên môi trường điện toán đám mây:
+
+- **Frontend SPA**: [https://rcfield-platform.vercel.app](https://rcfield-platform.vercel.app) (Vercel Global Edge Network)
+- **Backend API**: [https://rcfield-api.onrender.com](https://rcfield-api.onrender.com) (Render Docker Web Service)
+- **Swagger Docs**: [https://rcfield-api.onrender.com/api-docs](https://rcfield-api.onrender.com/api-docs)
+- **Database**: Neon Serverless PostgreSQL 16 (AWS Singapore `ap-southeast-1`, SSL mode)
+- **Redis & Queue**: Upstash Serverless Redis 7 (TLS enabled, port 6379)
+- **Keep-Alive**: Tự động giám sát uptime qua cron-job định kỳ 10 phút.
+

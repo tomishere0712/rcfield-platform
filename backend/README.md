@@ -202,6 +202,26 @@ backend/src/
 ```
 
 ---
-
-## 📖 Tài Liệu Nghiệp Vụ & Đặc Tả
-Đặc tả chi tiết về mô hình dữ liệu (ERD), máy trạng thái đặt lịch (State Machine), quy tắc tính cước và giao thức bàn giao xe được lưu trữ tại thư mục [docs/](file:///Users/phucnguyenvinh/FPT%20SE%20Learning/SE_9/Project/rcfield-platform/docs).
+ 
+ ## 🚀 Triển khai & Vận hành (Production Deployment)
+ 
+ Backend API được đóng gói container Docker và triển khai độc lập trên nền tảng đám mây:
+ 
+ - **Live API Server**: [https://rcfield-api.onrender.com](https://rcfield-api.onrender.com)
+ - **Tài liệu Swagger API**: [https://rcfield-api.onrender.com/api-docs](https://rcfield-api.onrender.com/api-docs)
+ - **Nền tảng Hosting**: **Render** (Containerized Web Service qua `Dockerfile`)
+   - Multi-stage build với `node:20-alpine`, tự động build và chạy `dist/server.js`
+   - Health check endpoint: `GET /api/v1/health` (HTTP 200 OK)
+ - **Cơ sở dữ liệu (Database)**: **Neon Serverless PostgreSQL 16** (AWS Singapore `ap-southeast-1`)
+   - Cấu hình connection pooling bảo mật với `sslmode=require&channel_binding=require`
+   - Đã thực thi đủ 86 migration và đồng bộ toàn bộ 71 bảng dữ liệu thực tế
+ - **Bộ nhớ đệm & Message Queue**: **Upstash Serverless Redis 7**
+   - Kết nối mã hóa TLS qua port `6379` (`REDIS_TLS=true`)
+   - Vận hành BullMQ task queues và caching phiên làm việc
+ - **Giám sát Uptime & Chống ngủ đông (Keep-Alive)**:
+   - Cấu hình cron-job định kỳ mỗi 10 phút gửi HTTP request tới endpoint `/api/v1/health` để duy trì server luôn sẵn sàng 24/7.
+ 
+ ---
+ 
+ ## 📖 Tài Liệu Nghiệp Vụ & Đặc Tả
+ Đặc tả chi tiết về mô hình dữ liệu (ERD), máy trạng thái đặt lịch (State Machine), quy tắc tính cước và giao thức bàn giao xe được lưu trữ tại thư mục [docs/](file:///Users/phucnguyenvinh/FPT%20SE%20Learning/SE_9/Project/rcfield-platform/docs).

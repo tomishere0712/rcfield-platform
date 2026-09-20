@@ -3,6 +3,11 @@
 > **Comprehensive RC (Remote Control) Field Management, Contest Hosting & Vehicle Rental Ecosystem.**  
 > An end-to-end fullstack platform designed for RC hobbyists, track owners, and tournament organizers.
 
+🌐 **Live Web Application**: [https://rcfield-platform.vercel.app](https://rcfield-platform.vercel.app)  
+⚙️ **Backend API**: [https://rcfield-api.onrender.com](https://rcfield-api.onrender.com) *(Swagger Docs: [/api-docs](https://rcfield-api.onrender.com/api-docs))*
+
+[![Vercel](https://img.shields.io/badge/Vercel-Live_Demo-black?style=flat-square&logo=vercel&logoColor=white)](https://rcfield-platform.vercel.app/)
+[![Render](https://img.shields.io/badge/Render-Backend_Live-46E3B7?style=flat-square&logo=render&logoColor=white)](https://rcfield-api.onrender.com)
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React_19-20232A?style=flat-square&logo=react&logoColor=61DAFB)](https://react.dev/)
 [![React Native](https://img.shields.io/badge/React_Native-Expo_54-000020?style=flat-square&logo=expo&logoColor=white)](https://expo.dev/)

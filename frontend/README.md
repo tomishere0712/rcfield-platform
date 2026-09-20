@@ -3,6 +3,9 @@
 > **Modern, High-Performance Web Application for RC Field Management, Live Tournament Hosting & Asset Rental Operations.**  
 > Built with **React 19**, **TypeScript**, **Vite**, **Tailwind CSS v4**, and **TanStack Query v5**.
 
+🌐 **Live Demo**: [https://rcfield-platform.vercel.app](https://rcfield-platform.vercel.app)
+
+[![Vercel](https://img.shields.io/badge/Vercel-Live_Demo-black?style=flat-square&logo=vercel&logoColor=white)](https://rcfield-platform.vercel.app/)
 [![React](https://img.shields.io/badge/React-19.2-20232A?style=flat-square&logo=react&logoColor=61DAFB)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-007ACC?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Vite](https://img.shields.io/badge/Vite-6.x-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev/)

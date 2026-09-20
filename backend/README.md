@@ -3,6 +3,10 @@
 > **Enterprise-Grade RESTful API & Real-Time Engine for Multi-Tenant RC Field Management.**  
 > Built with **Node.js**, **Express**, **TypeScript**, **TypeORM**, **PostgreSQL 16**, **Redis 7**, and **BullMQ**.
 
+⚙️ **Live API Server**: [https://rcfield-api.onrender.com](https://rcfield-api.onrender.com)  
+📚 **Swagger API Documentation**: [https://rcfield-api.onrender.com/api-docs](https://rcfield-api.onrender.com/api-docs)
+
+[![Render](https://img.shields.io/badge/Render-Backend_Live-46E3B7?style=flat-square&logo=render&logoColor=white)](https://rcfield-api.onrender.com)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-007ACC?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-20+-339933?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org/)
 [![Express](https://img.shields.io/badge/Express-Backend-black?style=flat-square&logo=express&logoColor=white)](https://expressjs.com/)

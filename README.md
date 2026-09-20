@@ -8,6 +8,9 @@
 
 [![Vercel](https://img.shields.io/badge/Vercel-Live_Demo-black?style=flat-square&logo=vercel&logoColor=white)](https://rcfield-platform.vercel.app/)
 [![Render](https://img.shields.io/badge/Render-Backend_Live-46E3B7?style=flat-square&logo=render&logoColor=white)](https://rcfield-api.onrender.com)
+[![Neon](https://img.shields.io/badge/Postgres-Neon_Serverless-00E599?style=flat-square&logo=postgresql&logoColor=white)](https://neon.tech/)
+[![Upstash](https://img.shields.io/badge/Redis-Upstash_TLS-00E699?style=flat-square&logo=redis&logoColor=white)](https://upstash.com/)
+[![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED?style=flat-square&logo=docker&logoColor=white)](https://www.docker.com/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React_19-20232A?style=flat-square&logo=react&logoColor=61DAFB)](https://react.dev/)
 [![React Native](https://img.shields.io/badge/React_Native-Expo_54-000020?style=flat-square&logo=expo&logoColor=white)](https://expo.dev/)
@@ -68,8 +71,21 @@ rcfield-platform/
 | **Frontend** | React 19, Vite, TailwindCSS v4, TypeScript | TanStack Query v5, Zustand, TanStack Table, Leaflet Maps, React Hook Form, Zod, Radix UI |
 | **Backend** | Node.js, Express, TypeScript, TypeORM | Modular architecture, BullMQ job queues, Zod validation, Swagger OpenAPI, PayOS gateway, Gemini AI |
 | **Mobile** | React Native, Expo 54, Expo Router, NativeWind | Expo Camera (QR check-in), Expo Auth Session, TanStack Query, Expo Location |
+| **Cloud & DevOps** | Vercel, Render, Neon, Upstash, Docker | Global Edge CDN, Docker runtime, Serverless PostgreSQL 16, Serverless Redis TLS, Automated CI/CD |
 | **NLU Service** | Python, FastAPI, SentenceTransformers | Multilingual semantic embedding (`paraphrase-multilingual-MiniLM-L12-v2`) |
 | **Specs & Docs** | Markdown, Mermaid | Comprehensive system specifications, event-driven state machines, domain models |
+
+### ☁️ Cloud Infrastructure & Deployment Architecture
+
+The platform operates on a modern, decoupled serverless & containerized cloud architecture designed for high availability, zero cold-starts, and 24/7 reliability:
+
+- **🌐 Frontend (Vercel)**: Single Page Application deployed on Vercel's global Edge Network, providing automatic SSL, instant cache invalidation, and seamless CI/CD on `git push`.
+- **⚙️ Backend (Render)**: Containerized Express API service running in a Docker runtime with automated health checks, SSL termination, and horizontal scaling capabilities.
+- **🗄️ Database (Neon.tech)**: Serverless PostgreSQL 16 featuring auto-scaling, connection pooling, and automated schema migrations.
+- **⚡ Cache & Message Broker (Upstash)**: Managed Redis 7 with encryption-in-transit (TLS) powering BullMQ task queues, session caches, and distributed locks.
+- **🖼️ Media CDN (Cloudinary)**: Object storage and CDN delivery for digital vehicle inspection photos and track banners.
+- **🔄 Availability Monitoring (cron-job.org)**: Automated 10-minute HTTP health probes ensuring 24/7 uptime without cold-start latency.
+
 
 ---
 

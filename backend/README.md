@@ -7,6 +7,9 @@
 📚 **Swagger API Documentation**: [https://rcfield-api.onrender.com/api-docs](https://rcfield-api.onrender.com/api-docs)
 
 [![Render](https://img.shields.io/badge/Render-Backend_Live-46E3B7?style=flat-square&logo=render&logoColor=white)](https://rcfield-api.onrender.com)
+[![Neon](https://img.shields.io/badge/Postgres-Neon_Serverless-00E599?style=flat-square&logo=postgresql&logoColor=white)](https://neon.tech/)
+[![Upstash](https://img.shields.io/badge/Redis-Upstash_TLS-00E699?style=flat-square&logo=redis&logoColor=white)](https://upstash.com/)
+[![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=flat-square&logo=docker&logoColor=white)](https://www.docker.com/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-007ACC?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-20+-339933?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org/)
 [![Express](https://img.shields.io/badge/Express-Backend-black?style=flat-square&logo=express&logoColor=white)](https://expressjs.com/)
@@ -17,7 +20,6 @@
 [![Zod](https://img.shields.io/badge/Validation-Zod-3E67B1?style=flat-square&logo=zod&logoColor=white)](https://zod.dev/)
 [![PayOS](https://img.shields.io/badge/Payment-PayOS-green?style=flat-square)](https://payos.vn/)
 [![Gemini AI](https://img.shields.io/badge/AI-Google_Gemini-4285F4?style=flat-square&logo=google&logoColor=white)](https://ai.google.dev/)
-[![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=flat-square&logo=docker&logoColor=white)](https://www.docker.com/)
 
 ---
 
@@ -96,15 +98,15 @@ Luồng xử lý một request: **Route → Middleware → Controller → Servic
 | **Runtime** | Node.js 20+ LTS | Nền tảng thực thi server-side |
 | **Ngôn ngữ** | TypeScript (Strict Mode) | An toàn kiểu dữ liệu, bảo trì dài hạn |
 | **Framework** | Express.js | Định tuyến theo domain, middleware pipeline |
-| **CSDL** | PostgreSQL 16 + pgvector | Lưu trữ dữ liệu quan hệ & semantic vector search |
+| **CSDL** | PostgreSQL 16 + pgvector (Hosted on Neon Serverless) | Lưu trữ dữ liệu quan hệ & semantic vector search |
 | **ORM** | TypeORM 0.3 | Quản lý schema, migrations, data mapping |
-| **Cache & Queue** | Redis 7 + BullMQ | Khóa phân tán, cache dữ liệu, hàng đợi tác vụ nền |
+| **Cache & Queue** | Redis 7 (Hosted on Upstash Serverless TLS) + BullMQ | Khóa phân tán, cache dữ liệu, hàng đợi tác vụ nền |
 | **Validation** | Zod | Kiểm tra dữ liệu đầu vào runtime type-safe |
 | **Xác thực** | JWT + RBAC | Phân quyền 4 vai trò: Admin, Provider, Staff, Customer |
 | **Thanh toán** | PayOS, VietQR, VNPay | Cổng thanh toán và đối soát tự động |
 | **Lưu trữ file** | Cloudinary | Lưu trữ ảnh biên bản kiểm tra xe |
 | **Tài liệu API** | OpenAPI 3.0 / Swagger | Sinh tự động từ Zod schemas |
-| **Đóng gói** | Docker & Docker Compose | Triển khai nhất quán giữa các môi trường |
+| **Triển khai Cloud** | Render Web Service (Docker) + Vercel + Neon + Upstash | Môi trường production serverless & containerized 24/7 |
 
 ---
 

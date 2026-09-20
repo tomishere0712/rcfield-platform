@@ -1,131 +1,112 @@
-# RCField Mobile
+# RCField Mobile 📱🏎️
 
-Mobile application foundation for RCField, built with Expo, React Native, Expo Router, and NativeWind.
+> **Cross-Platform Mobile Application for RC Racers & Track Staff.**  
+> Built with **React Native**, **Expo SDK 54**, **Expo Router**, and **NativeWind v4**.
 
-This app is currently set up as a clean base project. Feature screens are intentionally minimal route shells; business UI and API flows should be implemented inside `src/features`.
+[![React Native](https://img.shields.io/badge/React_Native-0.81-20232A?style=flat-square&logo=react&logoColor=61DAFB)](https://reactnative.dev/)
+[![Expo](https://img.shields.io/badge/Expo-SDK_54-000020?style=flat-square&logo=expo&logoColor=white)](https://expo.dev/)
+[![NativeWind](https://img.shields.io/badge/Tailwind-NativeWind_v4-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white)](https://www.nativewind.dev/)
+[![TanStack Query](https://img.shields.io/badge/TanStack_Query-v5-FF4154?style=flat-square&logo=react-query&logoColor=white)](https://tanstack.com/query)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-007ACC?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 
-## Tech Stack
+---
 
-- Expo SDK 54
-- React Native 0.81
-- Expo Router
-- NativeWind v4
-- React Query v5
-- Zustand
-- Axios
-- React Hook Form
-- Zod
-- Expo SecureStore
-- Lucide React Native
-- Be Vietnam Pro
-- Jest + React Native Testing Library
-- ESLint + Prettier
+## 📌 Overview
 
-## Project Structure
+**RCField Mobile** delivers a native on-the-go experience for RC enthusiasts and on-field track staff. Racers can discover nearby RC tracks, book driving slots, rent vehicles, register for tournaments, and receive live session notifications. On-field staff can scan QR tickets and conduct digital vehicle inspections directly from their phones.
+
+---
+
+## 🌟 Core Features
+
+### 1. 🏎️ Customer Experience
+- **Explore & Geolocation**: Discover nearby RC tracks with distance calculations and interactive maps (`expo-location`, `react-native-maps`).
+- **Venue Details & Slot Booking**: Browse track specs, surface conditions, rental fleets, and available time slots.
+- **Contests & Tournaments**: Register for club races, check entrant lists, and view tournament brackets.
+- **Favorites & Notifications**: Bookmark preferred tracks and receive push notifications for upcoming bookings.
+- **Payment Verification**: Deep linking support for automated return handling after banking app transfers.
+
+### 2. 🏁 Staff Counter & On-Field Operations
+- **Camera QR Scanner**: Fast ticket check-in at the pit area powered by `expo-camera`.
+- **Vehicle Inspection Flow**: Capture photo evidence before and after rental sessions using the device camera (`expo-image-picker`).
+
+---
+
+## 🛠️ Tech Stack
+
+- **Framework**: React Native 0.81, Expo SDK 54, Expo Router v6 (File-based routing)
+- **Styling**: NativeWind v4 (Tailwind CSS for React Native)
+- **State & Data Fetching**: TanStack Query v5, Zustand
+- **Networking**: Axios with interceptors
+- **Form & Validation**: React Hook Form, Zod
+- **Hardware Integrations**: `expo-camera`, `expo-location`, `expo-image-picker`, `expo-secure-store`
+- **Typography & Icons**: Be Vietnam Pro, Lucide React Native
+- **Testing**: Jest, React Native Testing Library
+
+---
+
+## 📂 Project Structure
 
 ```text
-rcfield-mobile/
-├── app/                         Expo Router route shells
-│   ├── (auth)/                  Auth route group
-│   ├── (tabs)/                  Main tab route group
-│   ├── _layout.tsx              Root provider wrapper
-│   └── index.tsx                Redirect controller
+mobile/
+├── app/                         # Expo Router route definitions
+│   ├── (auth)/                  # Authentication routes (login, register)
+│   ├── (tabs)/                  # Bottom tab navigation (Explore, Bookings, Contests, Profile)
+│   ├── booking/                 # Booking wizard & checkout screens
+│   ├── cafe-detail/             # Cafe profile, track details, reviews
+│   ├── staff/                   # Staff QR scanner & check-in flow
+│   ├── _layout.tsx              # Root layout & providers
+│   └── index.tsx                # Initial route controller
 ├── src/
-│   ├── features/                Feature screens and feature-specific code
-│   └── shared/
-│       ├── components/          Shared compound components
-│       ├── config/              Environment/config layer
-│       ├── constants/           API, query, storage keys
-│       ├── lib/                 API client, query client, utilities
-│       ├── providers/           App-level providers
-│       ├── schemas/             Zod schemas
-│       ├── store/               Zustand stores
-│       ├── types/               Shared TypeScript types
-│       └── ui/                  Reusable UI primitives
-├── scripts/                     Local command wrappers
-├── assets/                      Icons, splash assets, images
-├── global.css                   NativeWind global stylesheet
-├── tailwind.config.js           NativeWind/Tailwind config
-├── metro.config.js              Metro + NativeWind config
-└── babel.config.js              Expo, NativeWind, Reanimated config
+│   ├── features/                # Domain-driven feature implementations
+│   │   ├── auth/                # Authentication logic & screens
+│   │   ├── bookings/            # Booking management & list
+│   │   ├── contests/            # Tournament details & racer registration
+│   │   ├── explore/             # Track search & discovery
+│   │   ├── staff/               # QR scanner & check-in implementation
+│   │   └── ...                  # (favorites, home, notifications, reviews, packages)
+│   └── shared/                  # Shared primitives, UI components, hooks, stores
+├── assets/                      # Icons, splash screens, and images
+└── global.css                   # NativeWind global stylesheet
 ```
 
-## Routing Convention
+---
 
-Route files in `app/` should stay thin. They should read route params and render feature screens.
+## 🚀 Getting Started
 
-Example:
+### Prerequisites
+- Node.js `>= 20.x`
+- npm `>= 10.x`
+- Expo Go app (on iOS/Android) or iOS Simulator / Android Emulator
 
-```tsx
-// app/(tabs)/bookings.tsx
-import { BookingListScreen } from '@/features/bookings/components/BookingListScreen';
-
-export default function BookingsRoute() {
-  return <BookingListScreen />;
-}
-```
-
-Screen implementation belongs in `src/features`.
-
-## Environment Variables
-
-Local environment config lives in `.env`.
-
-```env
-EXPO_PUBLIC_API_URL=
-EXPO_PUBLIC_ENV=development
-```
-
-For physical device testing, do not use `localhost` for the API URL. Use the machine IP address running the backend:
-
-```env
-EXPO_PUBLIC_API_URL=http://192.168.1.100:3000/api/v1
-EXPO_PUBLIC_ENV=development
-```
-
-Only put public client-safe values in `EXPO_PUBLIC_*`. These values are bundled into the app.
-
-## Scripts
+### Installation & Run
 
 ```bash
-npm run start       # Start Expo
-npm run android     # Start Expo and open Android target
-npm run ios         # Start Expo and open iOS target
-npm run web         # Start Expo web
-npm run typecheck   # TypeScript validation
-npm run lint        # ESLint validation, fails on warnings
-npm test            # Jest test suite
-npm run check       # Typecheck + lint + test
-npm run format      # Prettier format
+# 1. Navigate to mobile directory
+cd mobile
+
+# 2. Install dependencies
+npm install
+
+# 3. Configure environment
+cp .env.example .env
+
+# 4. Start Expo development server
+npm run start
 ```
 
-`lint` and `typecheck` print a success message when no issues are found.
+Press `i` to launch in iOS Simulator, `a` for Android Emulator, or scan the QR code with **Expo Go**.
 
-## Testing Convention
+---
 
-Keep unit and component tests colocated with the source file:
+## 📜 Available Scripts
 
-```text
-src/shared/lib/utils.ts
-src/shared/lib/utils.test.ts
-
-src/shared/ui/Text.tsx
-src/shared/ui/Text.test.tsx
-
-src/features/auth/components/LoginScreen.tsx
-src/features/auth/components/LoginScreen.test.tsx
-```
-
-Use a separate top-level test folder only for wider-scope tests such as E2E or integration suites.
-
-## Git Checks
-
-The workspace has a pre-push hook at `../.githooks/pre-push`.
-
-Before pushing mobile changes, Git runs:
-
-```bash
-npm --prefix rcfield-mobile run check
-```
-
-If typecheck, lint, or tests fail, the push is blocked.
+| Command | Purpose |
+| :--- | :--- |
+| `npm run start` | Starts Expo dev server with Metro bundler |
+| `npm run ios` | Starts Expo and opens iOS simulator |
+| `npm run android` | Starts Expo and opens Android emulator |
+| `npm run web` | Starts Expo web version |
+| `npm run typecheck` | Validates TypeScript types |
+| `npm run lint` | Runs ESLint validation |
+| `npm test` | Runs Jest test suite |

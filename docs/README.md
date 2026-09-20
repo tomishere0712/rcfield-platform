@@ -1,62 +1,42 @@
-# rcfield-spec
+# RCField Documentation & Specifications 📚📐
 
-Tài liệu kỹ thuật cho dự án RCField. Đây là **source of truth** cho business logic, domain model, và API contracts.
+Tài liệu kỹ thuật và đặc tả nghiệp vụ cho toàn bộ nền tảng **RCField**. Đây là **source of truth** cho business logic, domain model, state machines, và API contracts giữa Backend, Web Frontend và Mobile.
 
-> Spec sống cùng code. Khi business logic thay đổi → update spec trong cùng PR với code.
-
----
-
-## Cấu trúc
-
-```
-docs/spec/
-├── 00-overview.md        Tổng quan đề tài, actors, scope, timeline
-├── 01-domain-model.md    Entity, quan hệ, enums
-├── 02-state-machine.md   Booking lifecycle, events, timeout rules
-├── 03-payment-engine.md  ⚠️ CRITICAL — Component rules, refund R1-R3
-├── 04-inspection-flow.md Check-in/out protocol, validation rules
-└── 05-api-contracts.md   Endpoint list, request/response format
-
-docs/adr/
-└── 001-*.md              Architecture Decision Records
-
-docs/diagrams/
-└── *.md                  Mermaid diagrams (ERD, sequence)
-
-graphify-out/
-└── GRAPH_REPORT.md       Auto-generated bởi Graphify (gitignored raw, commit report)
-```
+> **Nguyên tắc**: Spec sống cùng code trong cùng monorepo `rcfield-platform`. Mọi thay đổi về nghiệp vụ đều được phản ánh qua các tài liệu đặc tả tương ứng.
 
 ---
 
-## Setup Graphify (chạy 1 lần)
+## 📂 Cấu trúc Thư mục Tài liệu
 
-```bash
-pip install graphify
-cd rcfield-spec
-graphify install claude   # hook vào Claude Code
-graphify run              # build knowledge graph từ docs/
-```
-
-Sau đó Claude Code tự đọc `graphify-out/GRAPH_REPORT.md` trước mọi câu hỏi về spec.
-
----
-
-## Workspace Setup
-
-Repo này được dùng cùng với `rcfield-app`. Clone cả 2 vào cùng folder:
-
-```bash
-mkdir rcfield-workspace && cd rcfield-workspace
-git clone https://github.com/rcfield-org/rcfield-spec.git
-git clone https://github.com/rcfield-org/rcfield-app.git
-# CLAUDE.md nằm ở root workspace
+```text
+docs/
+├── spec/                        # Kiến trúc và nghiệp vụ cốt lõi
+│   ├── 00-overview.md           # Tổng quan đề tài, actors, phạm vi nghiệp vụ
+│   ├── 01-domain-model.md       # Entity, quan hệ dữ liệu, enums
+│   ├── 02-state-machine.md      # Booking lifecycle, timeout rules, event triggers
+│   ├── 03-payment-engine.md     # Quy tắc ledger thanh toán, đối soát, hoàn tiền
+│   ├── 04-inspection-flow.md    # Giao thức bàn giao xe và biên bản ảnh check-in/out
+│   └── 05-api-contracts.md      # Đặc tả danh sách API endpoints, request & response
+├── specs/                       # 19 Feature Specs chi tiết (từ 001 đến 019)
+│   ├── 001-user-login/          # Xác thực & phân quyền RBAC
+│   ├── 007-booking-payment/     # Đặt lịch & cổng thanh toán
+│   ├── 015-booking-qr-checkin/  # Quét mã QR check-in tại quầy
+│   ├── 016-contest-booking/     # Tổ chức giải đấu & đăng ký thi đấu
+│   ├── 019-cafe-bank-payment/   # Thanh toán chuyển khoản ngân hàng theo chi nhánh
+│   └── ...
+├── diagrams/                    # Sơ đồ quan hệ thực thể (ERD) và tuần tự (Sequence)
+└── website/                     # Cấu hình tài liệu hiển thị dạng Docusaurus (nếu có)
 ```
 
 ---
 
-## Contributing
+## 🎯 Các tài liệu quan trọng cần tham khảo
 
-- Mọi thay đổi business logic → PR vào `develop`
-- Spec thay đổi phải kèm theo code change tương ứng trong `rcfield-app` (link PR)
-- Dùng commit message: `docs(spec): <mô tả>`
+| Tài liệu | Nội dung chính |
+| :--- | :--- |
+| **[00-overview.md](file:///Users/phucnguyenvinh/FPT%20SE%20Learning/SE_9/Project/rcfield-platform/docs/docs/spec/00-overview.md)** | Bối cảnh dự án, mô hình SaaS multi-tenant, 4 vai trò người dùng |
+| **[01-domain-model.md](file:///Users/phucnguyenvinh/FPT%20SE%20Learning/SE_9/Project/rcfield-platform/docs/docs/spec/01-domain-model.md)** | Cấu trúc dữ liệu 70 bảng, quan hệ thực thể, ràng buộc nghiệp vụ |
+| **[02-state-machine.md](file:///Users/phucnguyenvinh/FPT%20SE%20Learning/SE_9/Project/rcfield-platform/docs/docs/spec/02-state-machine.md)** | Vòng đời trạng thái booking (Pending -> Confirmed -> Active -> Completed) |
+| **[03-payment-engine.md](file:///Users/phucnguyenvinh/FPT%20SE%20Learning/SE_9/Project/rcfield-platform/docs/docs/spec/03-payment-engine.md)** | Cơ chế tính cước, phân tách cổng thanh toán PayOS/VNPay và VietQR chi nhánh |
+| **[04-inspection-flow.md](file:///Users/phucnguyenvinh/FPT%20SE%20Learning/SE_9/Project/rcfield-platform/docs/docs/spec/04-inspection-flow.md)** | Quy trình chụp ảnh 4 góc bàn giao xe, ngăn chặn tranh chấp hư hỏng |
+| **[05-api-contracts.md](file:///Users/phucnguyenvinh/FPT%20SE%20Learning/SE_9/Project/rcfield-platform/docs/docs/spec/05-api-contracts.md)** | Hợp đồng API chuẩn giữa Backend và các ứng dụng Frontend/Mobile |

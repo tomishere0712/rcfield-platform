@@ -1,70 +1,81 @@
-# RCField Workspace — Setup Guide
+# RCField Platform — Developer Setup Guide 🛠️
 
-## Lần đầu setup (chạy một lần)
+Hướng dẫn thiết lập và khởi chạy toàn bộ hệ thống **RCField Platform** trên môi trường cục bộ (Local Development).
 
+---
+
+## 🏗️ Cấu trúc Monorepo
+
+```text
+rcfield-platform/
+├── backend/          # RESTful API (Express + TypeScript + TypeORM + Redis + PostgreSQL)
+├── frontend/         # Web Application (React 19 + Vite + TailwindCSS v4)
+├── mobile/           # Mobile Application (React Native + Expo SDK 54)
+└── docs/             # Technical Specifications & Domain Models
+```
+
+---
+
+## 📋 Yêu cầu tiên quyết (Prerequisites)
+
+- **Node.js**: `>= 20.x` (khuyến nghị phiên bản LTS mới nhất)
+- **npm**: `>= 10.x`
+- **Docker Desktop**: Chạy PostgreSQL và Redis cho Backend
+- **Python**: `>= 3.10` (nếu chạy NLU Service)
+- **Expo Go** (trên điện thoại) hoặc **iOS Simulator / Android Emulator** (cho Mobile)
+
+---
+
+## 🚀 Khởi chạy từng thành phần
+
+### 1. Backend (REST API & Services)
 ```bash
-# 1. Tạo workspace folder
-mkdir rcfield-workspace && cd rcfield-workspace
+cd backend
 
-# 2. Clone cả 2 repo
-git clone https://github.com/rcfield-org/rcfield-spec.git
-git clone https://github.com/rcfield-org/rcfield-app.git
+# Cài đặt thư viện (nếu chưa có node_modules)
+npm install
 
-# 3. Copy CLAUDE.md vào root (hoặc tạo symlink)
-# File CLAUDE.md đã có trong workspace root
+# Khởi động cơ sở dữ liệu và API server
+npm run dev
+# Server lắng nghe tại: http://localhost:3000
+# Swagger API Docs: http://localhost:3000/api-docs
 ```
 
-## Cấu trúc sau khi clone
-
-```
-rcfield-workspace/
-├── CLAUDE.md               ← AI reads this first
-├── rcfield-spec/           ← Spec & docs
-│   ├── README.md
-│   └── docs/spec/          ← 5 spec files
-└── rcfield-app/            ← Source code
-    ├── README.md
-    └── apps/
-        ├── api/            ← NestJS
-        └── web/            ← Next.js
-```
-
-## Mở workspace trong editor
-
+### 2. Frontend (React 19 Web App)
 ```bash
-# VS Code / Cursor
-code rcfield-workspace/
+cd frontend
 
-# Claude Code
-cd rcfield-workspace && claude
+# Cài đặt thư viện (nếu chưa có node_modules)
+npm install
+
+# Khởi chạy Vite development server
+npm run dev
+# Web app khả dụng tại: http://localhost:5173
 ```
 
-## Setup Graphify (đọc spec)
-
+### 3. Mobile App (Expo / React Native)
 ```bash
-pip install graphify
-cd rcfield-workspace/rcfield-spec
-graphify install claude
-graphify run
-# → Tạo graphify-out/GRAPH_REPORT.md
-# → Claude Code tự đọc file này trước khi trả lời về spec
+cd mobile
+
+# Cài đặt thư viện (nếu chưa có node_modules)
+npm install
+
+# Khởi chạy Expo Metro bundler
+npm run start
 ```
+- Bấm `i` để mở trên iOS Simulator.
+- Bấm `a` để mở trên Android Emulator.
+- Quét mã QR bằng ứng dụng **Expo Go** trên điện thoại thật.
 
-## Setup GitNexus (sau khi có codebase)
+---
 
-```bash
-cd rcfield-workspace
-npm install -g gitnexus
-gitnexus analyze rcfield-app    # index codebase
-gitnexus setup                  # configure MCP cho editor
-# → Claude Code có full codebase awareness
-```
+## 👥 Tài khoản thử nghiệm (Seed Accounts)
 
-## GitHub Organization Setup
+Sau khi chạy lệnh nạp dữ liệu mẫu ở backend (`npm run seed:all`), bạn có thể đăng nhập bằng các tài khoản sau:
 
-1. Tạo GitHub Organization: `rcfield-org`
-2. Tạo 2 repos: `rcfield-spec` (public/private) + `rcfield-app` (private)
-3. Settings → Branches: protect `main` (require PR + CI pass)
-4. Projects → New project: Kanban board với columns:
-   - `Backlog` / `In Progress` / `In Review` / `Done`
-5. Labels: `task-package-1`, `task-package-2`, `task-package-3`, `bug`, `docs`
+| Vai trò | Email | Mật khẩu | Chức năng chính |
+| :--- | :--- | :--- | :--- |
+| **Admin** | `admin@gmail.com` | `123456` | Duyệt KYC, quản lý gói SaaS, giám sát hệ thống |
+| **Provider** | `provider@gmail.com` | `123456` | Quản lý chi nhánh, catalog xe, phân quyền nhân viên, thống kê doanh thu |
+| **Staff** | `staff@gmail.com` | `123456` | Quét mã QR check-in, kiểm tra bàn giao xe với ảnh inspection |
+| **Customer** | `customer@gmail.com` | `123456` | Tìm sân, đặt slot/thuê xe, quét QR thanh toán, xem lịch sử phiên chơi |

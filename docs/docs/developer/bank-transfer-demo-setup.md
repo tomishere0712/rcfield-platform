@@ -34,7 +34,7 @@ Kết quả dạng `192.168.x.x` hoặc `10.x.x.x`. Ghi lại, dưới đây g�
 
 ## 2. Khai biến môi trường
 
-Trong `rcfeild-be/.env`:
+Trong `backend/.env`:
 
 ```bash
 SANDBOX_BANK_ENABLED=true
@@ -60,7 +60,7 @@ Backend từ chối khởi động nếu bật `SANDBOX_BANK_ENABLED` mà thiế
 ## 3. Khởi động và kiểm tra kết nối
 
 ```bash
-cd rcfeild-be && npm run dev
+cd backend && npm run dev
 ```
 
 Nhật ký khởi động phải có dòng:

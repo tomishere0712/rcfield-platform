@@ -9,9 +9,9 @@
 
 **Purpose**: Cài package mới và cấu hình env — không có bảng DB mới cần migrate.
 
-- [X] T001 Install `qrcode` và `@types/qrcode` vào rcfeild-be/package.json (chạy `npm install qrcode @types/qrcode` trong rcfeild-be/)
-- [X] T002 [P] Install `jsqr` và `qrcode.react` vào rcfield-fe/package.json (chạy `npm install jsqr qrcode.react` trong rcfield-fe/)
-- [X] T003 Thêm `apiBaseUrl: process.env.API_BASE_URL ?? 'http://localhost:3001'` vào rcfeild-be/src/config/env.ts
+- [X] T001 Install `qrcode` và `@types/qrcode` vào backend/package.json (chạy `npm install qrcode @types/qrcode` trong backend/)
+- [X] T002 [P] Install `jsqr` và `qrcode.react` vào frontend/package.json (chạy `npm install jsqr qrcode.react` trong frontend/)
+- [X] T003 Thêm `apiBaseUrl: process.env.API_BASE_URL ?? 'http://localhost:3001'` vào backend/src/config/env.ts
 
 ---
 
@@ -21,8 +21,8 @@
 
 **⚠️ CRITICAL**: Phase 3 (email) phụ thuộc vào endpoint này phải tồn tại và hoạt động.
 
-- [X] T004 Implement `getBookingQr()` handler trong rcfeild-be/src/controllers/booking.controller.ts: validate UUID format → `QRCode.toBuffer(id, { width: 256, margin: 2 })` → `res.setHeader('Content-Type', 'image/png')` + `res.setHeader('Cache-Control', 'public, max-age=3600')` → `res.send(buffer)`; trả 400 VALIDATION_ERROR nếu không phải UUID
-- [X] T005 Đăng ký route public `GET /:id/qr` trong rcfeild-be/src/routes/booking.routes.ts — **TRƯỚC** middleware `authenticate`, không cần auth (email clients cần load ảnh không có JWT)
+- [X] T004 Implement `getBookingQr()` handler trong backend/src/controllers/booking.controller.ts: validate UUID format → `QRCode.toBuffer(id, { width: 256, margin: 2 })` → `res.setHeader('Content-Type', 'image/png')` + `res.setHeader('Cache-Control', 'public, max-age=3600')` → `res.send(buffer)`; trả 400 VALIDATION_ERROR nếu không phải UUID
+- [X] T005 Đăng ký route public `GET /:id/qr` trong backend/src/routes/booking.routes.ts — **TRƯỚC** middleware `authenticate`, không cần auth (email clients cần load ảnh không có JWT)
 
 **Checkpoint**: `curl http://localhost:3001/api/v1/bookings/{valid-uuid}/qr -o qr.png && file qr.png` → "PNG image data, 256 x 256"
 
@@ -36,9 +36,9 @@
 
 ### Implementation for User Story 1
 
-- [X] T006 [P] [US1] Thêm method `sendCheckInEmail(bookingId: string)` vào rcfeild-be/src/services/email.service.ts: query booking + cafe + user → build HTML email với `<img src="${env.apiBaseUrl}/api/v1/bookings/${bookingId}/qr" width="220" height="220">` và text fallback `#${shortRef}` → gọi `this.brevoSend()`; subject: `📱 Mã check-in đặt sân #${shortRef} — RCField`
-- [X] T007 [US1] Thêm `emailService.sendCheckInEmail(bookingId)` vào Promise.all trong `processConfirmation()` và `processMockConfirmation()` tại rcfeild-be/src/services/payment.service.ts (cùng chỗ đang có sendBookingConfirmation + sendBookingInvoice)
-- [X] T008 [P] [US1] Thêm QR display section vào rcfield-fe/src/pages/customer/booking-detail/CustomerBookingDetailPage.tsx: import `QRCodeSVG` từ `qrcode.react`; điều kiện hiển thị `booking.status === 'CONFIRMED' && new Date() < new Date(booking.slotEnd)`; render `<QRCodeSVG value={booking.id} size={200} level="M" includeMargin />` + text fallback `#{booking.id.substring(0,8).toUpperCase()}`; ẩn QR hoàn toàn nếu điều kiện false
+- [X] T006 [P] [US1] Thêm method `sendCheckInEmail(bookingId: string)` vào backend/src/services/email.service.ts: query booking + cafe + user → build HTML email với `<img src="${env.apiBaseUrl}/api/v1/bookings/${bookingId}/qr" width="220" height="220">` và text fallback `#${shortRef}` → gọi `this.brevoSend()`; subject: `📱 Mã check-in đặt sân #${shortRef} — RCField`
+- [X] T007 [US1] Thêm `emailService.sendCheckInEmail(bookingId)` vào Promise.all trong `processConfirmation()` và `processMockConfirmation()` tại backend/src/services/payment.service.ts (cùng chỗ đang có sendBookingConfirmation + sendBookingInvoice)
+- [X] T008 [P] [US1] Thêm QR display section vào frontend/src/pages/customer/booking-detail/CustomerBookingDetailPage.tsx: import `QRCodeSVG` từ `qrcode.react`; điều kiện hiển thị `booking.status === 'CONFIRMED' && new Date() < new Date(booking.slotEnd)`; render `<QRCodeSVG value={booking.id} size={200} level="M" includeMargin />` + text fallback `#{booking.id.substring(0,8).toUpperCase()}`; ẩn QR hoàn toàn nếu điều kiện false
 
 **Checkpoint**: Mock checkout → hộp thư nhận 3 email (confirmation + invoice + check-in QR); mở BookingDetailPage với booking CONFIRMED → QR hiển thị; slot_end đã qua → QR ẩn.
 
@@ -52,8 +52,8 @@
 
 ### Implementation for User Story 2
 
-- [X] T009 [P] [US2] Tạo component mới `QrCheckinUploader` tại rcfield-fe/src/features/staff/components/QrCheckinUploader.tsx: nhận prop `onDecoded: (bookingId: string) => void`; `<input type="file" accept="image/*">` onChange handler: tạo canvas → draw image → `jsQR(imageData.data, width, height)` → nếu `result?.data` gọi `onDecoded(result.data)`; nếu không decode được hiển thị error "Không đọc được mã QR. Hãy nhập booking ID thủ công."
-- [X] T010 [US2] Tích hợp `QrCheckinUploader` vào rcfield-fe/src/pages/staff/StaffTodayBookingsPage.tsx: thêm state `bookingId` dùng chung cho cả 2 input mode; render `<QrCheckinUploader onDecoded={setBookingId} />` + divider "hoặc" + `<Input>` nhập tay; sau khi có `bookingId` gọi `GET /api/v1/bookings/:id` để preview thông tin (status, tên khách, thời gian, chế độ); nếu `status !== 'CONFIRMED'` hiện thông báo lý do từ chối; nếu `session !== null` hiện "Đã check-in lúc ..."; nếu hợp lệ hiện nút "Xác nhận check-in" → gọi existing API `POST /api/v1/staff/bookings/:id/check-in`
+- [X] T009 [P] [US2] Tạo component mới `QrCheckinUploader` tại frontend/src/features/staff/components/QrCheckinUploader.tsx: nhận prop `onDecoded: (bookingId: string) => void`; `<input type="file" accept="image/*">` onChange handler: tạo canvas → draw image → `jsQR(imageData.data, width, height)` → nếu `result?.data` gọi `onDecoded(result.data)`; nếu không decode được hiển thị error "Không đọc được mã QR. Hãy nhập booking ID thủ công."
+- [X] T010 [US2] Tích hợp `QrCheckinUploader` vào frontend/src/pages/staff/StaffTodayBookingsPage.tsx: thêm state `bookingId` dùng chung cho cả 2 input mode; render `<QrCheckinUploader onDecoded={setBookingId} />` + divider "hoặc" + `<Input>` nhập tay; sau khi có `bookingId` gọi `GET /api/v1/bookings/:id` để preview thông tin (status, tên khách, thời gian, chế độ); nếu `status !== 'CONFIRMED'` hiện thông báo lý do từ chối; nếu `session !== null` hiện "Đã check-in lúc ..."; nếu hợp lệ hiện nút "Xác nhận check-in" → gọi existing API `POST /api/v1/staff/bookings/:id/check-in`
 
 **Checkpoint**: Upload ảnh QR của booking CONFIRMED → preview hiển thị → nhấn xác nhận → session được tạo; upload ảnh mờ → error + nhập tay vẫn hoạt động; QR booking đã check-in → cảnh báo không tạo session thứ hai.
 
@@ -67,7 +67,7 @@
 
 ### Implementation for User Story 3
 
-- [X] T011 [US3] Verify và document trong rcfeild-be/src/services/payment.service.ts rằng Promise.all sau khi sửa ở T007 chứa đúng 4 calls: `sendBookingConfirmation`, `sendBookingInvoice`, `sendCheckInEmail`, `pushBookingNew` — không có email nào bị bỏ hoặc thay thế
+- [X] T011 [US3] Verify và document trong backend/src/services/payment.service.ts rằng Promise.all sau khi sửa ở T007 chứa đúng 4 calls: `sendBookingConfirmation`, `sendBookingInvoice`, `sendCheckInEmail`, `pushBookingNew` — không có email nào bị bỏ hoặc thay thế
 
 **Checkpoint**: Thực hiện mock checkout → kiểm tra log backend thấy 3 dòng "EmailService ... sent" (confirmation, invoice, check-in QR).
 
@@ -75,9 +75,9 @@
 
 ## Phase 6: Polish & Cross-Cutting Concerns
 
-- [X] T012 [P] Kiểm tra TypeScript build không lỗi sau khi thêm package mới: chạy `npx tsc --noEmit` trong rcfeild-be/ và rcfield-fe/
-- [X] T013 [P] Cập nhật rcfeild-be/src/routes/booking.routes.ts comment: ghi rõ `GET /:id/qr` là public route (no auth) với lý do "email clients load ảnh không có JWT"
-- [ ] T014 Chạy test suite hiện tại (`npm test`) trong rcfeild-be/ — đảm bảo không regression trong booking.test.ts và chat.test.ts
+- [X] T012 [P] Kiểm tra TypeScript build không lỗi sau khi thêm package mới: chạy `npx tsc --noEmit` trong backend/ và frontend/
+- [X] T013 [P] Cập nhật backend/src/routes/booking.routes.ts comment: ghi rõ `GET /:id/qr` là public route (no auth) với lý do "email clients load ảnh không có JWT"
+- [ ] T014 Chạy test suite hiện tại (`npm test`) trong backend/ — đảm bảo không regression trong booking.test.ts và chat.test.ts
 
 ---
 
@@ -111,8 +111,8 @@
 
 ```bash
 # Sau khi Phase 2 hoàn thành:
-Task A: T006 — rcfeild-be/src/services/email.service.ts (sendCheckInEmail)
-Task B: T008 — rcfield-fe/.../CustomerBookingDetailPage.tsx (QR display)
+Task A: T006 — backend/src/services/email.service.ts (sendCheckInEmail)
+Task B: T008 — frontend/.../CustomerBookingDetailPage.tsx (QR display)
 # Chạy đồng thời — khác file, khác repo
 # T007 (payment.service wiring) chờ T006 xong
 ```

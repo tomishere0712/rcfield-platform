@@ -20,7 +20,7 @@ Ba điểm dễ sai nhất đã được nhận diện: guard quyền phải vi�
 **Storage**: PostgreSQL — bảng mới `contest_ledger_entries`; thêm 1 cột vào `contest_registrations`; không đổi kiểu cột nào
 **Testing**: Jest + supertest (`src/__tests__/services/`, `src/__tests__/routes/`), chạy trên DB thật qua `jest-setup.ts`
 **Target Platform**: Linux server (API) + trình duyệt (SPA tiếng Việt)
-**Project Type**: Web application — hai repo tách rời `rcfeild-be` (API) và `rcfield-fe` (SPA)
+**Project Type**: Web application — hai repo tách rời `backend` (API) và `frontend` (SPA)
 **Performance Goals**: Không đặt mục tiêu riêng — mỗi giải cỡ vài chục đăng ký và vài chục bút toán, nằm gọn trong ngân sách hiện tại của workspace giải
 **Constraints**: `amount > 0` (ràng buộc DB), tiêu đề ≤255 ký tự, ghi chú ≤1000 ký tự, ảnh chứng từ ≤5MB và chỉ JPG/PNG/WEBP; tiền lưu `numeric(15,2)`, hiển thị VND không thập phân
 **Scale/Scope**: 15 file backend (7 tạo mới) + 11 file frontend (4 tạo mới), 1 migration, 3 mã lỗi mới
@@ -70,7 +70,7 @@ specs/018-contest-finance/
 ### Source Code (repository root)
 
 ```text
-rcfeild-be/src/
+backend/src/
 ├── models/
 │   ├── contest-ledger-entry.entity.ts        # TẠO MỚI — entity ContestLedgerEntry
 │   └── contest-registration.entity.ts        # SỬA — thêm cột entryFeePaymentMethod
@@ -94,7 +94,7 @@ rcfeild-be/src/
     ├── services/contest-finance.test.ts      # TẠO MỚI — viết TRƯỚC (Nguyên tắc V)
     └── routes/contest-finance.test.ts        # TẠO MỚI
 
-rcfield-fe/src/
+frontend/src/
 ├── features/contests/
 │   ├── api/contest-finance.api.ts            # TẠO MỚI — client 7 endpoint
 │   ├── api/contest.api.ts                    # SỬA — thêm query key finance/ledger

@@ -8,13 +8,13 @@
 
 ## Backend
 
-- chạy `npm run build` trong `rcfield-be`
+- chạy `npm run build` trong `backend`
 - nếu có test mới: chạy test route/service liên quan contest
 - verify migration compile được
 
 ## Frontend
 
-- chạy `npm run build` trong `rcfield-fe`
+- chạy `npm run build` trong `frontend`
 - verify route mới resolve được
 - verify form contest không cần mock fallback
 
@@ -121,8 +121,8 @@ Trong repo hiện tại, nếu user không yêu cầu tách branch mới từ đ
 
 Đã chạy thành công:
 
-- `rcfield-be`: `npm run build`
-- `rcfield-fe`: `npm run build`
+- `backend`: `npm run build`
+- `frontend`: `npm run build`
 
 Chưa chạy:
 

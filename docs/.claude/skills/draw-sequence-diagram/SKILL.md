@@ -36,7 +36,7 @@ The input may be one of:
 
 **Scan source code for existing API implementations:**
 
-Check if the backend source exists at `../rcfield-app/apps/api/src/` (relative to workspace root):
+Check if the backend source exists at `../rcfield-platform/apps/api/src/` (relative to workspace root):
 
 - If the path **exists**: scan for routes and controllers relevant to this flow:
   - Search `routes/` for router files matching keywords in the flow (e.g., `booking`, `payment`, `inspection`)
@@ -176,7 +176,7 @@ machine transitions covered in this flow.
 
 ## {N+1}. Key Files
 
-### Backend (`rcfield-app/apps/api`)
+### Backend (`rcfield-platform/apps/api`)
 
 | Area | Path | Note |
 |------|------|------|
@@ -185,7 +185,7 @@ machine transitions covered in this flow.
 | Entity | `src/{module}/entities/{name}.entity.ts` | DB entity |
 | DTOs | `src/{module}/dto/*.dto.ts` | Request/response shapes |
 
-### Frontend (`rcfield-app/apps/web`)
+### Frontend (`rcfield-platform/apps/web`)
 
 | Area | Path | Note |
 |------|------|------|
@@ -244,8 +244,8 @@ flowchart LR
 - *(list other docs read during analysis)*
 
 ### Legend
-- **Frontend** = `rcfield-app/apps/web` (Next.js 14 App Router)
-- **API** = `rcfield-app/apps/api` (NestJS 10)
+- **Frontend** = `rcfield-platform/apps/web` (Next.js 14 App Router)
+- **API** = `rcfield-platform/apps/api` (NestJS 10)
 - **SM** = `BookingsService.transition(bookingId, event)` — all state changes go here
 - **PE** = `PaymentsService` — all payment component operations go here
 - `-->>` = response / async return

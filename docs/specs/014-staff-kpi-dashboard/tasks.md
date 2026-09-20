@@ -14,8 +14,8 @@
 
 **Purpose**: Verify điểm mount route và pattern hiện có trước khi thêm code mới.
 
-- [X] T001 Đọc `rcfeild-be/src/routes/provider-subscription.routes.ts` để hiểu pattern hiện có (middleware order: authenticate → authorize(PROVIDER) → requireActiveProvider → handler)
-- [X] T002 Đọc `rcfeild-be/src/controllers/staff.controller.ts` để hiểu controller pattern (response format, error propagation)
+- [X] T001 Đọc `backend/src/routes/provider-subscription.routes.ts` để hiểu pattern hiện có (middleware order: authenticate → authorize(PROVIDER) → requireActiveProvider → handler)
+- [X] T002 Đọc `backend/src/controllers/staff.controller.ts` để hiểu controller pattern (response format, error propagation)
 
 ---
 
@@ -25,7 +25,7 @@
 
 **⚠️ CRITICAL**: Không bắt đầu Phase 3/4 cho đến khi T003 xong.
 
-- [X] T003 Thêm private helper `assertStaffBelongsToProvider(providerId, staffId)` vào `rcfeild-be/src/services/staff.service.ts` — SQL: `JOIN staff_cafe_assignments a ON a.staff_id = $staffId JOIN cafes c ON c.id = a.cafe_id WHERE c.provider_id = $providerId AND a.is_active = true`, throw `AppError('Forbidden', 403, 'FORBIDDEN')` nếu 0 rows
+- [X] T003 Thêm private helper `assertStaffBelongsToProvider(providerId, staffId)` vào `backend/src/services/staff.service.ts` — SQL: `JOIN staff_cafe_assignments a ON a.staff_id = $staffId JOIN cafes c ON c.id = a.cafe_id WHERE c.provider_id = $providerId AND a.is_active = true`, throw `AppError('Forbidden', 403, 'FORBIDDEN')` nếu 0 rows
 
 **Checkpoint**: Helper xong → Phase 3 và 4 có thể chạy song song
 
@@ -39,17 +39,17 @@
 
 ### Backend US1
 
-- [X] T004 [P] [US1] Thêm service method `getStaffDetail(providerId, staffId): Promise<StaffDetailProfile>` vào `rcfeild-be/src/services/staff.service.ts` — gọi `assertStaffBelongsToProvider`, query users + staff_cafe_assignments + cafes, trả về: id, fullName, email, phone, cafeName, cafeId, status, createdAt, activatedAt, lastActiveAt
-- [X] T005 [P] [US1] Thêm service method `getStaffKpi(providerId, staffId, period): Promise<StaffKpiSummary>` vào `rcfeild-be/src/services/staff.service.ts` — gọi `assertStaffBelongsToProvider`, chạy 5 aggregate queries: (1) COUNT sessions WHERE checked_in_by=$staffId AND created_at>=since, (2) COUNT fnb_orders WHERE created_by=$staffId AND status='DELIVERED' AND created_at>=since, (3) COUNT extension_proposals WHERE proposed_by=$staffId AND status='APPROVED' AND created_at>=since, (4) on-time rate: COUNT sessions WHERE created_at BETWEEN slot_start-15min AND slot_start+15min / NULLIF(total,0)*100, (5) activeDaysCount: COUNT DISTINCT DATE(event_time) UNION từ 3 bảng
-- [X] T006 [US1] Thêm controller handlers `getStaffDetail` và `getStaffKpi` vào `rcfeild-be/src/controllers/staff.controller.ts` — validate `period` query param (enum: '7d','30d','90d', default '30d'), gọi service, wrap response `{ success: true, data: ... }`
-- [X] T007 [US1] Thêm 2 routes vào `rcfeild-be/src/routes/provider-subscription.routes.ts`: `GET /staff/:staffId` → `staffController.getStaffDetail` và `GET /staff/:staffId/kpi` → `staffController.getStaffKpi` — cùng middleware chain: `requireActiveProvider`
+- [X] T004 [P] [US1] Thêm service method `getStaffDetail(providerId, staffId): Promise<StaffDetailProfile>` vào `backend/src/services/staff.service.ts` — gọi `assertStaffBelongsToProvider`, query users + staff_cafe_assignments + cafes, trả về: id, fullName, email, phone, cafeName, cafeId, status, createdAt, activatedAt, lastActiveAt
+- [X] T005 [P] [US1] Thêm service method `getStaffKpi(providerId, staffId, period): Promise<StaffKpiSummary>` vào `backend/src/services/staff.service.ts` — gọi `assertStaffBelongsToProvider`, chạy 5 aggregate queries: (1) COUNT sessions WHERE checked_in_by=$staffId AND created_at>=since, (2) COUNT fnb_orders WHERE created_by=$staffId AND status='DELIVERED' AND created_at>=since, (3) COUNT extension_proposals WHERE proposed_by=$staffId AND status='APPROVED' AND created_at>=since, (4) on-time rate: COUNT sessions WHERE created_at BETWEEN slot_start-15min AND slot_start+15min / NULLIF(total,0)*100, (5) activeDaysCount: COUNT DISTINCT DATE(event_time) UNION từ 3 bảng
+- [X] T006 [US1] Thêm controller handlers `getStaffDetail` và `getStaffKpi` vào `backend/src/controllers/staff.controller.ts` — validate `period` query param (enum: '7d','30d','90d', default '30d'), gọi service, wrap response `{ success: true, data: ... }`
+- [X] T007 [US1] Thêm 2 routes vào `backend/src/routes/provider-subscription.routes.ts`: `GET /staff/:staffId` → `staffController.getStaffDetail` và `GET /staff/:staffId/kpi` → `staffController.getStaffKpi` — cùng middleware chain: `requireActiveProvider`
 
 ### Frontend US1
 
-- [X] T008 [P] [US1] Thêm TypeScript interfaces và API functions vào `rcfield-fe/src/features/staff/api/staff.api.ts`: interface `StaffDetailProfile`, interface `StaffKpiSummary`, `getStaffDetail(staffId)`, `getStaffKpi(staffId, period)`, thêm queryKeys: `staffDetail: (staffId) => [...]`, `staffKpi: (staffId, period) => [...]`
-- [ ] T009 [US1] Tạo `rcfield-fe/src/pages/provider/ProviderStaffDetailPage.tsx` với: (a) profile header (avatar chữ cái đầu + online dot từ lastActiveAt + tên + email + phone + cafeName + status badge + ngày tham gia), (b) period selector tabs [7 ngày / 30 ngày / 90 ngày] với useState('30d'), (c) 5 KPI card dùng `useQuery(staffQueryKeys.staffKpi(staffId, period))` — hiển thị skeleton animate-pulse khi isLoading, (d) nút "← Quay lại" navigate(-1). Màu sắc theo provider color system: bg-[#fcf8f8], text-[#1c1b1b], accent orange-600
-- [ ] T010 [US1] Thêm route `/provider/staff/:staffId` vào router của frontend (tìm file router trong `rcfield-fe/src/app/router/`) — lazy import `ProviderStaffDetailPage`, bảo vệ bởi ProviderGuard/PrivateRoute
-- [ ] T011 [US1] Thêm mục "Xem chi tiết" vào đầu dropdown menu "..." trong `StaffCard` component (`rcfield-fe/src/pages/provider/ProviderStaffPage.tsx`) — dùng `useNavigate()` hoặc `<Link>` đến `/provider/staff/${staff.id}`, hiển thị icon `Eye` từ lucide-react, áp dụng cho mọi status
+- [X] T008 [P] [US1] Thêm TypeScript interfaces và API functions vào `frontend/src/features/staff/api/staff.api.ts`: interface `StaffDetailProfile`, interface `StaffKpiSummary`, `getStaffDetail(staffId)`, `getStaffKpi(staffId, period)`, thêm queryKeys: `staffDetail: (staffId) => [...]`, `staffKpi: (staffId, period) => [...]`
+- [ ] T009 [US1] Tạo `frontend/src/pages/provider/ProviderStaffDetailPage.tsx` với: (a) profile header (avatar chữ cái đầu + online dot từ lastActiveAt + tên + email + phone + cafeName + status badge + ngày tham gia), (b) period selector tabs [7 ngày / 30 ngày / 90 ngày] với useState('30d'), (c) 5 KPI card dùng `useQuery(staffQueryKeys.staffKpi(staffId, period))` — hiển thị skeleton animate-pulse khi isLoading, (d) nút "← Quay lại" navigate(-1). Màu sắc theo provider color system: bg-[#fcf8f8], text-[#1c1b1b], accent orange-600
+- [ ] T010 [US1] Thêm route `/provider/staff/:staffId` vào router của frontend (tìm file router trong `frontend/src/app/router/`) — lazy import `ProviderStaffDetailPage`, bảo vệ bởi ProviderGuard/PrivateRoute
+- [ ] T011 [US1] Thêm mục "Xem chi tiết" vào đầu dropdown menu "..." trong `StaffCard` component (`frontend/src/pages/provider/ProviderStaffPage.tsx`) — dùng `useNavigate()` hoặc `<Link>` đến `/provider/staff/${staff.id}`, hiển thị icon `Eye` từ lucide-react, áp dụng cho mọi status
 
 **Checkpoint**: US1 hoàn chỉnh — Provider có thể xem profile + 5 KPI với period filter
 
@@ -63,14 +63,14 @@
 
 ### Backend US2
 
-- [ ] T012 [US2] Thêm service method `getStaffActivity(providerId, staffId, limit, offset): Promise<StaffActivityPage>` vào `rcfeild-be/src/services/staff.service.ts` — gọi `assertStaffBelongsToProvider`, chạy UNION ALL query: SELECT 'CHECK_IN' + s.id + s.created_at + COALESCE(b.short_code,'Booking') FROM sessions JOIN bookings UNION ALL SELECT 'FNB_ORDER' + fo.id + fo.created_at + label FROM fnb_orders UNION ALL SELECT 'EXTENSION_APPROVED' + ep.id + ep.created_at + 'Gia hạn +'+duration_minutes+'phút' FROM extension_proposals WHERE status='APPROVED' ORDER BY event_time DESC LIMIT $limit OFFSET $offset; COUNT tổng riêng để tính hasMore
-- [ ] T013 [US2] Thêm controller handler `getStaffActivity` vào `rcfeild-be/src/controllers/staff.controller.ts` — validate limit (max 50, default 20) và offset (default 0, integer), gọi service
-- [ ] T014 [US2] Thêm route `GET /staff/:staffId/activity` vào `rcfeild-be/src/routes/provider-subscription.routes.ts` → `staffController.getStaffActivity` với middleware `requireActiveProvider`
+- [ ] T012 [US2] Thêm service method `getStaffActivity(providerId, staffId, limit, offset): Promise<StaffActivityPage>` vào `backend/src/services/staff.service.ts` — gọi `assertStaffBelongsToProvider`, chạy UNION ALL query: SELECT 'CHECK_IN' + s.id + s.created_at + COALESCE(b.short_code,'Booking') FROM sessions JOIN bookings UNION ALL SELECT 'FNB_ORDER' + fo.id + fo.created_at + label FROM fnb_orders UNION ALL SELECT 'EXTENSION_APPROVED' + ep.id + ep.created_at + 'Gia hạn +'+duration_minutes+'phút' FROM extension_proposals WHERE status='APPROVED' ORDER BY event_time DESC LIMIT $limit OFFSET $offset; COUNT tổng riêng để tính hasMore
+- [ ] T013 [US2] Thêm controller handler `getStaffActivity` vào `backend/src/controllers/staff.controller.ts` — validate limit (max 50, default 20) và offset (default 0, integer), gọi service
+- [ ] T014 [US2] Thêm route `GET /staff/:staffId/activity` vào `backend/src/routes/provider-subscription.routes.ts` → `staffController.getStaffActivity` với middleware `requireActiveProvider`
 
 ### Frontend US2
 
-- [ ] T015 [P] [US2] Thêm interface `StaffActivityEvent`, `StaffActivityPage` và function `getStaffActivity(staffId, limit, offset)` vào `rcfield-fe/src/features/staff/api/staff.api.ts`, thêm queryKey `staffActivity: (staffId) => [...]`
-- [ ] T016 [US2] Thêm section "Lịch sử hoạt động" vào `rcfield-fe/src/pages/provider/ProviderStaffDetailPage.tsx` — dùng `useInfiniteQuery` hoặc manual pagination với useState offset, hiển thị event list: icon theo type (CheckCircle2=CHECK_IN, Utensils=FNB_ORDER, Clock=EXTENSION_APPROVED), label, thời gian format "dd/MM HH:mm", nút "Tải thêm" khi hasMore=true, empty state khi 0 events
+- [ ] T015 [P] [US2] Thêm interface `StaffActivityEvent`, `StaffActivityPage` và function `getStaffActivity(staffId, limit, offset)` vào `frontend/src/features/staff/api/staff.api.ts`, thêm queryKey `staffActivity: (staffId) => [...]`
+- [ ] T016 [US2] Thêm section "Lịch sử hoạt động" vào `frontend/src/pages/provider/ProviderStaffDetailPage.tsx` — dùng `useInfiniteQuery` hoặc manual pagination với useState offset, hiển thị event list: icon theo type (CheckCircle2=CHECK_IN, Utensils=FNB_ORDER, Clock=EXTENSION_APPROVED), label, thời gian format "dd/MM HH:mm", nút "Tải thêm" khi hasMore=true, empty state khi 0 events
 
 **Checkpoint**: US1 + US2 hoàn chỉnh
 

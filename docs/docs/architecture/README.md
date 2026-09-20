@@ -39,12 +39,12 @@ B2B SaaS cho **1 doanh nghiệp** vận hành chuỗi sân xe RC tại Việt Na
 
 ```
 rcfield-workspace/
-├── rcfield-spec/               ← Tài liệu này
+├── docs/               ← Tài liệu này
 │   └── docs/
 │       ├── architecture/       ← Bạn đang ở đây
 │       ├── diagrams/sequence/  ← Sequence flow diagrams
 │       └── spec/               ← Business spec (source of truth)
-└── rcfield-app/
+└── rcfield-platform/
     └── apps/
         ├── api/                ← TypeScript + Express backend
         └── web/                ← ReactJS frontend
@@ -57,14 +57,14 @@ rcfield-workspace/
 ```bash
 # Clone
 mkdir rcfield-workspace && cd rcfield-workspace
-git clone https://github.com/rcfield-org/rcfield-spec.git
-git clone https://github.com/rcfield-org/rcfield-app.git
+git clone https://github.com/rcfield-org/docs.git
+git clone https://github.com/rcfield-org/rcfield-platform.git
 
 # Backend
-cd rcfield-app/apps/api && npm install && npm run dev
+cd rcfield-platform/apps/api && npm install && npm run dev
 
 # Frontend
-cd rcfield-app/apps/web && npm install && npm run dev
+cd rcfield-platform/apps/web && npm install && npm run dev
 ```
 
 **Required env vars (Backend):**

@@ -1,6 +1,6 @@
 # Report 4 Database Design Diagrams
 
-**Baseline:** `docs/spec/06-database.md` and `rcfield-be/src/models` at 2026-08-13.
+**Baseline:** `docs/spec/06-database.md` and `backend/src/models` at 2026-08-13.
 
 These four diagrams replace Figures 15-18 in Report 4 while preserving its existing database-section grouping. The DOCX uses compact grouped renderings for print legibility; the detailed ER relationships below remain the engineering reference.
 

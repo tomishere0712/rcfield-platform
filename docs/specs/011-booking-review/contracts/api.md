@@ -273,7 +273,7 @@ export const UpdateReviewVisibilitySchema = z.object({
 ## Backend File Changes Summary
 
 ```
-rcfeild-be/src/
+backend/src/
 ├── models/
 │   ├── review.entity.ts                    NEW
 │   └── booking.entity.ts                   MODIFY  (add completedAt, reviewDismissedAt columns)
@@ -291,4 +291,4 @@ rcfeild-be/src/
     └── 1752100000000-AddReviewTables.ts    NEW
 ```
 
-The notification trigger is added inside `rcfeild-be/src/services/staff.service.ts` at the point where `booking.status` is set to `COMPLETED`.
+The notification trigger is added inside `backend/src/services/staff.service.ts` at the point where `booking.status` is set to `COMPLETED`.

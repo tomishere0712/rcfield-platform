@@ -12,7 +12,7 @@
 
 ## Path Convention
 
-All source paths are relative to `rcfeild-be/` (the backend root).
+All source paths are relative to `backend/` (the backend root).
 
 ---
 
@@ -20,7 +20,7 @@ All source paths are relative to `rcfeild-be/` (the backend root).
 
 **Purpose**: Install new dependency and extend env config before any implementation begins.
 
-- [x] T001 Install `google-auth-library` dependency — run `npm install google-auth-library` in `rcfeild-be/`
+- [x] T001 Install `google-auth-library` dependency — run `npm install google-auth-library` in `backend/`
 - [x] T002 Add `GOOGLE_CLIENT_ID` env variable to `src/config/env.ts` (typed string, required), `.env.example` (with placeholder comment), and `.env.test` (any string for tests — real verification will be mocked)
 
 ---
@@ -131,7 +131,7 @@ All source paths are relative to `rcfeild-be/` (the backend root).
 ## Phase 7: Polish & Cross-Cutting Concerns
 
 - [x] T025 [P] Update `src/__tests__/helpers/index.ts` — export a `hashPassword(plain: string)` helper so test files can create users with known passwords without duplicating bcrypt calls
-- [x] T026 [P] Update `rcfeild-be/SCHEMA.md` — add a note under `refresh_tokens` row: "token col stores SHA-256 hash of raw token; revoked_at set on logout/rotation"
+- [x] T026 [P] Update `backend/SCHEMA.md` — add a note under `refresh_tokens` row: "token col stores SHA-256 hash of raw token; revoked_at set on logout/rotation"
 - [x] T027 Run full test suite `npm test` and fix any regressions from mounting the auth router (e.g., route conflicts, middleware order)
 - [x] T028 [P] Verify Zod validation error shape from `auth.controller.ts` is handled by the global error middleware in `src/middlewares/error.middleware.ts` — add `ZodError` handling if not already present
 

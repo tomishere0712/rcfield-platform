@@ -10,7 +10,7 @@
 ## Prerequisites
 
 ```bash
-cd rcfield-fe
+cd frontend
 npm run dev   # Start dev server at http://localhost:5173
 # Navigate to http://localhost:5173/partner
 ```

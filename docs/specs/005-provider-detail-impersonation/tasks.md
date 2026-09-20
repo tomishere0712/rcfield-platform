@@ -24,8 +24,8 @@ No new dependencies, databases, or configuration files needed — this feature e
 
 **⚠️ CRITICAL**: These tasks MUST complete before any user story work begins.
 
-- [X] T001 Extend `AuthPayload` interface in `rcfeild-be/src/types/index.ts` — add optional field `impersonated_by?: string`
-- [X] T002 [P] Add `getProviderCafes(providerId)` and `impersonateProvider(providerId)` async functions to `rcfield-fe/src/features/subscriptions/api/index.ts` (or create `rcfield-fe/src/features/admin/api/index.ts` if no existing admin API file)
+- [X] T001 Extend `AuthPayload` interface in `backend/src/types/index.ts` — add optional field `impersonated_by?: string`
+- [X] T002 [P] Add `getProviderCafes(providerId)` and `impersonateProvider(providerId)` async functions to `frontend/src/features/subscriptions/api/index.ts` (or create `frontend/src/features/admin/api/index.ts` if no existing admin API file)
 
 **Checkpoint**: AuthPayload type is extended; frontend API functions exist. Backend endpoints don't exist yet — that's fine, functions will 404 until Phase 3/4 complete them.
 
@@ -39,12 +39,12 @@ No new dependencies, databases, or configuration files needed — this feature e
 
 ### Implementation for User Story 1
 
-- [X] T003 [US1] Add `getProviderCafes` controller function in `rcfeild-be/src/controllers/provider-onboarding.controller.ts` — query `cafes` table where `provider_id = :id AND deleted_at IS NULL`, return `{ data: CafeListItem[] }`
-- [X] T004 [US1] Register `GET /:id/cafes` route in `rcfeild-be/src/routes/admin-provider.routes.ts` with `authenticate, authorize(UserRole.ADMIN)` middleware pointing to `getProviderCafes`
-- [X] T005 [P] [US1] Add `adminProviderDetail: '/admin/providers/:providerId'` to `rcfield-fe/src/app/router/route-paths.ts`
-- [X] T006 [US1] Register `AdminProviderDetailPage` route in `rcfield-fe/src/app/router/routes.tsx` — add `{ path: routePaths.adminProviderDetail, element: <AdminProviderDetailPage /> }` inside the admin route group
-- [X] T007 [US1] Add row `onClick` navigation in `rcfield-fe/src/pages/admin/AdminProvidersPage.tsx` — wrap each table row with `onClick={() => navigate(\`/admin/providers/${provider.id}\`)}` and `className="cursor-pointer"`
-- [X] T008 [US1] Create `rcfield-fe/src/pages/admin/AdminProviderDetailPage.tsx` — page reads `providerId` from `useParams`, fires two parallel React Query calls (`getProviderDetail` + `getProviderCafes`), renders: Account Info section, Business Info section, Status Badge, conditional Action Buttons (PENDING→Duyệt+Từ chối / ACTIVE→Tạm khóa / SUSPENDED→Mở khóa / REJECTED→none), Subscription Info section (show "Chưa có gói" if null), Cafes List section (show empty state if no cafes)
+- [X] T003 [US1] Add `getProviderCafes` controller function in `backend/src/controllers/provider-onboarding.controller.ts` — query `cafes` table where `provider_id = :id AND deleted_at IS NULL`, return `{ data: CafeListItem[] }`
+- [X] T004 [US1] Register `GET /:id/cafes` route in `backend/src/routes/admin-provider.routes.ts` with `authenticate, authorize(UserRole.ADMIN)` middleware pointing to `getProviderCafes`
+- [X] T005 [P] [US1] Add `adminProviderDetail: '/admin/providers/:providerId'` to `frontend/src/app/router/route-paths.ts`
+- [X] T006 [US1] Register `AdminProviderDetailPage` route in `frontend/src/app/router/routes.tsx` — add `{ path: routePaths.adminProviderDetail, element: <AdminProviderDetailPage /> }` inside the admin route group
+- [X] T007 [US1] Add row `onClick` navigation in `frontend/src/pages/admin/AdminProvidersPage.tsx` — wrap each table row with `onClick={() => navigate(\`/admin/providers/${provider.id}\`)}` and `className="cursor-pointer"`
+- [X] T008 [US1] Create `frontend/src/pages/admin/AdminProviderDetailPage.tsx` — page reads `providerId` from `useParams`, fires two parallel React Query calls (`getProviderDetail` + `getProviderCafes`), renders: Account Info section, Business Info section, Status Badge, conditional Action Buttons (PENDING→Duyệt+Từ chối / ACTIVE→Tạm khóa / SUSPENDED→Mở khóa / REJECTED→none), Subscription Info section (show "Chưa có gói" if null), Cafes List section (show empty state if no cafes)
 - [X] T009 [US1] Wire action buttons in `AdminProviderDetailPage.tsx` — reuse existing approve/reject/suspend/unsuspend API calls from admin subscriptions API; call `queryClient.invalidateQueries` after each action to refresh detail page data
 
 **Checkpoint**: US1 complete — Admin can view full provider detail and perform all status actions from the detail page. No impersonation UI yet.
@@ -59,15 +59,15 @@ No new dependencies, databases, or configuration files needed — this feature e
 
 ### Implementation for User Story 2
 
-- [X] T010 [US2] Add `impersonateProvider` controller function in `rcfeild-be/src/controllers/provider-onboarding.controller.ts` — verify provider exists and `registration_status === ACTIVE`, sign JWT with `env.jwt.secret` + `expiresIn: '2h'` + payload `{ userId, role: PROVIDER, email, impersonated_by: adminId }`, return `{ token, expires_in: 7200, provider: { id, business_name } }`
-- [X] T011 [US2] Register `POST /:id/impersonate` route in `rcfeild-be/src/routes/admin-provider.routes.ts` with `authenticate, authorize(UserRole.ADMIN)` pointing to `impersonateProvider`
-- [X] T012 [P] [US2] Add `adminAuth: 'rcfield.admin_auth'` key to `storageKeys` object in `rcfield-fe/src/shared/lib/storage.ts`
-- [X] T013 [US2] Extend Zustand auth store in `rcfield-fe/src/features/auth/stores/auth.store.ts` — add `impersonation: { providerUserId: string; providerName: string } | null` to state (default `null`), add actions `startImpersonation(state)` and `exitImpersonation()` that set/clear this field
-- [X] T014 [US2] Create `rcfield-fe/src/shared/components/ImpersonationBanner.tsx` — reads `authStore.impersonation`; returns `null` when `null`; renders sticky orange `div` with text "Đang truy cập với tư cách: **{providerName}**" and "Thoát" button; "Thoát" handler: restore `adminAuth` token → `storageKeys.auth`, remove `adminAuth` from localStorage, call `exitImpersonation()`, navigate to `/admin/providers/${providerUserId}`
-- [X] T015 [US2] Add `<ImpersonationBanner />` to `rcfield-fe/src/app/layouts/DashboardLayout.tsx` — render it as first child before `<Outlet />` (sticky top ensures visibility while scrolling)
-- [X] T016 [US2] Modify `rcfield-fe/src/shared/components/ProviderStatusGuard.tsx` — add `const impersonation = useAuthStore(s => s.impersonation)` at top of component; add early return `if (impersonation) return <>{children}</>` before any `useEffect` or API call
-- [X] T017 [US2] Modify axios 401 response interceptor in `rcfield-fe/src/shared/lib/axios.ts` — before the existing logout logic, check `localStorage.getItem(storageKeys.adminAuth)`; if present: restore admin token to `storageKeys.auth`, remove `adminAuth`, call `useAuthStore.getState().exitImpersonation()`, set `window.location.href = '/admin/providers'`, return `Promise.reject(error)`
-- [X] T018 [US2] Add "Truy cập với tư cách Provider" button to `rcfield-fe/src/pages/admin/AdminProviderDetailPage.tsx` — show only when `detail.registration_status === 'ACTIVE'`; click handler calls `impersonateProvider(providerId)`, saves current token to `adminAuth`, sets impersonation token to `storageKeys.auth`, calls `startImpersonation({ providerUserId: resp.provider.id, providerName: resp.provider.business_name })`, navigates to `/provider/dashboard`
+- [X] T010 [US2] Add `impersonateProvider` controller function in `backend/src/controllers/provider-onboarding.controller.ts` — verify provider exists and `registration_status === ACTIVE`, sign JWT with `env.jwt.secret` + `expiresIn: '2h'` + payload `{ userId, role: PROVIDER, email, impersonated_by: adminId }`, return `{ token, expires_in: 7200, provider: { id, business_name } }`
+- [X] T011 [US2] Register `POST /:id/impersonate` route in `backend/src/routes/admin-provider.routes.ts` with `authenticate, authorize(UserRole.ADMIN)` pointing to `impersonateProvider`
+- [X] T012 [P] [US2] Add `adminAuth: 'rcfield.admin_auth'` key to `storageKeys` object in `frontend/src/shared/lib/storage.ts`
+- [X] T013 [US2] Extend Zustand auth store in `frontend/src/features/auth/stores/auth.store.ts` — add `impersonation: { providerUserId: string; providerName: string } | null` to state (default `null`), add actions `startImpersonation(state)` and `exitImpersonation()` that set/clear this field
+- [X] T014 [US2] Create `frontend/src/shared/components/ImpersonationBanner.tsx` — reads `authStore.impersonation`; returns `null` when `null`; renders sticky orange `div` with text "Đang truy cập với tư cách: **{providerName}**" and "Thoát" button; "Thoát" handler: restore `adminAuth` token → `storageKeys.auth`, remove `adminAuth` from localStorage, call `exitImpersonation()`, navigate to `/admin/providers/${providerUserId}`
+- [X] T015 [US2] Add `<ImpersonationBanner />` to `frontend/src/app/layouts/DashboardLayout.tsx` — render it as first child before `<Outlet />` (sticky top ensures visibility while scrolling)
+- [X] T016 [US2] Modify `frontend/src/shared/components/ProviderStatusGuard.tsx` — add `const impersonation = useAuthStore(s => s.impersonation)` at top of component; add early return `if (impersonation) return <>{children}</>` before any `useEffect` or API call
+- [X] T017 [US2] Modify axios 401 response interceptor in `frontend/src/shared/lib/axios.ts` — before the existing logout logic, check `localStorage.getItem(storageKeys.adminAuth)`; if present: restore admin token to `storageKeys.auth`, remove `adminAuth`, call `useAuthStore.getState().exitImpersonation()`, set `window.location.href = '/admin/providers'`, return `Promise.reject(error)`
+- [X] T018 [US2] Add "Truy cập với tư cách Provider" button to `frontend/src/pages/admin/AdminProviderDetailPage.tsx` — show only when `detail.registration_status === 'ACTIVE'`; click handler calls `impersonateProvider(providerId)`, saves current token to `adminAuth`, sets impersonation token to `storageKeys.auth`, calls `startImpersonation({ providerUserId: resp.provider.id, providerName: resp.provider.business_name })`, navigates to `/provider/dashboard`
 
 **Checkpoint**: US2 complete — full impersonation cycle works: start → navigate → banner persists → exit → auto-exit on expiry.
 
@@ -106,8 +106,8 @@ No new dependencies, databases, or configuration files needed — this feature e
 
 ```bash
 # Foundational — run together:
-T001: Extend AuthPayload in rcfeild-be/src/types/index.ts
-T002: Add API functions to rcfield-fe/src/features/subscriptions/api/index.ts
+T001: Extend AuthPayload in backend/src/types/index.ts
+T002: Add API functions to frontend/src/features/subscriptions/api/index.ts
 
 # US1 backend + frontend path (after T001, T002):
 T003+T004: Backend GET /cafes endpoint

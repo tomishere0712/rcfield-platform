@@ -24,7 +24,7 @@ Hoan tat luong:
 
 ## Hien trang BE da co
 
-Trong `rcfield-be`, da co gateway adapter co ban:
+Trong `backend`, da co gateway adapter co ban:
 
 | Endpoint | Auth | Muc dich |
 |----------|------|----------|

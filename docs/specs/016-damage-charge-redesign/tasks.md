@@ -11,10 +11,10 @@
 
 **⚠️ CRITICAL**: Phải hoàn thành trước khi bắt đầu bất kỳ US nào.
 
-- [X] T001 Thêm enum `DamagePartType` (TIRE_WHEEL, SPOILER, CHASSIS, MOTOR, SHELL, SERVO, REMOTE, OTHER) vào `rcfeild-be/src/types/index.ts`
-- [X] T002 [P] Tạo TypeORM entity `DamageLineItem` với columns: id, inspection_id, part_type, custom_part_name, parts_price, labor_price, created_at, updated_at, deleted_at tại `rcfeild-be/src/models/damage-line-item.entity.ts`
-- [X] T003 [P] Thêm `@OneToMany(() => DamageLineItem, (d) => d.inspection) damageLineItems: DamageLineItem[]` vào Inspection entity tại `rcfeild-be/src/models/inspection.entity.ts`
-- [X] T004 Tạo TypeORM migration tạo bảng `damage_line_items` và enum `damage_part_type` (xem SQL trong data-model.md) tại `rcfeild-be/src/migrations/` — chạy migration sau khi tạo
+- [X] T001 Thêm enum `DamagePartType` (TIRE_WHEEL, SPOILER, CHASSIS, MOTOR, SHELL, SERVO, REMOTE, OTHER) vào `backend/src/types/index.ts`
+- [X] T002 [P] Tạo TypeORM entity `DamageLineItem` với columns: id, inspection_id, part_type, custom_part_name, parts_price, labor_price, created_at, updated_at, deleted_at tại `backend/src/models/damage-line-item.entity.ts`
+- [X] T003 [P] Thêm `@OneToMany(() => DamageLineItem, (d) => d.inspection) damageLineItems: DamageLineItem[]` vào Inspection entity tại `backend/src/models/inspection.entity.ts`
+- [X] T004 Tạo TypeORM migration tạo bảng `damage_line_items` và enum `damage_part_type` (xem SQL trong data-model.md) tại `backend/src/migrations/` — chạy migration sau khi tạo
 
 **Checkpoint**: `damage_line_items` table tồn tại trong DB, entity import được không lỗi TypeScript.
 
@@ -28,15 +28,15 @@
 
 ### BE — User Story 1
 
-- [X] T005 [US1] Sửa `submitInspection` trong `rcfeild-be/src/services/staff.service.ts`: (1) nhận `damageLineItems[]` thay `damageDetails`, (2) lưu `DamageLineItem` records trong cùng transaction sau khi save inspection, (3) bỏ block auto-settle cho STAFF_MANUAL (session → CHECKING_OUT cho mọi loại booking), (4) bỏ WebSocket `SESSION_CHECKOUT_INSPECTION` gửi tới customer cho CHECK_OUT type
-- [X] T006 [US1] Sửa `settleSessionCheckoutBilling` trong `rcfeild-be/src/services/staff.service.ts`: thay `damageCostEstimate * multiplier` bằng `SUM(damage_line_items.parts_price + labor_price WHERE inspection_id AND deleted_at IS NULL)`; giữ fallback `damageCostEstimate * 1.5` khi `lineItems.length === 0` (backward compat legacy records)
-- [X] T007 [US1] Thêm `SubmitInspectionV2Schema` vào `rcfeild-be/src/validate/index.ts` (nhóm `-- inspections --`): mỗi `damageLineItem` cần `partType` (z.nativeEnum(DamagePartType)), `partsPrice` (z.number().min(0)), `laborPrice` (z.number().min(0).default(0)); khi `partType = OTHER` thì `customPartName` bắt buộc không rỗng (dùng `.superRefine`); sau đó sửa handler `submitInspection` trong `rcfeild-be/src/controllers/staff.controller.ts` gọi `SubmitInspectionV2Schema.parse(req.body)` trước khi gọi service
+- [X] T005 [US1] Sửa `submitInspection` trong `backend/src/services/staff.service.ts`: (1) nhận `damageLineItems[]` thay `damageDetails`, (2) lưu `DamageLineItem` records trong cùng transaction sau khi save inspection, (3) bỏ block auto-settle cho STAFF_MANUAL (session → CHECKING_OUT cho mọi loại booking), (4) bỏ WebSocket `SESSION_CHECKOUT_INSPECTION` gửi tới customer cho CHECK_OUT type
+- [X] T006 [US1] Sửa `settleSessionCheckoutBilling` trong `backend/src/services/staff.service.ts`: thay `damageCostEstimate * multiplier` bằng `SUM(damage_line_items.parts_price + labor_price WHERE inspection_id AND deleted_at IS NULL)`; giữ fallback `damageCostEstimate * 1.5` khi `lineItems.length === 0` (backward compat legacy records)
+- [X] T007 [US1] Thêm `SubmitInspectionV2Schema` vào `backend/src/validate/index.ts` (nhóm `-- inspections --`): mỗi `damageLineItem` cần `partType` (z.nativeEnum(DamagePartType)), `partsPrice` (z.number().min(0)), `laborPrice` (z.number().min(0).default(0)); khi `partType = OTHER` thì `customPartName` bắt buộc không rỗng (dùng `.superRefine`); sau đó sửa handler `submitInspection` trong `backend/src/controllers/staff.controller.ts` gọi `SubmitInspectionV2Schema.parse(req.body)` trước khi gọi service
 
 ### FE — User Story 1
 
-- [X] T008 [P] [US1] Thay thế slider/multiplier UI trong `rcfeild-fe/src/pages/staff/StaffInspectionPage.tsx`: xoá state `estimatedCost`, `damageMultiplier`, `finalCharge` và logic detect premium (lines ~65-68, ~105-112); thêm state `damageLineItems: {partType, customPartName?, partsPrice, laborPrice}[]`; render dynamic rows (dropdown partType, input parts_price, input labor_price, nút xoá); show `customPartName` text input khi `partType === 'OTHER'`; real-time total = SUM(partsPrice + laborPrice); validate trước khi submit
-- [X] T009 [P] [US1] Sửa `submitInspection` trong `rcfeild-fe/src/features/staff/api/staff.api.ts`: thay body field `damageDetails` → `damageLineItems: {partType, customPartName?, partsPrice, laborPrice?}[]`
-- [X] T010 [US1] Sửa `submitInspection` handler trong `rcfeild-fe/src/pages/staff/context/StaffOperationContext.tsx`: map `damageLineItems` state sang đúng API body format; xoá toast message đề cập async customer confirmation
+- [X] T008 [P] [US1] Thay thế slider/multiplier UI trong `frontend/src/pages/staff/StaffInspectionPage.tsx`: xoá state `estimatedCost`, `damageMultiplier`, `finalCharge` và logic detect premium (lines ~65-68, ~105-112); thêm state `damageLineItems: {partType, customPartName?, partsPrice, laborPrice}[]`; render dynamic rows (dropdown partType, input parts_price, input labor_price, nút xoá); show `customPartName` text input khi `partType === 'OTHER'`; real-time total = SUM(partsPrice + laborPrice); validate trước khi submit
+- [X] T009 [P] [US1] Sửa `submitInspection` trong `frontend/src/features/staff/api/staff.api.ts`: thay body field `damageDetails` → `damageLineItems: {partType, customPartName?, partsPrice, laborPrice?}[]`
+- [X] T010 [US1] Sửa `submitInspection` handler trong `frontend/src/pages/staff/context/StaffOperationContext.tsx`: map `damageLineItems` state sang đúng API body format; xoá toast message đề cập async customer confirmation
 
 **Checkpoint**: Staff submit CHECK_OUT với 2 damage items → DB có 2 records trong `damage_line_items` → `settleSessionCheckoutBilling` tính tổng đúng theo SUM.
 
@@ -50,23 +50,23 @@
 
 ### BE — User Story 2
 
-- [X] T011 [US2] Implement `staffConfirmCheckout(sessionId, inspectionId, staffUserId)` trong `rcfeild-be/src/services/staff.service.ts`: validate session ở CHECKING_OUT + inspection chưa confirmed; set `inspection.customerConfirmed=true`, `customerConfirmedAt=now()`; gọi `settleSessionCheckoutBilling`; set `session.status=COMPLETED`, `actualEndAt=now()`; update vehicle/sessionVehicle status; update booking status (AWAITING_PAYMENT hoặc COMPLETED)
-- [X] T012 [P] [US2] Implement `updateDamageLineItems(sessionId, inspectionId, staffUserId, newItems[])` trong `rcfeild-be/src/services/staff.service.ts`: validate session ở CHECKING_OUT; soft-delete items hiện tại (`deletedAt=now()`); tạo items mới; trả về items mới + tổng mới
-- [X] T013 [P] [US2] Implement `escalateDisputeToProvider(sessionId, inspectionId, note, staffUserId)` trong `rcfeild-be/src/services/staff.service.ts`: validate session ở CHECKING_OUT + note không rỗng; tạo `incidents` record với status='OPEN', resolution_note=note; trả về incidentId
-- [X] T014 [P] [US2] Thêm handler `confirmCheckout` trong `rcfeild-be/src/controllers/staff.controller.ts`: comment `// POST /api/v1/staff/sessions/:sessionId/confirm-checkout [auth]`; parse body với `ConfirmCheckoutSchema.parse(req.body)`; gọi `staffConfirmCheckout`; log `logger.info('Staff', 'confirmCheckout', { sessionId, staffId })`
-- [X] T015 [P] [US2] Thêm handler `updateDamageItems` trong `rcfeild-be/src/controllers/staff.controller.ts`: comment `// PUT /api/v1/staff/sessions/:sessionId/inspections/:inspectionId/damage-items [auth]`; parse body với `UpdateDamageItemsSchema.parse(req.body)`; gọi `updateDamageLineItems`; (thêm 2 schema tương ứng vào `src/validate/index.ts`)
-- [X] T016 [P] [US2] Thêm handler `escalateDispute` trong `rcfeild-be/src/controllers/staff.controller.ts`: comment `// POST /api/v1/staff/sessions/:sessionId/escalate-dispute [auth]`; parse body với `EscalateDisputeSchema.parse(req.body)` (`note: z.string().min(1)`); gọi `escalateDisputeToProvider`; (thêm schema vào `src/validate/index.ts`)
-- [X] T017 [US2] Đăng ký 3 routes mới trong `rcfeild-be/src/routes/staff.routes.ts` (auth STAFF): `POST /sessions/:sessionId/confirm-checkout`, `PUT /sessions/:sessionId/inspections/:inspectionId/damage-items`, `POST /sessions/:sessionId/escalate-dispute`
-- [X] T018 [US2] Cập nhật GET session detail response trong `rcfeild-be/src/services/staff.service.ts`: khi session ở CHECKING_OUT hoặc COMPLETED, include `checkoutInspection` với `damageLineItems[]` và `totalDamageCharge`
+- [X] T011 [US2] Implement `staffConfirmCheckout(sessionId, inspectionId, staffUserId)` trong `backend/src/services/staff.service.ts`: validate session ở CHECKING_OUT + inspection chưa confirmed; set `inspection.customerConfirmed=true`, `customerConfirmedAt=now()`; gọi `settleSessionCheckoutBilling`; set `session.status=COMPLETED`, `actualEndAt=now()`; update vehicle/sessionVehicle status; update booking status (AWAITING_PAYMENT hoặc COMPLETED)
+- [X] T012 [P] [US2] Implement `updateDamageLineItems(sessionId, inspectionId, staffUserId, newItems[])` trong `backend/src/services/staff.service.ts`: validate session ở CHECKING_OUT; soft-delete items hiện tại (`deletedAt=now()`); tạo items mới; trả về items mới + tổng mới
+- [X] T013 [P] [US2] Implement `escalateDisputeToProvider(sessionId, inspectionId, note, staffUserId)` trong `backend/src/services/staff.service.ts`: validate session ở CHECKING_OUT + note không rỗng; tạo `incidents` record với status='OPEN', resolution_note=note; trả về incidentId
+- [X] T014 [P] [US2] Thêm handler `confirmCheckout` trong `backend/src/controllers/staff.controller.ts`: comment `// POST /api/v1/staff/sessions/:sessionId/confirm-checkout [auth]`; parse body với `ConfirmCheckoutSchema.parse(req.body)`; gọi `staffConfirmCheckout`; log `logger.info('Staff', 'confirmCheckout', { sessionId, staffId })`
+- [X] T015 [P] [US2] Thêm handler `updateDamageItems` trong `backend/src/controllers/staff.controller.ts`: comment `// PUT /api/v1/staff/sessions/:sessionId/inspections/:inspectionId/damage-items [auth]`; parse body với `UpdateDamageItemsSchema.parse(req.body)`; gọi `updateDamageLineItems`; (thêm 2 schema tương ứng vào `src/validate/index.ts`)
+- [X] T016 [P] [US2] Thêm handler `escalateDispute` trong `backend/src/controllers/staff.controller.ts`: comment `// POST /api/v1/staff/sessions/:sessionId/escalate-dispute [auth]`; parse body với `EscalateDisputeSchema.parse(req.body)` (`note: z.string().min(1)`); gọi `escalateDisputeToProvider`; (thêm schema vào `src/validate/index.ts`)
+- [X] T017 [US2] Đăng ký 3 routes mới trong `backend/src/routes/staff.routes.ts` (auth STAFF): `POST /sessions/:sessionId/confirm-checkout`, `PUT /sessions/:sessionId/inspections/:inspectionId/damage-items`, `POST /sessions/:sessionId/escalate-dispute`
+- [X] T018 [US2] Cập nhật GET session detail response trong `backend/src/services/staff.service.ts`: khi session ở CHECKING_OUT hoặc COMPLETED, include `checkoutInspection` với `damageLineItems[]` và `totalDamageCharge`
 
 ### FE — User Story 2
 
-- [X] T019 [US2] Tạo `StaffCheckoutSummaryPage` tại `rcfeild-fe/src/pages/staff/StaffCheckoutSummaryPage.tsx`: load session detail từ API; layout gồm (1) so sánh ảnh check-in vs check-out cạnh nhau có phóng to, (2) bảng breakdown damage items (tên, parts, labor, subtotal), (3) tổng đền bù nổi bật, (4) nút "Xác nhận & Quyết toán" → gọi `confirmCheckout` → navigate session detail, (5) nút "Có tranh chấp" → navigate về StaffInspectionPage (edit mode), (6) nút "Chuyển lên Provider" (hiện sau dispute ≥1 lần) → gọi `escalateDispute`
-- [X] T020 [US2] Thêm route path `staffCheckoutSummary = '/staff/sessions/:sessionId/checkout-summary'` vào `rcfeild-fe/src/routes/route-paths.ts` và đăng ký route `<StaffCheckoutSummaryPage />` trong `rcfeild-fe/src/routes/routes.tsx`
-- [X] T021 [US2] Sửa navigation sau submit trong `rcfeild-fe/src/pages/staff/StaffInspectionPage.tsx` (line ~262): thay `navigate('/staff/sessions/${sessionId}')` → `navigate('/staff/sessions/${sessionId}/checkout-summary')`
-- [X] T022 [P] [US2] Thêm `confirmCheckout(sessionId, inspectionId)` → `POST /v1/staff/sessions/:id/confirm-checkout` vào `rcfeild-fe/src/features/staff/api/staff.api.ts`
-- [X] T023 [P] [US2] Thêm `updateDamageItems(sessionId, inspectionId, items)` → `PUT /v1/staff/sessions/:id/inspections/:inspId/damage-items` vào `rcfeild-fe/src/features/staff/api/staff.api.ts`
-- [X] T024 [P] [US2] Thêm `escalateDispute(sessionId, inspectionId, note)` → `POST /v1/staff/sessions/:id/escalate-dispute` vào `rcfeild-fe/src/features/staff/api/staff.api.ts`
+- [X] T019 [US2] Tạo `StaffCheckoutSummaryPage` tại `frontend/src/pages/staff/StaffCheckoutSummaryPage.tsx`: load session detail từ API; layout gồm (1) so sánh ảnh check-in vs check-out cạnh nhau có phóng to, (2) bảng breakdown damage items (tên, parts, labor, subtotal), (3) tổng đền bù nổi bật, (4) nút "Xác nhận & Quyết toán" → gọi `confirmCheckout` → navigate session detail, (5) nút "Có tranh chấp" → navigate về StaffInspectionPage (edit mode), (6) nút "Chuyển lên Provider" (hiện sau dispute ≥1 lần) → gọi `escalateDispute`
+- [X] T020 [US2] Thêm route path `staffCheckoutSummary = '/staff/sessions/:sessionId/checkout-summary'` vào `frontend/src/routes/route-paths.ts` và đăng ký route `<StaffCheckoutSummaryPage />` trong `frontend/src/routes/routes.tsx`
+- [X] T021 [US2] Sửa navigation sau submit trong `frontend/src/pages/staff/StaffInspectionPage.tsx` (line ~262): thay `navigate('/staff/sessions/${sessionId}')` → `navigate('/staff/sessions/${sessionId}/checkout-summary')`
+- [X] T022 [P] [US2] Thêm `confirmCheckout(sessionId, inspectionId)` → `POST /v1/staff/sessions/:id/confirm-checkout` vào `frontend/src/features/staff/api/staff.api.ts`
+- [X] T023 [P] [US2] Thêm `updateDamageItems(sessionId, inspectionId, items)` → `PUT /v1/staff/sessions/:id/inspections/:inspId/damage-items` vào `frontend/src/features/staff/api/staff.api.ts`
+- [X] T024 [P] [US2] Thêm `escalateDispute(sessionId, inspectionId, note)` → `POST /v1/staff/sessions/:id/escalate-dispute` vào `frontend/src/features/staff/api/staff.api.ts`
 
 **Checkpoint**: Staff lưu biên bản → màn hình summary hiển thị đúng ảnh và breakdown → bấm Xác nhận → session COMPLETED → `settlePendingPayments` có thể được gọi sau.
 
@@ -84,7 +84,7 @@
 
 ### FE — User Story 3
 
-- [X] T026 [US3] Thêm section "Đền bù hư hỏng" vào Provider booking detail page (`rcfeild-fe/src/pages/provider/` — tìm file ProviderBookingDetailPage hoặc tương đương): hiển thị bảng từng hạng mục (tên bộ phận, giá linh kiện, phí công, thành tiền) và tổng; hiển thị trạng thái (Đã thu / Vượt ký quỹ – thu thêm / Tranh chấp đang xử lý)
+- [X] T026 [US3] Thêm section "Đền bù hư hỏng" vào Provider booking detail page (`frontend/src/pages/provider/` — tìm file ProviderBookingDetailPage hoặc tương đương): hiển thị bảng từng hạng mục (tên bộ phận, giá linh kiện, phí công, thành tiền) và tổng; hiển thị trạng thái (Đã thu / Vượt ký quỹ – thu thêm / Tranh chấp đang xử lý)
 
 **Checkpoint**: Provider thấy breakdown damage trong chi tiết booking đã COMPLETED.
 
@@ -92,7 +92,7 @@
 
 ## Phase 5: Polish & Dọn dẹp
 
-- [X] T027 Xoá hoặc redirect `CustomerDamageReviewPage` về `/customer/bookings` trong `rcfeild-fe/src/pages/customer/damage/CustomerDamageReviewPage.tsx` và cập nhật `rcfeild-fe/src/routes/routes.tsx` — page này dùng mock data, không thuộc flow mới
+- [X] T027 Xoá hoặc redirect `CustomerDamageReviewPage` về `/customer/bookings` trong `frontend/src/pages/customer/damage/CustomerDamageReviewPage.tsx` và cập nhật `frontend/src/routes/routes.tsx` — page này dùng mock data, không thuộc flow mới
 - [X] T028 Thêm spec 016 vào sidebar tại `website/sidebars-specs.ts` theo cấu trúc đã có cho các spec khác
 
 ---

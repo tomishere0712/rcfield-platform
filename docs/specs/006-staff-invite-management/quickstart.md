@@ -131,18 +131,18 @@ Implementation order and integration test scenarios.
 
 | Area | File | What changes |
 |------|------|-------------|
-| Migration | `rcfeild-be/src/migrations/TIMESTAMP-AddStaffInviteTokens.ts` | New table |
-| Entity | `rcfeild-be/src/models/staff-invite-token.entity.ts` | New |
-| Types | `rcfeild-be/src/types/index.ts` | AuthPayload.cafeId |
-| Auth | `rcfeild-be/src/services/auth.service.ts` | cafeId in JWT |
-| Email | `rcfeild-be/src/services/email.service.ts` | sendStaffInvite() |
-| Staff svc | `rcfeild-be/src/services/staff.service.ts` | Full invite flow |
-| Staff ctrl | `rcfeild-be/src/controllers/staff.controller.ts` | 4 new handlers |
-| Invite ctrl | `rcfeild-be/src/controllers/staff-invite.controller.ts` | New |
-| Provider routes | `rcfeild-be/src/routes/provider-subscription.routes.ts` | New staff routes |
-| Invite routes | `rcfeild-be/src/routes/staff-invite.routes.ts` | New public router |
-| Validate | `rcfeild-be/src/validate/index.ts` | 2 new schemas |
-| FE activate | `rcfield-fe/src/pages/staff/activate/StaffActivatePage.tsx` | New |
-| FE staff API | `rcfield-fe/src/features/staff/api/staff.api.ts` | New |
-| FE provider | `rcfield-fe/src/pages/provider/ProviderStaffPage.tsx` | Remove mock |
-| FE dashboard | `rcfield-fe/src/pages/staff/dashboard/StaffDashboardPage.tsx` | Remove mock |
+| Migration | `backend/src/migrations/TIMESTAMP-AddStaffInviteTokens.ts` | New table |
+| Entity | `backend/src/models/staff-invite-token.entity.ts` | New |
+| Types | `backend/src/types/index.ts` | AuthPayload.cafeId |
+| Auth | `backend/src/services/auth.service.ts` | cafeId in JWT |
+| Email | `backend/src/services/email.service.ts` | sendStaffInvite() |
+| Staff svc | `backend/src/services/staff.service.ts` | Full invite flow |
+| Staff ctrl | `backend/src/controllers/staff.controller.ts` | 4 new handlers |
+| Invite ctrl | `backend/src/controllers/staff-invite.controller.ts` | New |
+| Provider routes | `backend/src/routes/provider-subscription.routes.ts` | New staff routes |
+| Invite routes | `backend/src/routes/staff-invite.routes.ts` | New public router |
+| Validate | `backend/src/validate/index.ts` | 2 new schemas |
+| FE activate | `frontend/src/pages/staff/activate/StaffActivatePage.tsx` | New |
+| FE staff API | `frontend/src/features/staff/api/staff.api.ts` | New |
+| FE provider | `frontend/src/pages/provider/ProviderStaffPage.tsx` | Remove mock |
+| FE dashboard | `frontend/src/pages/staff/dashboard/StaffDashboardPage.tsx` | Remove mock |

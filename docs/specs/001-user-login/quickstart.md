@@ -11,7 +11,7 @@
 ## New dependency
 
 ```bash
-cd rcfeild-be
+cd backend
 npm install google-auth-library
 npm install --save-dev @types/node  # for crypto.randomBytes (already likely installed)
 ```

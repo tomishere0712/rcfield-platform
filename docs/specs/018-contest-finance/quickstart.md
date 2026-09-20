@@ -7,11 +7,11 @@
 ## Chuẩn bị
 
 ```bash
-cd rcfeild-be
+cd backend
 npm run migration:run          # chạy 1785700000000-ContestLedgerAndEntryFeeMethod
 npm run dev                    # http://localhost:3000
 
-cd ../rcfield-fe
+cd ../frontend
 npm run dev                    # http://localhost:5173
 ```
 
@@ -189,7 +189,7 @@ Upload ảnh JPG cho một khoản chi.
 - [ ] Giải rỗng → 200 với số 0, không 404 (S1)
 
 ```bash
-cd rcfeild-be && npm test -- contest-finance
+cd backend && npm test -- contest-finance
 ```
 
 ## Checklist test frontend

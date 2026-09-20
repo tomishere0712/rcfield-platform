@@ -28,7 +28,7 @@ Mỗi chi nhánh (cafe) của RCField có một **AI chat widget riêng**. Custo
 ## Project Structure
 
 ```
-rcfeild-be/
+backend/
 ├── src/
 │   ├── controllers/
 │   │   ├── chat.controller.ts     ← validate, điều phối route, SSE writer
@@ -410,7 +410,7 @@ src/
 
 ```bash
 # Backend
-cd rcfeild-be
+cd backend
 npm install
 npm run dev          # Express :3000, hot reload
 

@@ -59,7 +59,7 @@ The `review_dismissed_at` approach is simpler than a separate dismissal table â€
 
 ## Migration
 
-One migration file (`rcfeild-be/src/migrations/`):
+One migration file (`backend/src/migrations/`):
 
 ### `1752100000000-AddReviewTables.ts`
 

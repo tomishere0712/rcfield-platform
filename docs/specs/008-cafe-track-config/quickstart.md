@@ -221,10 +221,10 @@ describe('createBooking — vehicle compatibility', () => {
 
 | File | Why |
 |------|-----|
-| `rcfeild-be/src/models/vehicle-catalog.entity.ts` | `compatibleTrackTypes` field |
-| `rcfeild-be/src/models/booking.entity.ts` | `trackTypeId`, `slotStart`, `slotEnd`, `snapshot` |
-| `rcfeild-be/src/controllers/cafe.controller.ts` | `getAvailability` — BYOC and RENTAL logic to update |
-| `rcfeild-be/src/controllers/cafe-image.controller.ts` | Image upload pattern for Cloudinary |
-| `rcfeild-be/src/validate/index.ts` | `CreateBookingSchema`, `CheckAvailabilitySchema` to update |
-| `rcfeild-fe/src/pages/booking/components/checkout/ParticipantsStep.tsx` | Existing booking step structure |
-| `rcfeild-fe/src/pages/customer/cafe-detail/components/DailySlotGrid.tsx` | Slot grid for multi-slot selection |
+| `backend/src/models/vehicle-catalog.entity.ts` | `compatibleTrackTypes` field |
+| `backend/src/models/booking.entity.ts` | `trackTypeId`, `slotStart`, `slotEnd`, `snapshot` |
+| `backend/src/controllers/cafe.controller.ts` | `getAvailability` — BYOC and RENTAL logic to update |
+| `backend/src/controllers/cafe-image.controller.ts` | Image upload pattern for Cloudinary |
+| `backend/src/validate/index.ts` | `CreateBookingSchema`, `CheckAvailabilitySchema` to update |
+| `frontend/src/pages/booking/components/checkout/ParticipantsStep.tsx` | Existing booking step structure |
+| `frontend/src/pages/customer/cafe-detail/components/DailySlotGrid.tsx` | Slot grid for multi-slot selection |

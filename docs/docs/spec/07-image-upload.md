@@ -18,7 +18,7 @@ Chỉ Backend cần Cloudinary env. Không thêm Cloudinary secret vào Frontend
 File:
 
 ```text
-rcfield-be/.env
+backend/.env
 ```
 
 Cần có:
@@ -196,7 +196,7 @@ Không thay thế luồng gallery cafe bằng endpoint upload chung nếu chưa 
 
 ## 8. Những việc không nên làm
 
-- Không đặt `CLOUDINARY_API_SECRET` trong `rcfield-fe/.env`.
+- Không đặt `CLOUDINARY_API_SECRET` trong `frontend/.env`.
 - Không gọi Cloudinary SDK trực tiếp từ Frontend.
 - Không hard-code Cloudinary URL vào code.
 - Không dùng chung một `usage` cho nhiều nghiệp vụ khác nhau.
@@ -208,29 +208,29 @@ Không thay thế luồng gallery cafe bằng endpoint upload chung nếu chưa 
 Backend:
 
 ```text
-rcfield-be/src/services/cloudinary.service.ts
-rcfield-be/src/controllers/upload.controller.ts
-rcfield-be/src/routes/upload.routes.ts
-rcfield-be/src/controllers/auth.controller.ts
-rcfield-be/src/services/auth.service.ts
-rcfield-be/src/models/user.entity.ts
-rcfield-be/src/migrations/1749254400000-AddUserAvatarUrl.ts
+backend/src/services/cloudinary.service.ts
+backend/src/controllers/upload.controller.ts
+backend/src/routes/upload.routes.ts
+backend/src/controllers/auth.controller.ts
+backend/src/services/auth.service.ts
+backend/src/models/user.entity.ts
+backend/src/migrations/1749254400000-AddUserAvatarUrl.ts
 ```
 
 Frontend:
 
 ```text
-rcfield-fe/src/features/uploads/api/upload.api.ts
-rcfield-fe/src/features/auth/api/auth.api.ts
-rcfield-fe/src/features/auth/stores/auth.store.ts
-rcfield-fe/src/pages/profile/ProfilePage.tsx
+frontend/src/features/uploads/api/upload.api.ts
+frontend/src/features/auth/api/auth.api.ts
+frontend/src/features/auth/stores/auth.store.ts
+frontend/src/pages/profile/ProfilePage.tsx
 ```
 
 ## 10. Checklist khi upload lỗi
 
 1. Backend `.env` đã có đủ Cloudinary chưa?
 2. Đã restart Backend sau khi sửa `.env` chưa?
-3. Frontend có `VITE_API_URL=http://localhost:3000/api` chưa?
+3. Frontend có `VITE_API_BASE_URL` hợp lệ chưa?
 4. Request upload có Bearer token chưa?
 5. Field file có tên đúng là `file` chưa?
 6. File có đúng định dạng JPG, PNG, WEBP và nhỏ hơn 5MB chưa?
@@ -238,7 +238,7 @@ rcfield-fe/src/pages/profile/ProfilePage.tsx
 
 Chạy migration:
 
-```powershell
-cd rcfield-be
+```bash
+cd backend
 npm run migration:run
 ```

@@ -2,7 +2,7 @@
 
 **Last updated:** 2026-08-06
 
-Tai lieu nay gom cac flow ho tro dang co trong `rcfield-fe/src/app/router/routes.tsx` va `rcfield-be/src/routes/index.ts` nhung khong duoc tach thanh file rieng vi chu yeu la CRUD/utility. Cac flow lon nhu Booking, Contest, Provider Subscription, RAG Chat, Redis va Revenue nam o cac file sequence rieng.
+Tai lieu nay gom cac flow ho tro dang co trong `frontend/src/app/router/routes.tsx` va `backend/src/routes/index.ts` nhung khong duoc tach thanh file rieng vi chu yeu la CRUD/utility. Cac flow lon nhu Booking, Contest, Provider Subscription, RAG Chat, Redis va Revenue nam o cac file sequence rieng.
 
 ---
 

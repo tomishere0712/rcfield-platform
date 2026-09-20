@@ -6,10 +6,10 @@ Sơ đồ luồng màn hình cho vai trò **ADMIN** (đội RCField vận hành 
 
 | Thành phần trên sơ đồ | Lấy từ |
 |---|---|
-| Đường dẫn từng màn hình | `rcfield-fe/src/app/router/route-paths.ts` |
-| Màn hình nào có thật, ai vào được | `rcfield-fe/src/app/router/routes.tsx` (`guardRoute(..., ["admin"])`) |
-| Sáu nhóm menu và thứ tự mục | `rcfield-fe/src/pages/admin/components/AdminShell.tsx` (`adminNavGroups`) |
-| Nhãn nút và hộp thoại | Chính các trang trong `rcfield-fe/src/pages/admin/` |
+| Đường dẫn từng màn hình | `frontend/src/app/router/route-paths.ts` |
+| Màn hình nào có thật, ai vào được | `frontend/src/app/router/routes.tsx` (`guardRoute(..., ["admin"])`) |
+| Sáu nhóm menu và thứ tự mục | `frontend/src/pages/admin/components/AdminShell.tsx` (`adminNavGroups`) |
+| Nhãn nút và hộp thoại | Chính các trang trong `frontend/src/pages/admin/` |
 
 ## Quy ước hình khối
 

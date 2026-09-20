@@ -48,7 +48,7 @@ specs/006-staff-invite-management/
 
 ### Source Code
 
-**Backend** (`rcfeild-be/src/`):
+**Backend** (`backend/src/`):
 ```text
 models/
 └── staff-invite-token.entity.ts   (NEW)
@@ -73,7 +73,7 @@ types/index.ts                     (MODIFIED — AuthPayload: add optional cafeI
 services/auth.service.ts           (MODIFIED — include cafeId in JWT for STAFF users)
 ```
 
-**Frontend** (`rcfield-fe/src/`):
+**Frontend** (`frontend/src/`):
 ```text
 pages/
 ├── provider/

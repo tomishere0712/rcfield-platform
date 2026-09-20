@@ -11,7 +11,7 @@
 
 **Hiện tại** (giữ nguyên phần check-in, chỉ sửa phần damage check-out)
 **Auth**: STAFF
-**File**: `rcfeild-be/src/controllers/staff.controller.ts` → `rcfeild-be/src/services/staff.service.ts:submitInspection()`
+**File**: `backend/src/controllers/staff.controller.ts` → `backend/src/services/staff.service.ts:submitInspection()`
 
 #### Request body — thay đổi field `damageDetails` → `damageLineItems`
 
@@ -244,7 +244,7 @@ checkoutInspection?: {
 
 | File | Thay đổi |
 |------|---------|
-| `rcfield-fe/src/features/staff/api/staff.api.ts` | Sửa body của `submitInspection` (bỏ `damageDetails`, thêm `damageLineItems`) |
-| `rcfield-fe/src/features/staff/api/staff.api.ts` | Thêm `confirmCheckout(sessionId, inspectionId)` |
-| `rcfield-fe/src/features/staff/api/staff.api.ts` | Thêm `updateDamageItems(sessionId, inspectionId, items)` |
-| `rcfield-fe/src/features/staff/api/staff.api.ts` | Thêm `escalateDispute(sessionId, inspectionId, note)` |
+| `frontend/src/features/staff/api/staff.api.ts` | Sửa body của `submitInspection` (bỏ `damageDetails`, thêm `damageLineItems`) |
+| `frontend/src/features/staff/api/staff.api.ts` | Thêm `confirmCheckout(sessionId, inspectionId)` |
+| `frontend/src/features/staff/api/staff.api.ts` | Thêm `updateDamageItems(sessionId, inspectionId, items)` |
+| `frontend/src/features/staff/api/staff.api.ts` | Thêm `escalateDispute(sessionId, inspectionId, note)` |

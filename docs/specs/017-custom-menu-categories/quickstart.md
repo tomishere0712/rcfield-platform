@@ -10,7 +10,7 @@ Tài liệu này là bộ kịch bản xác minh thủ công + checklist test t�
 
 ```bash
 # 1. Backend — chạy migration
-cd rcfield-workspace/rcfield-spec/rcfeild-be
+cd rcfield-workspace/docs/backend
 npm run migration:run
 
 # 2. Seed lại dữ liệu demo (seed đã được sửa để tạo danh mục)
@@ -20,7 +20,7 @@ npm run seed
 npm run dev
 
 # 4. Frontend
-cd ../rcfield-fe
+cd ../frontend
 npm run dev
 ```
 
@@ -228,7 +228,7 @@ Tiếp ngay sau KB-3.
 - [ ] `ProviderComboFormDialog` — **có** dropdown chọn danh mục (trường mới)
 - [ ] `FnbStep` — badge hiện tên tiếng Việt, không phải `DRINK`
 - [ ] `CafeFnbSection` — nhóm theo danh mục đúng thứ tự, `Chưa phân loại` cuối
-- [ ] Không còn tham chiếu `FNB_CATEGORIES` / `FNB_CATEGORY_LABEL` nào trong `rcfield-fe/src`
+- [ ] Không còn tham chiếu `FNB_CATEGORIES` / `FNB_CATEGORY_LABEL` nào trong `frontend/src`
 
 ---
 

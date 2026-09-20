@@ -3,8 +3,8 @@
 ## Audit baseline
 
 - Report: `Report4_Software Design Document.docx`
-- Backend baseline: `rcfield-be` at `bf3a7b9` (2026-08-13)
-- Specification baseline: `rcfield-spec` at `c801fa8` (2026-08-13)
+- Backend baseline: `backend` at `bf3a7b9` (2026-08-13)
+- Specification baseline: `docs` at `c801fa8` (2026-08-13)
 - Existing Report 4 sequence figures: Figure 20 through Figure 57, with 29 embedded `rcfield_sequence_*.png` assets.
 
 ## Material changes found

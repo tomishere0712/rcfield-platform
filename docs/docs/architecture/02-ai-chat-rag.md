@@ -296,4 +296,4 @@ NLU_TIMEOUT_MS=500                              # default
 - [`specs/002-branch-ai-chat-rag/research.md`](../../specs/002-branch-ai-chat-rag/research.md) — Key decisions (pgvector, NLU routing, chunking)
 - [`specs/002-branch-ai-chat-rag/data-model.md`](../../specs/002-branch-ai-chat-rag/data-model.md) — Entity definitions chi tiết
 - [`specs/002-branch-ai-chat-rag/contracts/api.md`](../../specs/002-branch-ai-chat-rag/contracts/api.md) — API contracts đầy đủ
-- [`nlu-service/README.md`](../../../rcfeild-be/nlu-service/README.md) — Hướng dẫn chạy NLU service
+- [`nlu-service/README.md`](../../../backend/nlu-service/README.md) — Hướng dẫn chạy NLU service

@@ -314,7 +314,7 @@ async deleteDocument(req: AuthRequest, res: Response, next: NextFunction) { ... 
 ## Bước 9 — Package dependencies cần cài
 
 ```bash
-cd rcfeild-be
+cd backend
 npm install @google/genai multer pdf-parse mammoth ws
 npm install -D @types/multer @types/pdf-parse @types/ws
 ```

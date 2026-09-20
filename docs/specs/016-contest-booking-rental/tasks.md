@@ -11,7 +11,7 @@
 
 **Purpose**: Nền dữ liệu cho liên kết Contest↔Booking.
 
-- [X] T001 Thêm `BookingSource.CONTEST` vào booking source enum (rcfield-be/src/entities hoặc constants booking)
+- [X] T001 Thêm `BookingSource.CONTEST` vào booking source enum (backend/src/entities hoặc constants booking)
 - [X] T002 Migration `1784500000000-ContestBookingLink`: thêm cột `bookings.contest_id` (uuid NULL, FK → contests, `ON DELETE SET NULL`) + backfill từ `snapshot.contest_id`
 - [X] T003 [P] Migration `1784600000000`: seed contest_type `GRAND_PRIX` + template `grand_prix_qualifying_final`
 
@@ -25,7 +25,7 @@
 
 **⚠️ CRITICAL**: Phase 3 (WF-A) và Phase 4 (WF-B) đều phụ thuộc bridge này.
 
-- [X] T004 Implement `getContestRentalPolicy` trong rcfield-be/src/services/contest-rental.service.ts: đọc `contest.config.rental_policy` `{ waive_slot_fee, deposit_mode: FULL|REDUCED|WAIVED, deposit_percent (default 50), slot_window { before_min, after_min } (default 60/60) }` với default an toàn khi thiếu config
+- [X] T004 Implement `getContestRentalPolicy` trong backend/src/services/contest-rental.service.ts: đọc `contest.config.rental_policy` `{ waive_slot_fee, deposit_mode: FULL|REDUCED|WAIVED, deposit_percent (default 50), slot_window { before_min, after_min } (default 60/60) }` với default an toàn khi thiếu config
 - [X] T005 Implement `createContestRentalBooking` trong contest-rental.service.ts: validate slot nằm trong `slot_window` quanh race window (lỗi `CONTEST_SLOT_OUTSIDE_WINDOW`) → tạo booking qua core booking engine với `source=CONTEST`, `contest_id`
 - [X] T006 Áp `rental_policy` vào pricing: `waive_slot_fee` → phí sân = 0; `deposit_mode=REDUCED` → cọc = `deposit_percent`% chuẩn; `WAIVED` → cọc 0; freeze giá thực thu vào snapshot (refund cọc tự đúng)
 
@@ -99,7 +99,7 @@
 
 ## Phase 7: Polish & Cross-Cutting Concerns
 
-- [X] T019 [P] TypeScript build sạch cả hai repo (`npx tsc --noEmit` trong rcfield-be/ và rcfield-fe/)
+- [X] T019 [P] TypeScript build sạch (`npx tsc --noEmit` trong backend/ và frontend/)
 - [X] T020 [P] Verify refund cọc booking contest khớp snapshot cho cả 3 `deposit_mode` (FULL/REDUCED/WAIVED)
 - [X] T021 Cập nhật domain docs: `docs/spec/03-contest.md` (section Contest↔Booking + QUALIFYING_FINAL) và `docs/spec/business-rules/BR-contest.md` (rules BR-CT-080+)
 

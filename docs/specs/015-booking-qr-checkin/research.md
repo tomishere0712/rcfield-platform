@@ -123,13 +123,13 @@ import { QRCodeSVG } from 'qrcode.react';
 
 ## Packages to install
 
-**Backend** (`rcfeild-be`):
+**Backend** (`backend`):
 ```bash
 npm install qrcode
 npm install -D @types/qrcode
 ```
 
-**Frontend** (`rcfield-fe`):
+**Frontend** (`frontend`):
 ```bash
 npm install jsqr qrcode.react
 ```

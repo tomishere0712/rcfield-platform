@@ -5,7 +5,7 @@
 > Tài liệu này xác định toàn bộ danh sách màn hình (screens) cần xây dựng cho ứng dụng di động
 > RCField, phân chia theo vai trò **Customer (CUS)** và **Staff (STF)**, cùng với các màn hình dùng chung.
 >
-> Căn cứ từ: phân tích toàn bộ source code FE (`rcfield-fe`) và BE (`rcfield-be`) hiện tại.
+> Căn cứ từ: phân tích toàn bộ source code Frontend (`frontend`) và Backend (`backend`) hiện tại.
 
 ---
 
@@ -408,4 +408,4 @@ ST7 (Staff đánh dấu hư hại + ước tính chi phí)
 ---
 
 *Tài liệu cập nhật: 2026-06-17*
-*Căn cứ: rcfield-fe source code (pages/staff, pages/customer, pages/booking, pages/auth) + rcfield-be controllers & services*
+*Căn cứ: frontend source code (pages/staff, pages/customer, pages/booking, pages/auth) + backend controllers & services*

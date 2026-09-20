@@ -91,7 +91,7 @@ specs/016-contest-booking-rental/
 ### Source Code
 
 ```text
-rcfield-be/
+backend/
 ├── src/
 │   ├── migrations/
 │   │   ├── 1784500000000-ContestBookingLink.ts   ← cột contest_id + FK SET NULL + backfill
@@ -105,7 +105,7 @@ rcfield-be/
 │   └── routes/                                   ← POST /bookings/contest-rental, GET /contests/:id/bookings,
 │                                                   POST /contests/:id/matches/generate-final-bracket
 
-rcfield-fe/
+frontend/
 ├── src/
 │   ├── features/contests/
 │   │   ├── api/contest-booking.api.ts            ← API client contest↔booking

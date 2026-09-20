@@ -436,7 +436,7 @@ sequenceDiagram
 
 ## 7. Key Files
 
-### Backend (`rcfeild-be/src`)
+### Backend (`backend/src`)
 
 | Area | Path | Note |
 |------|------|------|
@@ -459,7 +459,7 @@ sequenceDiagram
 | Classifier | `nlu-service/classifier.py` | `classify()` — PyTorch intent classification |
 | Intents config | `nlu-service/intents/rcfield.json` | Intent definitions + examples |
 
-### Frontend (`rcfield-fe/src`)
+### Frontend (`frontend/src`)
 
 | Area | Path | Note |
 |------|------|------|
@@ -651,23 +651,23 @@ classDiagram
 ## Reference
 
 ### Source files analyzed
-- `rcfeild-be/src/controllers/chat.controller.ts` — widget/full page chat handlers
-- `rcfeild-be/src/controllers/fb-webhook.controller.ts` — Facebook webhook
-- `rcfeild-be/src/services/chat.service.ts` — ragChat, ragChatStream, route, checkGate, fastAnswer
-- `rcfeild-be/src/services/chat-tools/index.ts` — toolDefinitions, dispatchTool
-- `rcfeild-be/src/services/chat-tools/check-availability.ts` — availability tool handler
-- `rcfeild-be/src/services/fb-messenger.service.ts` — markSeen, typingOn, sendMessage
-- `rcfeild-be/src/services/fb-messenger.formatter.ts` — FbMessengerFormatter
-- `rcfeild-be/src/config/nlu.ts` — classifyIntent, timeout, fallback
-- `rcfeild-be/nlu-service/main.py` — NLU FastAPI server
-- `rcfeild-be/nlu-service/classifier.py` — PyTorch intent classifier
-- `rcfeild-be/src/routes/chat.routes.ts` — chat routes
-- `rcfeild-be/src/models/cafe-widget-config.entity.ts` — CafeWidgetConfig entity
-- `rcfield-fe/src/app/router/route-paths.ts` — cafeChat route
+- `backend/src/controllers/chat.controller.ts` — widget/full page chat handlers
+- `backend/src/controllers/fb-webhook.controller.ts` — Facebook webhook
+- `backend/src/services/chat.service.ts` — ragChat, ragChatStream, route, checkGate, fastAnswer
+- `backend/src/services/chat-tools/index.ts` — toolDefinitions, dispatchTool
+- `backend/src/services/chat-tools/check-availability.ts` — availability tool handler
+- `backend/src/services/fb-messenger.service.ts` — markSeen, typingOn, sendMessage
+- `backend/src/services/fb-messenger.formatter.ts` — FbMessengerFormatter
+- `backend/src/config/nlu.ts` — classifyIntent, timeout, fallback
+- `backend/nlu-service/main.py` — NLU FastAPI server
+- `backend/nlu-service/classifier.py` — PyTorch intent classifier
+- `backend/src/routes/chat.routes.ts` — chat routes
+- `backend/src/models/cafe-widget-config.entity.ts` — CafeWidgetConfig entity
+- `frontend/src/app/router/route-paths.ts` — cafeChat route
 
 ### Legend
-- **ChatController** = `rcfeild-be/src/controllers/chat.controller.ts`
-- **FbWebhook** = `rcfeild-be/src/controllers/fb-webhook.controller.ts`
+- **ChatController** = `backend/src/controllers/chat.controller.ts`
+- **FbWebhook** = `backend/src/controllers/fb-webhook.controller.ts`
 - **NLU Service** = Python FastAPI microservice tại `http://nlu-service:8000`
 - **Gemini** = Google GenAI via `@google/genai` SDK; Flash = fast/cheap, Pro = accurate
 - **ragCache** = in-memory LRU cache (không phải Redis); keyed by `(cafeId, queryEmbedding)` cosine distance

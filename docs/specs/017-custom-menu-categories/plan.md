@@ -18,7 +18,7 @@ Không chuyển đổi phân loại cũ — toàn bộ món hiện có về "Ch�
 **Storage**: PostgreSQL — bảng mới `menu_categories`; sửa cột trên `menu_items`; drop type `fnb_category_enum`
 **Testing**: Jest + supertest (`src/__tests__/routes/`), chạy trên DB thật qua `jest-setup.ts`
 **Target Platform**: Linux server (API) + trình duyệt (SPA tiếng Việt)
-**Project Type**: Web application — hai repo tách rời `rcfeild-be` (API) và `rcfield-fe` (SPA)
+**Project Type**: Web application — hai repo tách rời `backend` (API) và `frontend` (SPA)
 **Performance Goals**: Không có mục tiêu riêng — danh sách ≤30 danh mục mỗi chi nhánh, nằm hoàn toàn trong ngân sách hiện tại của endpoint menu
 **Constraints**: Tên danh mục ≤50 ký tự, ≤30 danh mục/chi nhánh, duy nhất theo `(cafe_id, lower(btrim(name)))` trong phạm vi bản ghi chưa xóa
 **Scale/Scope**: 16 file backend (6 tạo mới), 9 file frontend (1 tạo mới), 1 migration
@@ -65,7 +65,7 @@ specs/017-custom-menu-categories/
 ### Source Code (repository root)
 
 ```text
-rcfeild-be/src/
+backend/src/
 ├── models/
 │   ├── menu-category.entity.ts          # TẠO MỚI — entity MenuCategory
 │   └── menu-item.entity.ts              # SỬA — bỏ enum category, thêm categoryId
@@ -93,7 +93,7 @@ rcfeild-be/src/
     ├── menu.test.ts                     # SỬA — helper INSERT bỏ cột category (42)
     └── menu-category.test.ts            # TẠO MỚI
 
-rcfield-fe/src/
+frontend/src/
 ├── features/menu/
 │   ├── types/index.ts                   # SỬA — bỏ FNB_CATEGORIES/LABEL, thêm MenuCategory
 │   └── api/menu.api.ts                  # SỬA — thêm CRUD danh mục + query keys

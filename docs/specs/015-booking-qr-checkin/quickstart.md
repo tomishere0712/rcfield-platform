@@ -9,20 +9,20 @@
 
 ```bash
 # Backend
-cd rcfeild-be
+cd backend
 npm install qrcode @types/qrcode
 
 # Frontend
-cd rcfield-fe
+cd frontend
 npm install jsqr qrcode.react
 ```
 
 Ensure `API_BASE_URL` env var is set in both `.env` (backend) and `.env` (frontend):
 ```env
-# rcfeild-be/.env
+# backend/.env
 API_BASE_URL=http://localhost:3001
 
-# rcfield-fe/.env
+# frontend/.env
 VITE_API_BASE_URL=http://localhost:3001
 ```
 

@@ -58,7 +58,7 @@ specs/003-fb-messenger-channel/
 ### Source Code
 
 ```text
-rcfeild-be/src/
+backend/src/
 ├── config/
 │   └── env.ts                          ← ADD: facebook{} block + CHANNEL_ENCRYPTION_KEY
 ├── utils/
@@ -85,7 +85,7 @@ rcfeild-be/src/
 └── config/
     └── database.ts                     ← UPDATE: add CafeChannel to entities[]
 
-rcfield-fe/src/
+frontend/src/
 ├── features/channels/
 │   ├── api/
 │   │   └── channel.api.ts              ← NEW: getAuthUrl, getStatus, disconnect

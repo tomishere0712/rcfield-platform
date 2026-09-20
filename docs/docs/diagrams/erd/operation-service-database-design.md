@@ -11,7 +11,7 @@ customer arrives at the branch**: check-in, the live session, vehicle handover
 inspections, on-site F&B, slot extensions, and vehicle maintenance. Fourteen tables
 belong to this block.
 
-The diagram below is generated from the live schema of `rcfeild_db`
+The diagram below is generated from the live schema of `rcfield_db`
 (`information_schema` dump), not from the entity classes — `vehicle_maintenance_logs`
 has no TypeORM entity and would be missing otherwise.
 

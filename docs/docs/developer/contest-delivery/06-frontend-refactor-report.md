@@ -2,7 +2,7 @@
 
 **Date:** 2026-07-18  
 **Branch:** `toan/fix/contest`  
-**Scope:** `rcfield-fe` contest surfaces cleanup (E1–E5 + F)
+**Scope:** `frontend` contest surfaces cleanup (E1–E5 + F)
 
 ---
 

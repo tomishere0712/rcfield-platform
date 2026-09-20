@@ -36,7 +36,7 @@ Có hai lớp kiểm tra độc lập, luôn phải áp dụng cùng nhau:
 ## 3. Các guard đã có sẵn
 
 ### 3.1 `requireActiveProvider` middleware
-**File**: `rcfeild-be/src/middlewares/auth.middleware.ts`
+**File**: `backend/src/middlewares/auth.middleware.ts`
 
 Tự động chạy nếu route có `authorize(UserRole.PROVIDER)`. Trả về `403 ACCOUNT_SUSPENDED` nếu `registration_status = SUSPENDED`.
 
@@ -46,7 +46,7 @@ router.use(authenticate, authorize(UserRole.PROVIDER), requireActiveProvider);
 ```
 
 ### 3.2 `checkBranchQuota(providerId)`
-**File**: `rcfeild-be/src/services/subscription.service.ts`
+**File**: `backend/src/services/subscription.service.ts`
 
 Kiểm tra số chi nhánh hiện tại so với `plan.branch_limit`. Throw `403 PLAN_LIMIT_EXCEEDED` nếu đã đạt giới hạn.
 
@@ -58,12 +58,12 @@ await checkBranchQuota(providerId);
 **Trạng thái**: Đã implement trong subscription.service, **chưa được gọi** vì cafe service chưa tồn tại.
 
 ### 3.3 `checkChannelQuota(providerId)`
-**File**: `rcfeild-be/src/services/subscription.service.ts`
+**File**: `backend/src/services/subscription.service.ts`
 
 Kiểm tra số kênh CONNECTED so với `plan.channel_limit`. Đã được gọi trong `fb-channel.service.ts → handleOAuthCallback`.
 
 ### 3.4 `incrementAIQuota(providerId)`
-**File**: `rcfeild-be/src/services/subscription.service.ts`
+**File**: `backend/src/services/subscription.service.ts`
 
 Atomic UPDATE tăng `ai_messages_used` lên 1. Fail nếu đã đạt quota. Đã được gọi trong `fb-webhook.controller.ts`.
 
@@ -89,7 +89,7 @@ Mỗi khi implement một write operation cho provider, hỏi 3 câu:
 Thêm function này vào `subscription.service.ts` khi cần dùng lần đầu:
 
 ```typescript
-// rcfeild-be/src/services/subscription.service.ts
+// backend/src/services/subscription.service.ts
 
 /**
  * Throw 403 nếu subscription không phải TRIAL hoặc ACTIVE.
@@ -285,8 +285,8 @@ router.use(authenticate, authorize(UserRole.PROVIDER), requireActiveProvider);
 
 ## Tham khảo
 
-- `rcfeild-be/src/services/subscription.service.ts` — tất cả guard functions
-- `rcfeild-be/src/middlewares/auth.middleware.ts` — `requireActiveProvider`
+- `backend/src/services/subscription.service.ts` — tất cả guard functions
+- `backend/src/middlewares/auth.middleware.ts` — `requireActiveProvider`
 - `specs/004-provider-subscription/data-model.md` — subscription state machine
 - `docs/diagrams/sequence/sequence-flow-provider-onboarding-subscription.md` — flow diagram đầy đủ
 

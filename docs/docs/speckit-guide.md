@@ -7,7 +7,7 @@ SpecKit adds spec-driven development skills to Claude Code. Instead of asking AI
 ## How It Fits Into This Repo
 
 ```
-rcfield-spec/
+docs/
 ├── docs/spec/          ← Business rules, domain model, API contracts (source of truth)
 ├── .specify/
 │   └── memory/
@@ -23,7 +23,7 @@ The **constitution** is a living summary that SpecKit maintains. It reads your `
 
 ## One-Time Setup (already done)
 
-SpecKit is initialized. The `.specify/` directory and `.claude/skills/speckit-*` are already committed. Anyone who clones `rcfield-spec` gets the skills automatically — no extra install needed.
+SpecKit is initialized. The `.specify/` directory and `.claude/skills/speckit-*` are already committed. Anyone who clones `docs` gets the skills automatically — no extra install needed.
 
 > If you're setting up a brand-new machine, install the CLI once:
 > ```bash
@@ -48,7 +48,7 @@ The constitution at `.specify/memory/constitution.md` is the AI's "briefing docu
 
 ### How to run it
 
-Open Claude Code in `rcfield-spec/` and type:
+Open Claude Code in `docs/` and type:
 
 ```
 /speckit-constitution
@@ -70,7 +70,7 @@ Update the constitution to include dispute handling principles.
 
 ## Feature Development Workflow
 
-Use this sequence every time you implement a new feature in `rcfield-app`.
+Use this sequence every time you implement a new feature in `rcfield-platform`.
 
 ### Step 1 — Describe the feature
 
@@ -99,7 +99,7 @@ SpecKit asks structured questions about edge cases before planning. Run this whe
 /speckit-plan
 
 Use NestJS for the API, TypeORM for database, follow the existing
-module structure in rcfield-app/apps/api/src/bookings/
+module structure in rcfield-platform/apps/api/src/bookings/
 ```
 
 SpecKit produces a technical plan with chosen approach, file structure, and dependencies.

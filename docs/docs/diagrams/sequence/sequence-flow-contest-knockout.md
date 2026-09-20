@@ -1,7 +1,7 @@
 # Sequence Flow: Contest — Đấu loại trực tiếp (Knockout)
 
 **Last updated**: 2026-08-02
-**Status**: Bám theo code thật của `rcfeild-be` tại thời điểm cập nhật
+**Status**: Bám theo code thật của `backend` tại thời điểm cập nhật
 **Related**: `docs/developer/contest-delivery/07-contest-flow-audit.md`, `docs/spec/03-contest.md`
 
 Tài liệu mô tả luồng end-to-end của **một** thể thức: đấu loại trực tiếp 1v1, thua là bị loại. Mọi endpoint và tên hàm dưới đây được đối chiếu trực tiếp với source, không suy từ spec — vì bản audit đã chỉ ra spec đang mô tả nhiều thứ khác với code.
@@ -385,7 +385,7 @@ sequenceDiagram
 
 ## 10. Key Files
 
-### Backend — `rcfeild-be`
+### Backend — `backend`
 
 | Vai trò | Đường dẫn | Ghi chú |
 |---|---|---|
@@ -399,7 +399,7 @@ sequenceDiagram
 | Engine | `src/services/contest-format.engine.ts` | `KnockoutEngine`, `shuffleWithSeed`, `buildBracketSeedOrder` |
 | Khoá tài nguyên | `src/services/contest-lock.service.ts` | Chặn booking thường trùng giờ giải |
 
-### Frontend — `rcfield-fe`
+### Frontend — `frontend`
 
 | Vai trò | Đường dẫn |
 |---|---|
@@ -469,12 +469,12 @@ flowchart LR
 - `docs/spec/business-rules/BR-contest.md` — business rules (⚠️ BR-CT-031/031a/050/080/081/082 đang mô tả luồng đã bị gỡ bỏ)
 
 ### Legend
-- **Frontend** = `rcfield-fe` (React + Vite + React Query)
-- **API** = `rcfeild-be` (Express + TypeScript + TypeORM)
+- **Frontend** = `frontend` (React + Vite + React Query)
+- **API** = `backend` (Express + TypeScript + TypeORM)
 - `->>` gọi / request · `-->>` trả về
 - `alt/else` nhánh điều kiện · `opt` bước có thể không xảy ra · `loop` lặp
 - ⚠️ = phần chưa hoàn thiện, xem §9
 
 ---
 
-*Last updated: 2026-08-02 · Đối chiếu trực tiếp với source `rcfeild-be`, không suy từ spec.*
+*Last updated: 2026-08-02 · Đối chiếu trực tiếp với source `backend`, không suy từ spec.*

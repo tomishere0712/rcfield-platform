@@ -5,7 +5,7 @@
 
 ## Summary
 
-Redesign `rcfield-fe/src/pages/public/PartnerLandingPage.tsx` — a single-file B2B landing page targeting RC Cafe owners who want to register as Providers. The current page (608 lines) already has the 7 required sections but needs: (1) stronger visual hierarchy and premium feel, (2) clearer pain→solution storytelling, (3) Zalo OA contact integration, (4) contact banner fallback for API errors, and (5) mobile-first layout polish. No backend changes required.
+Redesign `frontend/src/pages/public/PartnerLandingPage.tsx` — a single-file B2B landing page targeting RC Cafe owners who want to register as Providers. The current page (608 lines) already has the 7 required sections but needs: (1) stronger visual hierarchy and premium feel, (2) clearer pain→solution storytelling, (3) Zalo OA contact integration, (4) contact banner fallback for API errors, and (5) mobile-first layout polish. No backend changes required.
 
 ## Technical Context
 
@@ -54,10 +54,10 @@ specs/013-partner-page-redesign/
 └── tasks.md             ← Phase 2 output (/speckit-tasks)
 ```
 
-### Source Code (rcfield-fe)
+### Source Code (frontend)
 
 ```text
-rcfield-fe/src/
+frontend/src/
 ├── pages/public/
 │   ├── PartnerLandingPage.tsx          ← PRIMARY FILE: full rewrite
 │   └── components/                      ← Extract heavy sections if > 200 lines

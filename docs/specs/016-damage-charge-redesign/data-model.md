@@ -10,7 +10,7 @@
 ### `DamageLineItem` — Hạng mục hư hỏng
 
 **Bảng DB**: `damage_line_items`
-**File entity**: `rcfeild-be/src/models/damage-line-item.entity.ts`
+**File entity**: `backend/src/models/damage-line-item.entity.ts`
 
 | Cột | Kiểu DB | TypeORM | TypeScript | Nullable | Ghi chú |
 |-----|---------|---------|------------|----------|---------|
@@ -38,7 +38,7 @@
 
 ### `DamagePartType`
 
-**File**: `rcfeild-be/src/types/index.ts` (thêm vào)
+**File**: `backend/src/types/index.ts` (thêm vào)
 
 ```typescript
 export enum DamagePartType {
@@ -59,7 +59,7 @@ export enum DamagePartType {
 
 ### `Inspection` — Biên bản kiểm xe (hiện có)
 
-**File**: `rcfeild-be/src/models/inspection.entity.ts`
+**File**: `backend/src/models/inspection.entity.ts`
 
 | Thay đổi | Chi tiết |
 |----------|---------|
@@ -105,7 +105,7 @@ inspections (1) ──< (N) damage_line_items
 
 ## Migration DB
 
-**File mới**: `rcfeild-be/src/migrations/YYYYMMDDHHMMSS-create-damage-line-items.ts`
+**File mới**: `backend/src/migrations/YYYYMMDDHHMMSS-create-damage-line-items.ts`
 
 ```sql
 -- Up

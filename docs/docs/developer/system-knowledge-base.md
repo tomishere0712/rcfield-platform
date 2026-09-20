@@ -83,8 +83,8 @@ Backend đi theo tầng nghiêm ngặt: **route → controller → service → r
 Controller chỉ nhận request, validate bằng zod rồi gọi service; toàn bộ nghiệp
 vụ nằm ở service.
 
-- Backend: `rcfeild-be/` — Node 20+, TypeScript strict, Express, TypeORM
-- Frontend: `rcfield-fe/` — React, TypeScript, Tailwind, React Query + Zustand, giao diện tiếng Việt
+- Backend: `backend/` — Node 20+, TypeScript strict, Express, TypeORM
+- Frontend: `frontend/` — React, TypeScript, Tailwind, React Query + Zustand, giao diện tiếng Việt
 
 ---
 
@@ -461,14 +461,14 @@ hiện trong tài liệu nghiệp vụ. Không bảng nào tồn tại.
 
 ```bash
 # Schema thật của một bảng
-docker exec rcfeild_postgres psql -U postgres -d rcfeild_db -c '\d+ bookings'
+docker exec rcfeild_postgres psql -U postgres -d rcfield_db -c '\d+ bookings'
 
 # Ràng buộc duy nhất, kể cả loại đặt trên biểu thức
-docker exec rcfeild_postgres psql -U postgres -d rcfeild_db -Atc \
+docker exec rcfeild_postgres psql -U postgres -d rcfield_db -Atc \
   "SELECT indexdef FROM pg_indexes WHERE tablename='menu_categories' AND indexdef LIKE '%UNIQUE%';"
 
 # Chạy kiểm thử (script tự thêm NODE_OPTIONS cần thiết cho Node 25)
-cd rcfeild-be && npm test
+cd backend && npm test
 
 # Kiểm kiểu, lint, định dạng
 npx tsc --noEmit && npm run lint && npm run format:check

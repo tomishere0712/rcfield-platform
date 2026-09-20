@@ -8,7 +8,7 @@ Implementation order: **Backend → Frontend foundation → Frontend pages**
 
 ### 1.1 — Modify `AuthPayload` type
 
-File: `rcfeild-be/src/types/index.ts`
+File: `backend/src/types/index.ts`
 
 ```typescript
 export interface AuthPayload {
@@ -21,7 +21,7 @@ export interface AuthPayload {
 
 ### 1.2 — Add `getProviderCafes` to controller
 
-File: `rcfeild-be/src/controllers/provider-onboarding.controller.ts`
+File: `backend/src/controllers/provider-onboarding.controller.ts`
 
 ```typescript
 export const getProviderCafes = async (req: Request, res: Response, next: NextFunction) => {
@@ -40,7 +40,7 @@ export const getProviderCafes = async (req: Request, res: Response, next: NextFu
 
 ### 1.3 — Add `impersonateProvider` to controller
 
-File: `rcfeild-be/src/controllers/provider-onboarding.controller.ts`
+File: `backend/src/controllers/provider-onboarding.controller.ts`
 
 ```typescript
 export const impersonateProvider = async (req: Request, res: Response, next: NextFunction) => {
@@ -81,7 +81,7 @@ export const impersonateProvider = async (req: Request, res: Response, next: Nex
 
 ### 1.4 — Register routes
 
-File: `rcfeild-be/src/routes/admin-provider.routes.ts`
+File: `backend/src/routes/admin-provider.routes.ts`
 
 ```typescript
 router.get('/:id/cafes', authenticate, authorize(UserRole.ADMIN), getProviderCafes);
@@ -94,7 +94,7 @@ router.post('/:id/impersonate', authenticate, authorize(UserRole.ADMIN), imperso
 
 ### 2.1 — Add `adminAuth` storage key
 
-File: `rcfield-fe/src/shared/lib/storage.ts`
+File: `frontend/src/shared/lib/storage.ts`
 
 ```typescript
 export const storageKeys = {
@@ -107,7 +107,7 @@ export const storageKeys = {
 
 ### 2.2 — Extend `authStore` with impersonation state
 
-File: `rcfield-fe/src/features/auth/stores/auth.store.ts`
+File: `frontend/src/features/auth/stores/auth.store.ts`
 
 ```typescript
 interface ImpersonationState {
@@ -131,7 +131,7 @@ exitImpersonation: () => set({ impersonation: null }),
 
 ### 2.3 — Modify Axios 401 handler
 
-File: `rcfield-fe/src/shared/lib/axios.ts`
+File: `frontend/src/shared/lib/axios.ts`
 
 In the response interceptor, before the current "logout and redirect to login" logic:
 
@@ -154,7 +154,7 @@ if (error.response?.status === 401) {
 
 ### 2.4 — Bypass `ProviderStatusGuard` when impersonating
 
-File: `rcfield-fe/src/shared/components/ProviderStatusGuard.tsx`
+File: `frontend/src/shared/components/ProviderStatusGuard.tsx`
 
 At the top of the component (before any useEffect or API calls):
 
@@ -169,7 +169,7 @@ if (impersonation) return <>{children}</>;
 
 ### 3.1 — Create `ImpersonationBanner`
 
-File: `rcfield-fe/src/shared/components/ImpersonationBanner.tsx`
+File: `frontend/src/shared/components/ImpersonationBanner.tsx`
 
 ```tsx
 export function ImpersonationBanner() {
@@ -199,7 +199,7 @@ export function ImpersonationBanner() {
 
 ### 3.2 — Add banner to `DashboardLayout`
 
-File: `rcfield-fe/src/app/layouts/DashboardLayout.tsx`
+File: `frontend/src/app/layouts/DashboardLayout.tsx`
 
 ```tsx
 import { ImpersonationBanner } from '@/shared/components/ImpersonationBanner';
@@ -216,7 +216,7 @@ export function DashboardLayout() {
 
 ### 3.3 — Add `adminProviderDetail` route path
 
-File: `rcfield-fe/src/app/router/route-paths.ts`
+File: `frontend/src/app/router/route-paths.ts`
 
 ```typescript
 adminProviderDetail: '/admin/providers/:providerId',
@@ -224,7 +224,7 @@ adminProviderDetail: '/admin/providers/:providerId',
 
 ### 3.4 — Register route
 
-File: `rcfield-fe/src/app/router/routes.tsx`
+File: `frontend/src/app/router/routes.tsx`
 
 ```tsx
 {
@@ -235,7 +235,7 @@ File: `rcfield-fe/src/app/router/routes.tsx`
 
 ### 3.5 — Add row click to providers list
 
-File: `rcfield-fe/src/pages/admin/AdminProvidersPage.tsx`
+File: `frontend/src/pages/admin/AdminProvidersPage.tsx`
 
 ```tsx
 const navigate = useNavigate();
@@ -245,7 +245,7 @@ const navigate = useNavigate();
 
 ### 3.6 — Create `AdminProviderDetailPage`
 
-File: `rcfield-fe/src/pages/admin/AdminProviderDetailPage.tsx`
+File: `frontend/src/pages/admin/AdminProviderDetailPage.tsx`
 
 Page structure:
 1. `const { providerId } = useParams()`

@@ -32,7 +32,7 @@ Mô hình chuỗi (giống Starbucks): 1 Provider, nhiều chi nhánh, dùng chu
 
 ```
 rcfield-workspace/
-├── rcfield-spec/               ← Tài liệu spec (source of truth)
+├── docs/               ← Tài liệu spec (source of truth)
 │   └── docs/spec/
 │       ├── 00-overview.md
 │       ├── 01-domain-model.md
@@ -42,7 +42,7 @@ rcfield-workspace/
 │       ├── 05-api-contracts.md
 │       ├── 06-database.md
 │       └── business-rules/
-└── rcfield-app/                ← Codebase
+└── rcfield-platform/                ← Codebase
     └── apps/
         ├── api/                ← TypeScript + Express backend
         └── web/                ← ReactJS frontend
@@ -338,16 +338,16 @@ Phase 1 có 2 lớp xử lý khi xảy ra tranh chấp:
 ```bash
 # Clone workspace
 mkdir rcfield-workspace && cd rcfield-workspace
-git clone https://github.com/rcfield-org/rcfield-spec.git
-git clone https://github.com/rcfield-org/rcfield-app.git
+git clone https://github.com/rcfield-org/docs.git
+git clone https://github.com/rcfield-org/rcfield-platform.git
 
 # Backend
-cd rcfield-app/apps/api
+cd rcfield-platform/apps/api
 npm install
 npm run dev              # Port 3000 (default)
 
 # Frontend
-cd rcfield-app/apps/web
+cd rcfield-platform/apps/web
 npm install
 npm run dev
 ```
@@ -420,7 +420,7 @@ NODE_ENV=development
 | `docs/spec/05-api-contracts.md` | Trước khi tạo endpoint mới |
 | `docs/spec/06-database.md` | Schema chi tiết + SQL |
 
-### Backend (`rcfield-app/apps/api`)
+### Backend (`rcfield-platform/apps/api`)
 
 | Area | Path |
 |------|------|

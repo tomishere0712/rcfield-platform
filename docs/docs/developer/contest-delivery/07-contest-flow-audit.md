@@ -2,7 +2,7 @@
 
 **Mục đích:** liệt kê toàn bộ mâu thuẫn của luồng contest hiện tại (spec ↔ code ↔ spec) làm đầu vào cho bản redesign `specs/018-contest-flow-redesign`.
 
-**Phạm vi rà:** `docs/spec/03-contest.md`, `docs/spec/business-rules/BR-contest.md`, `specs/016-contest-booking-rental/`, và backend `rcfeild-be/src/{routes,controllers,services,models}` phần contest.
+**Phạm vi rà:** `docs/spec/03-contest.md`, `docs/spec/business-rules/BR-contest.md`, `specs/016-contest-booking-rental/`, và backend `backend/src/{routes,controllers,services,models}` phần contest.
 
 **Quy ước:** mỗi phát hiện có bằng chứng `file:line`. `P0` = luồng không vận hành được hoặc sai tiền. `P1` = code khác spec. `P2` = docs tự mâu thuẫn. `R` = rủi ro/nợ kỹ thuật.
 

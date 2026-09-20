@@ -41,7 +41,7 @@ specs/010-ai-revenue-analytics/
     └── requirements.md
 ```
 
-### Source Code (rcfeild-be)
+### Source Code (backend)
 
 ```text
 src/
@@ -62,7 +62,7 @@ src/
     └── admin-feature-flags.controller.ts       NEW — list, update handlers
 ```
 
-### Source Code (rcfield-fe)
+### Source Code (frontend)
 
 ```text
 src/
@@ -682,11 +682,11 @@ interface AiInsightsPanelProps {
 
 | File | Purpose |
 |------|---------|
-| `rcfeild-be/src/services/chat.service.ts:24` | `checkGate` — pattern copied for `checkAnalyticsGate` |
-| `rcfeild-be/src/services/subscription.service.ts:216` | `incrementAIQuota` — quota pattern reference |
-| `rcfeild-be/src/services/provider-dashboard.service.ts:1` | All 6 dashboard service functions to aggregate |
-| `rcfeild-be/src/routes/provider-subscription.routes.ts:85` | Insert point for new AI insights route |
-| `rcfeild-be/src/routes/index.ts:110` | Insert point for `adminFeatureFlagsRouter` |
-| `rcfield-fe/src/pages/admin/AdminFeatureFlagsPage.tsx:13` | Mock import to replace with real API |
-| `rcfield-fe/src/features/dashboard/api/provider-dashboard.api.ts:89` | Add `generateAiInsights` here |
-| `rcfield-fe/src/pages/provider/ProviderDashboardPage.tsx` | Inject `<AiInsightsPanel>` |
+| `backend/src/services/chat.service.ts:24` | `checkGate` — pattern copied for `checkAnalyticsGate` |
+| `backend/src/services/subscription.service.ts:216` | `incrementAIQuota` — quota pattern reference |
+| `backend/src/services/provider-dashboard.service.ts:1` | All 6 dashboard service functions to aggregate |
+| `backend/src/routes/provider-subscription.routes.ts:85` | Insert point for new AI insights route |
+| `backend/src/routes/index.ts:110` | Insert point for `adminFeatureFlagsRouter` |
+| `frontend/src/pages/admin/AdminFeatureFlagsPage.tsx:13` | Mock import to replace with real API |
+| `frontend/src/features/dashboard/api/provider-dashboard.api.ts:89` | Add `generateAiInsights` here |
+| `frontend/src/pages/provider/ProviderDashboardPage.tsx` | Inject `<AiInsightsPanel>` |

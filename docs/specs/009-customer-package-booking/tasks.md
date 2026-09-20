@@ -17,7 +17,7 @@
 
 **Purpose**: Verify project is ready — no new project initialization needed (existing Express monolith).
 
-- [x] T001 Confirm `rcfeild-be` compiles cleanly: run `npm run build` from `rcfeild-be/` and fix any pre-existing TypeScript errors before starting
+- [x] T001 Confirm `backend` compiles cleanly: run `npm run build` from `backend/` and fix any pre-existing TypeScript errors before starting
 
 ---
 
@@ -27,13 +27,13 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [x] T002 Add `CustomerPackageStatus` enum (PENDING_PAYMENT, ACTIVE, EXHAUSTED, EXPIRED) to `rcfeild-be/src/types/index.ts` under the `// ── Payment` section
-- [x] T003 Add `PACKAGE_PURCHASE = 'PACKAGE_PURCHASE'` to `PaymentComponentType` enum in `rcfeild-be/src/types/index.ts`
-- [x] T004 [P] Create `rcfeild-be/src/models/customer-package.entity.ts` — `CustomerPackage` entity with columns: `id`, `customer_id`, `package_id`, `cafe_id`, `slots_total`, `slots_remaining`, `expires_at`, `status` (CustomerPackageStatus), `purchased_price`, `package_name_snapshot`, `created_at`, `updated_at`; indexes on `(customer_id)`, `(cafe_id, status)`, `(status, expires_at)`
-- [x] T005 [P] Add nullable `customerPackageId` UUID column (`customer_package_id`) to `rcfeild-be/src/models/booking.entity.ts`
-- [x] T006 [P] Modify `rcfeild-be/src/models/payment-transaction.entity.ts` — make `bookingId` column nullable (`nullable: true`), add nullable `customerPackageId` UUID column (`customer_package_id`)
-- [x] T007 Write migration `rcfeild-be/src/migrations/1750300000000-CustomerPackages.ts` — idempotent up/down: (1) CREATE TABLE `customer_packages` with all columns + indexes, (2) ADD COLUMN `bookings.customer_package_id` nullable FK, (3) ALTER `payment_transactions.booking_id` DROP NOT NULL, (4) ADD COLUMN `payment_transactions.customer_package_id` nullable FK, (5) ADD CONSTRAINT `chk_payment_tx_source` CHECK that exactly one of `booking_id`/`customer_package_id` is non-null
-- [x] T008 Run migration: `cd rcfeild-be && npm run migration:run` — verify no errors and `customer_packages` table exists
+- [x] T002 Add `CustomerPackageStatus` enum (PENDING_PAYMENT, ACTIVE, EXHAUSTED, EXPIRED) to `backend/src/types/index.ts` under the `// ── Payment` section
+- [x] T003 Add `PACKAGE_PURCHASE = 'PACKAGE_PURCHASE'` to `PaymentComponentType` enum in `backend/src/types/index.ts`
+- [x] T004 [P] Create `backend/src/models/customer-package.entity.ts` — `CustomerPackage` entity with columns: `id`, `customer_id`, `package_id`, `cafe_id`, `slots_total`, `slots_remaining`, `expires_at`, `status` (CustomerPackageStatus), `purchased_price`, `package_name_snapshot`, `created_at`, `updated_at`; indexes on `(customer_id)`, `(cafe_id, status)`, `(status, expires_at)`
+- [x] T005 [P] Add nullable `customerPackageId` UUID column (`customer_package_id`) to `backend/src/models/booking.entity.ts`
+- [x] T006 [P] Modify `backend/src/models/payment-transaction.entity.ts` — make `bookingId` column nullable (`nullable: true`), add nullable `customerPackageId` UUID column (`customer_package_id`)
+- [x] T007 Write migration `backend/src/migrations/1750300000000-CustomerPackages.ts` — idempotent up/down: (1) CREATE TABLE `customer_packages` with all columns + indexes, (2) ADD COLUMN `bookings.customer_package_id` nullable FK, (3) ALTER `payment_transactions.booking_id` DROP NOT NULL, (4) ADD COLUMN `payment_transactions.customer_package_id` nullable FK, (5) ADD CONSTRAINT `chk_payment_tx_source` CHECK that exactly one of `booking_id`/`customer_package_id` is non-null
+- [x] T008 Run migration: `cd backend && npm run migration:run` — verify no errors and `customer_packages` table exists
 
 **Checkpoint**: Foundation ready — all four user stories can now be implemented
 
@@ -47,15 +47,15 @@
 
 ### Implementation for User Story 1
 
-- [x] T009 [P] [US1] Create `rcfeild-be/src/services/customer-package.service.ts` with stub exports and implement `purchasePackage(cafeId, packageId, viewer)`: validate package exists + ACTIVE, create `CustomerPackage` with `status=PENDING_PAYMENT`, create `PaymentTransaction` with `customerPackageId` set (and `bookingId` null), generate VNPay txnRef + URL, return `{ customer_package_id, payment_url, txn_ref, amount, expires_at }`
-- [x] T010 [P] [US1] Add `getPublicPackages(cafeId)` function to `rcfeild-be/src/services/package.service.ts` — query packages WHERE `cafeId = :cafeId AND status = ACTIVE`, return public-safe fields only (exclude cost_price / internal fields)
-- [x] T011 [US1] Add `PurchasePackageSchema = z.object({})` to `rcfeild-be/src/validate/index.ts` under `// ── customer_packages` section
-- [x] T012 [US1] Create `rcfeild-be/src/controllers/customer-package.controller.ts` — add `purchasePackage` handler: validate path params, call `customer-package.service.purchasePackage`, return 200
-- [x] T013 [US1] Add `GET /api/v1/cafes/:cafeId/packages/public` route (no auth middleware) to `rcfeild-be/src/routes/cafe.routes.ts` — wire to `getPublicPackages` service or new cafe controller method
-- [x] T014 [US1] Create `rcfeild-be/src/routes/customer-package.routes.ts` — add `POST /api/v1/cafes/:cafeId/packages/:packageId/purchase` with `authenticate` + `authorize(UserRole.CUSTOMER)` middleware, wired to `customerPackageController.purchasePackage`
-- [x] T015 [US1] Register `customer-package.routes.ts` in `rcfeild-be/src/app.ts` (or wherever routes are mounted)
-- [x] T016 [US1] Add `activateCustomerPackage(customerPackageId: string, queryRunner?: QueryRunner)` to `rcfeild-be/src/services/customer-package.service.ts` — set `status=ACTIVE`, compute `expires_at = now() + validDays days` (read `validDays` from joined `packages` row), save
-- [x] T017 [US1] Modify `processConfirmation` in `rcfeild-be/src/services/payment.service.ts` — after txnRef lookup: if `tx.customerPackageId != null` → call `activateCustomerPackage(tx.customerPackageId)` + mark `tx.status = SUCCESS`; else → existing booking confirmation branch (D2 from research.md)
+- [x] T009 [P] [US1] Create `backend/src/services/customer-package.service.ts` with stub exports and implement `purchasePackage(cafeId, packageId, viewer)`: validate package exists + ACTIVE, create `CustomerPackage` with `status=PENDING_PAYMENT`, create `PaymentTransaction` with `customerPackageId` set (and `bookingId` null), generate VNPay txnRef + URL, return `{ customer_package_id, payment_url, txn_ref, amount, expires_at }`
+- [x] T010 [P] [US1] Add `getPublicPackages(cafeId)` function to `backend/src/services/package.service.ts` — query packages WHERE `cafeId = :cafeId AND status = ACTIVE`, return public-safe fields only (exclude cost_price / internal fields)
+- [x] T011 [US1] Add `PurchasePackageSchema = z.object({})` to `backend/src/validate/index.ts` under `// ── customer_packages` section
+- [x] T012 [US1] Create `backend/src/controllers/customer-package.controller.ts` — add `purchasePackage` handler: validate path params, call `customer-package.service.purchasePackage`, return 200
+- [x] T013 [US1] Add `GET /api/v1/cafes/:cafeId/packages/public` route (no auth middleware) to `backend/src/routes/cafe.routes.ts` — wire to `getPublicPackages` service or new cafe controller method
+- [x] T014 [US1] Create `backend/src/routes/customer-package.routes.ts` — add `POST /api/v1/cafes/:cafeId/packages/:packageId/purchase` with `authenticate` + `authorize(UserRole.CUSTOMER)` middleware, wired to `customerPackageController.purchasePackage`
+- [x] T015 [US1] Register `customer-package.routes.ts` in `backend/src/app.ts` (or wherever routes are mounted)
+- [x] T016 [US1] Add `activateCustomerPackage(customerPackageId: string, queryRunner?: QueryRunner)` to `backend/src/services/customer-package.service.ts` — set `status=ACTIVE`, compute `expires_at = now() + validDays days` (read `validDays` from joined `packages` row), save
+- [x] T017 [US1] Modify `processConfirmation` in `backend/src/services/payment.service.ts` — after txnRef lookup: if `tx.customerPackageId != null` → call `activateCustomerPackage(tx.customerPackageId)` + mark `tx.status = SUCCESS`; else → existing booking confirmation branch (D2 from research.md)
 
 **Checkpoint**: US1 fully functional — customer can purchase a package and see it activated after VNPay IPN
 
@@ -69,13 +69,13 @@
 
 ### Implementation for User Story 2
 
-- [x] T018 [P] [US2] Extend `BookingSnapshot` interface in `rcfeild-be/src/services/payment.service.ts` — add optional field `package_used?: { customer_package_id: string; package_id: string; package_name: string; slots_used: number }`
-- [x] T019 [P] [US2] Add `customer_package_id: z.string().uuid().optional()` to `CreateBookingSchema` in `rcfeild-be/src/validate/index.ts`; add `ListMyPackagesQuerySchema` with optional `status` and `cafe_id` fields
-- [x] T020 [US2] Add `deductSlots(customerPackageId: string, slotsUsed: number, queryRunner: QueryRunner)` to `rcfeild-be/src/services/customer-package.service.ts` — `SELECT ... FOR UPDATE` on `customer_packages`, decrement `slots_remaining`, set `status=EXHAUSTED` if reaches 0, save within transaction (D4 from research.md)
-- [x] T021 [US2] Modify `CreateBookingBody` interface and `createBooking` in `rcfeild-be/src/services/booking.service.ts`: accept `customer_package_id?`; when provided: load and validate package (ownership, cafe match, applicable_play_modes, status=ACTIVE, expires_at > now, slots_remaining ≥ slots_needed); compute `slots_needed = ceil((slotEnd - slotStart in minutes) / cafe.slotDurationMinutes)`; set `slotFee = 0`; write `package_used` into the snapshot payload; store `customer_package_id` on the `Booking` entity before save
-- [x] T022 [US2] Modify `createCheckoutUrl` in `rcfeild-be/src/services/payment.service.ts` — after computing `totalCharged`: if `totalCharged === 0` AND package applied → skip VNPay URL; inline-confirm the booking (create DISBURSED payment components, call `transition(bookingId, 'PAYMENT_CONFIRMED')`, call `deductSlots` via `queryRunner`); return `{ payment_url: null, confirmed: true, booking_id, slots_used, slots_remaining_after }` (D3 from research.md)
-- [x] T023 [US2] Modify `processConfirmation` in `rcfeild-be/src/services/payment.service.ts` (booking branch) — after booking transitions to CONFIRMED: if `booking.snapshot.package_used` exists → call `deductSlots(package_used.customer_package_id, package_used.slots_used, queryRunner)` (D4 from research.md)
-- [x] T024 [US2] Modify `processMockConfirmation` in `rcfeild-be/src/services/payment.service.ts` — add same `deductSlots` call as T023
+- [x] T018 [P] [US2] Extend `BookingSnapshot` interface in `backend/src/services/payment.service.ts` — add optional field `package_used?: { customer_package_id: string; package_id: string; package_name: string; slots_used: number }`
+- [x] T019 [P] [US2] Add `customer_package_id: z.string().uuid().optional()` to `CreateBookingSchema` in `backend/src/validate/index.ts`; add `ListMyPackagesQuerySchema` with optional `status` and `cafe_id` fields
+- [x] T020 [US2] Add `deductSlots(customerPackageId: string, slotsUsed: number, queryRunner: QueryRunner)` to `backend/src/services/customer-package.service.ts` — `SELECT ... FOR UPDATE` on `customer_packages`, decrement `slots_remaining`, set `status=EXHAUSTED` if reaches 0, save within transaction (D4 from research.md)
+- [x] T021 [US2] Modify `CreateBookingBody` interface and `createBooking` in `backend/src/services/booking.service.ts`: accept `customer_package_id?`; when provided: load and validate package (ownership, cafe match, applicable_play_modes, status=ACTIVE, expires_at > now, slots_remaining ≥ slots_needed); compute `slots_needed = ceil((slotEnd - slotStart in minutes) / cafe.slotDurationMinutes)`; set `slotFee = 0`; write `package_used` into the snapshot payload; store `customer_package_id` on the `Booking` entity before save
+- [x] T022 [US2] Modify `createCheckoutUrl` in `backend/src/services/payment.service.ts` — after computing `totalCharged`: if `totalCharged === 0` AND package applied → skip VNPay URL; inline-confirm the booking (create DISBURSED payment components, call `transition(bookingId, 'PAYMENT_CONFIRMED')`, call `deductSlots` via `queryRunner`); return `{ payment_url: null, confirmed: true, booking_id, slots_used, slots_remaining_after }` (D3 from research.md)
+- [x] T023 [US2] Modify `processConfirmation` in `backend/src/services/payment.service.ts` (booking branch) — after booking transitions to CONFIRMED: if `booking.snapshot.package_used` exists → call `deductSlots(package_used.customer_package_id, package_used.slots_used, queryRunner)` (D4 from research.md)
+- [x] T024 [US2] Modify `processMockConfirmation` in `backend/src/services/payment.service.ts` — add same `deductSlots` call as T023
 
 **Checkpoint**: US2 functional — bookings with package applied work for both zero-total (inline confirm) and non-zero-total (VNPay) paths
 
@@ -89,10 +89,10 @@
 
 ### Implementation for User Story 3
 
-- [x] T025 [P] [US3] Add `listMyPackages(customerId: string, query: { status?, cafe_id? })` to `rcfeild-be/src/services/customer-package.service.ts` — query `customer_packages` JOIN `cafes` WHERE `customer_id = :customerId`; apply optional filters; order by `created_at DESC`; return array with `cafe_name`, `package_name`, `slots_total`, `slots_remaining`, `expires_at`, `status`, `purchased_price`
-- [x] T026 [P] [US3] Add `getPackageUsageHistory(customerPackageId: string, customerId: string)` to `rcfeild-be/src/services/customer-package.service.ts` — verify ownership, query `bookings WHERE customer_package_id = :customerPackageId` JOIN cafes, return `booking_id`, `slot_start`, `slot_end`, `slots_used` (from `snapshot.package_used.slots_used`), `cafe_name`, `booking_status`
-- [x] T027 [US3] Add `listMyPackages` and `getUsageHistory` handlers to `rcfeild-be/src/controllers/customer-package.controller.ts` — validate query with `ListMyPackagesQuerySchema`, call service methods, return 200
-- [x] T028 [US3] Add routes to `rcfeild-be/src/routes/customer-package.routes.ts`: `GET /api/v1/customers/me/packages` and `GET /api/v1/customers/me/packages/:customerPackageId/usage` — both require `authenticate` + `authorize(UserRole.CUSTOMER)`
+- [x] T025 [P] [US3] Add `listMyPackages(customerId: string, query: { status?, cafe_id? })` to `backend/src/services/customer-package.service.ts` — query `customer_packages` JOIN `cafes` WHERE `customer_id = :customerId`; apply optional filters; order by `created_at DESC`; return array with `cafe_name`, `package_name`, `slots_total`, `slots_remaining`, `expires_at`, `status`, `purchased_price`
+- [x] T026 [P] [US3] Add `getPackageUsageHistory(customerPackageId: string, customerId: string)` to `backend/src/services/customer-package.service.ts` — verify ownership, query `bookings WHERE customer_package_id = :customerPackageId` JOIN cafes, return `booking_id`, `slot_start`, `slot_end`, `slots_used` (from `snapshot.package_used.slots_used`), `cafe_name`, `booking_status`
+- [x] T027 [US3] Add `listMyPackages` and `getUsageHistory` handlers to `backend/src/controllers/customer-package.controller.ts` — validate query with `ListMyPackagesQuerySchema`, call service methods, return 200
+- [x] T028 [US3] Add routes to `backend/src/routes/customer-package.routes.ts`: `GET /api/v1/customers/me/packages` and `GET /api/v1/customers/me/packages/:customerPackageId/usage` — both require `authenticate` + `authorize(UserRole.CUSTOMER)`
 
 **Checkpoint**: US3 functional — customer can see all packages and per-package usage history
 
@@ -106,8 +106,8 @@
 
 ### Implementation for User Story 4
 
-- [x] T029 [US4] Add `refundSlots(customerPackageId: string, slotsUsed: number, queryRunner: QueryRunner)` to `rcfeild-be/src/services/customer-package.service.ts` — `SELECT ... FOR UPDATE`, increment `slots_remaining`, restore `status = ACTIVE` if was EXHAUSTED (spec FR-015 — refund to exhausted package is valid per edge case), save within transaction
-- [x] T030 [US4] Modify `cancelBooking` in `rcfeild-be/src/services/booking.service.ts` — after `transition(bookingId, 'CUSTOMER_CANCEL')` or `'PROVIDER_CANCEL'`: read `booking.snapshot?.package_used`; if present AND `booking.slotStart > new Date()` → call `refundSlots(package_used.customer_package_id, package_used.slots_used)` within DB transaction (D5 from research.md)
+- [x] T029 [US4] Add `refundSlots(customerPackageId: string, slotsUsed: number, queryRunner: QueryRunner)` to `backend/src/services/customer-package.service.ts` — `SELECT ... FOR UPDATE`, increment `slots_remaining`, restore `status = ACTIVE` if was EXHAUSTED (spec FR-015 — refund to exhausted package is valid per edge case), save within transaction
+- [x] T030 [US4] Modify `cancelBooking` in `backend/src/services/booking.service.ts` — after `transition(bookingId, 'CUSTOMER_CANCEL')` or `'PROVIDER_CANCEL'`: read `booking.snapshot?.package_used`; if present AND `booking.slotStart > new Date()` → call `refundSlots(package_used.customer_package_id, package_used.slots_used)` within DB transaction (D5 from research.md)
 
 **Checkpoint**: All 4 user stories functional — full feature complete
 
@@ -117,10 +117,10 @@
 
 **Purpose**: Expiry cron + verification pass
 
-- [x] T031 [P] Create `rcfeild-be/src/jobs/package-expiry.job.ts` — daily cron (00:05 VN time) that batch-queries `customer_packages WHERE status = 'ACTIVE' AND expires_at < NOW()` and bulk-updates to `status = 'EXPIRED'`; follow pattern from `subscription-lifecycle.job.ts`
+- [x] T031 [P] Create `backend/src/jobs/package-expiry.job.ts` — daily cron (00:05 VN time) that batch-queries `customer_packages WHERE status = 'ACTIVE' AND expires_at < NOW()` and bulk-updates to `status = 'EXPIRED'`; follow pattern from `subscription-lifecycle.job.ts`
 - [x] T032 [P] Register `package-expiry.job.ts` in the cron setup file (wherever `subscription-lifecycle.job.ts` is registered, e.g. `src/jobs/index.ts` or `src/app.ts`)
 - [x] T033 Verify all error codes from `contracts/api.md` are thrown correctly: `PACKAGE_NOT_FOUND`, `PACKAGE_INACTIVE`, `PACKAGE_INSUFFICIENT_SLOTS`, `PACKAGE_EXPIRED`, `PACKAGE_CAFE_MISMATCH`, `PACKAGE_PLAY_MODE_MISMATCH`, `CUSTOMER_PACKAGE_NOT_FOUND`
-- [x] T034 Add controller comment headers per `rcfeild-be/CLAUDE.md` convention to all new handlers in `src/controllers/customer-package.controller.ts` (format: `// METHOD /api/v1/path  [auth]`)
+- [x] T034 Add controller comment headers per `backend/CLAUDE.md` convention to all new handlers in `src/controllers/customer-package.controller.ts` (format: `// METHOD /api/v1/path  [auth]`)
 
 ---
 
@@ -213,7 +213,7 @@ Task T024: Modify processMockConfirmation (same file as T022/T023 — sequential
 
 ## Notes
 
-- All new code must follow `rcfeild-be/CLAUDE.md` conventions: controller comment headers, `logger` not `console.log`, zod schemas in `src/validate/index.ts`, enums in `src/types/index.ts`
+- All new code must follow `backend/CLAUDE.md` conventions: controller comment headers, `logger` not `console.log`, zod schemas in `src/validate/index.ts`, enums in `src/types/index.ts`
 - `deductSlots` and `refundSlots` MUST use `SELECT ... FOR UPDATE` (pessimistic lock) — race condition protection per SC-004
 - `snapshot.package_used.slots_used` is the authoritative value for deduction/refund — never recompute from current booking duration (Constitution Principle I)
 - Zero-total booking bypass (T022) must NOT call VNPay — VNPay rejects amount=0

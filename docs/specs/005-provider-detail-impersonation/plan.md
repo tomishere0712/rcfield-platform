@@ -46,7 +46,7 @@ specs/005-provider-detail-impersonation/
 ### Source Code
 
 ```text
-rcfeild-be/src/
+backend/src/
 ├── controllers/
 │   └── provider-onboarding.controller.ts   ← ADD: getProviderCafes, impersonateProvider
 ├── routes/
@@ -56,7 +56,7 @@ rcfeild-be/src/
 └── services/
     └── (no new service files — logic inline in controller)
 
-rcfield-fe/src/
+frontend/src/
 ├── features/auth/stores/
 │   └── auth.store.ts                       ← MODIFY: add impersonation state + actions
 ├── shared/lib/

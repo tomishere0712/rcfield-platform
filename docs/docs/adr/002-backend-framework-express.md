@@ -8,7 +8,7 @@
 
 ## Quyết định
 
-Dùng **Express.js** cho backend (`rcfield-app/apps/api`).
+Dùng **Express.js** cho backend (`rcfield-platform/apps/api`).
 
 ---
 

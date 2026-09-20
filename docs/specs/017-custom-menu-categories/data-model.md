@@ -35,7 +35,7 @@ CREATE UNIQUE INDEX "UQ_menu_categories_cafe_name"
 ### Entity TypeORM
 
 ```typescript
-// rcfeild-be/src/models/menu-category.entity.ts
+// backend/src/models/menu-category.entity.ts
 @Entity('menu_categories')
 @Index(['cafeId'])
 export class MenuCategory {
@@ -90,7 +90,7 @@ CREATE INDEX "IDX_menu_items_category_id" ON "menu_items" ("category_id");
 ### Entity sau khi sửa
 
 ```typescript
-// rcfeild-be/src/models/menu-item.entity.ts — phần thay đổi
+// backend/src/models/menu-item.entity.ts — phần thay đổi
 // BỎ:  @Column({ type: 'enum', enum: FnbCategory, nullable: true })
 //      category: FnbCategory | null;
 // THÊM:
@@ -104,7 +104,7 @@ Cờ `is_combo` **giữ nguyên không đổi** — nó là thuộc tính độc
 
 ## 3. Migration
 
-**File**: `rcfeild-be/src/migrations/1784500000000-CustomMenuCategories.ts`
+**File**: `backend/src/migrations/1784500000000-CustomMenuCategories.ts`
 
 ### `up()` — thứ tự bắt buộc
 

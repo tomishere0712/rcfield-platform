@@ -393,7 +393,7 @@ sequenceDiagram
 
 ## 10. Key Files
 
-### Backend (`rcfeild-be/src`)
+### Backend (`backend/src`)
 
 | Area | Path | Note |
 |------|------|------|
@@ -420,7 +420,7 @@ sequenceDiagram
 | Integration | `services/fb-channel.service.ts` | `handleOAuthCallback` calls `checkChannelQuota()` |
 | Integration | `controllers/fb-webhook.controller.ts` | Calls `incrementAIQuota()` per incoming AI message |
 
-### Frontend (`rcfield-fe/src`)
+### Frontend (`frontend/src`)
 
 | Area | Path | Note |
 |------|------|------|
@@ -609,8 +609,8 @@ classDiagram
 - `specs/004-provider-subscription/quickstart.md` — Integration scenarios and implementation order
 
 ### Legend
-- **Frontend** = `rcfield-fe/src` (React + Vite + TypeScript)
-- **API** = `rcfeild-be/src` (Express + TypeScript + TypeORM)
+- **Frontend** = `frontend/src` (React + Vite + TypeScript)
+- **API** = `backend/src` (Express + TypeScript + TypeORM)
 - **N** = `NotificationService` — `createNotification()` called as a side-effect on every state transition
 - `-->>` = response / async return
 - `->>` = request / call
@@ -621,4 +621,4 @@ classDiagram
 
 ---
 
-*Last updated: 2026-05-25 · Based on: specs/004-provider-subscription/contracts/api.md, data-model.md, rcfeild-be/src/services/subscription.service.ts, rcfeild-be/src/jobs/subscription-lifecycle.job.ts, rcfeild-be/src/routes/index.ts*
+*Last updated: 2026-05-25 · Based on: specs/004-provider-subscription/contracts/api.md, data-model.md, backend/src/services/subscription.service.ts, backend/src/jobs/subscription-lifecycle.job.ts, backend/src/routes/index.ts*

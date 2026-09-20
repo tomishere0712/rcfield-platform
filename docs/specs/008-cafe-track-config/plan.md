@@ -52,7 +52,7 @@ specs/008-cafe-track-config/
 ### Source Code
 
 ```text
-rcfeild-be/src/
+backend/src/
 ├── models/
 │   └── cafe-track-config.entity.ts          # NEW — CafeTrackConfig entity
 ├── controllers/
@@ -70,7 +70,7 @@ rcfeild-be/src/
 └── migrations/
     └── YYYYMMDD-cafe-track-configs.ts       # NEW — create cafe_track_configs, alter bookings
 
-rcfield-fe/src/
+frontend/src/
 ├── pages/
 │   ├── booking/components/checkout/
 │   │   ├── TrackSelectionStep.tsx           # NEW — Step 0 in booking flow

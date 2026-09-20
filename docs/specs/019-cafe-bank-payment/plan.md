@@ -22,7 +22,7 @@ Ba điều kiện ràng buộc mọi quyết định thiết kế:
 **Storage**: PostgreSQL — 2 bảng mới, 1 cột mới; không sửa `bookings`, không sửa `cafes`
 **Testing**: Jest 30 + ts-jest, supertest; `jest-setup.ts` truncate mỗi `beforeEach`
 **Target Platform**: Linux server (Coolify), frontend React 19 + Vite + Tailwind v4
-**Project Type**: Web — backend `rcfeild-be`, frontend `rcfield-fe`
+**Project Type**: Web — backend `backend`, frontend `frontend`
 **Performance Goals**: xác nhận đến màn hình khách ≤ 5s (SC-001); WebSocket ~1s, polling 5s dự phòng
 **Constraints**: giao diện tiếng Việt, VND không số lẻ; webhook luôn trả 200 khi khoá hợp lệ; điểm nhận thông báo công khai nên phải chặn nhồi rác
 **Scale/Scope**: 13 file backend mới + 8 sửa, 4 file frontend mới + 4 sửa
@@ -67,7 +67,7 @@ specs/019-cafe-bank-payment/
 ### Source Code
 
 ```text
-rcfeild-be/src/
+backend/src/
 ├── migrations/
 │   └── <ts>-CafePaymentSettingsAndBankTransactions.ts   MỚI
 ├── models/
@@ -100,7 +100,7 @@ rcfeild-be/src/
     ├── services/bank-webhook.test.ts                    MỚI  ⚠️ VIẾT TRƯỚC
     └── routes/bank-payment.test.ts                      MỚI
 
-rcfield-fe/src/
+frontend/src/
 ├── features/payments/api/bank-payment.api.ts            MỚI
 ├── pages/booking/components/checkout/
 │   ├── BankTransferQrPanel.tsx                          MỚI  QR + đếm ngược + chờ

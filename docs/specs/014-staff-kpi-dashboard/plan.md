@@ -54,7 +54,7 @@ specs/014-staff-kpi-dashboard/
 ### Backend — files cần tạo/sửa
 
 ```text
-rcfeild-be/src/
+backend/src/
 ├── routes/
 │   └── staff.routes.ts              ← SỬA: thêm 3 route mới
 ├── controllers/
@@ -68,7 +68,7 @@ rcfeild-be/src/
 ### Frontend — files cần tạo/sửa
 
 ```text
-rcfield-fe/src/
+frontend/src/
 ├── pages/provider/
 │   ├── ProviderStaffPage.tsx          ← SỬA: thêm mục "Xem chi tiết" vào dropdown menu "..." trên StaffCard
 │   └── ProviderStaffDetailPage.tsx    ← TẠO MỚI
@@ -128,7 +128,7 @@ async function assertStaffBelongsToProvider(providerId: string, staffId: string)
 // GET /v1/provider/staff/:staffId/activity?limit=20&offset=0
 ```
 
-Xem `rcfeild-be/src/routes/staff.routes.ts` hiện tại — file `staff.routes.ts` đang dành cho STAFF role. Provider staff management routes nằm ở đâu? Kiểm tra `staff-invite.routes.ts`. Các endpoint mới mount cùng prefix `/v1/provider/staff` — cần verify file route đúng khi implement.
+Xem `backend/src/routes/staff.routes.ts` hiện tại — file `staff.routes.ts` đang dành cho STAFF role. Provider staff management routes nằm ở đâu? Kiểm tra `staff-invite.routes.ts`. Các endpoint mới mount cùng prefix `/v1/provider/staff` — cần verify file route đúng khi implement.
 
 ### Frontend: ProviderStaffDetailPage layout
 

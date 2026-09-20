@@ -30,9 +30,9 @@ description: "Task list for AI Revenue Analytics implementation"
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete.
 
-- [x] T001 Create migration `rcfeild-be/src/migrations/1752000000000-AiAnalysisLog.ts` — `ai_analysis_logs` table + `ai_analysis_status_enum` + seed `AI_REVENUE_ANALYTICS` feature flag row
-- [x] T002 Create entity `rcfeild-be/src/models/ai-analysis-log.entity.ts` — `AiAnalysisLog` with columns: id, providerId, cafeId, periodFrom, periodTo, status, tokensUsed, durationMs, requestedAt, createdAt
-- [ ] T003 Run `npm run migration:run` in `rcfeild-be/` and verify `ai_analysis_logs` table + flag row exist in DB
+- [x] T001 Create migration `backend/src/migrations/1752000000000-AiAnalysisLog.ts` — `ai_analysis_logs` table + `ai_analysis_status_enum` + seed `AI_REVENUE_ANALYTICS` feature flag row
+- [x] T002 Create entity `backend/src/models/ai-analysis-log.entity.ts` — `AiAnalysisLog` with columns: id, providerId, cafeId, periodFrom, periodTo, status, tokensUsed, durationMs, requestedAt, createdAt
+- [ ] T003 Run `npm run migration:run` in `backend/` and verify `ai_analysis_logs` table + flag row exist in DB
 
 **Checkpoint**: Foundation ready — all user story phases can now begin.
 
@@ -48,12 +48,12 @@ description: "Task list for AI Revenue Analytics implementation"
 
 ### Implementation for User Story 2
 
-- [x] T004 [US2] Create `rcfeild-be/src/controllers/admin-feature-flags.controller.ts` — `list` handler (GET all flags) and `update` handler (PATCH by key, accepts `isEnabled` and/or `config`)
-- [x] T005 [US2] Create `rcfeild-be/src/routes/admin-feature-flags.routes.ts` — `adminFeatureFlagsRouter` with `authenticate, authorize(UserRole.ADMIN)` middleware; `GET /` → list, `PATCH /:key` → update
-- [x] T006 [US2] Mount router in `rcfeild-be/src/routes/index.ts` — add import and `router.use('/admin/feature-flags', adminFeatureFlagsRouter)` after line 110 (after `/admin/dashboard`)
-- [x] T007 [P] [US2] Create `rcfield-fe/src/features/admin/api/admin-feature-flags.api.ts` — `listFlags()` → `GET /v1/admin/feature-flags`, `updateFlag(key, payload)` → `PATCH /v1/admin/feature-flags/:key`
-- [x] T008 [US2] Update `rcfield-fe/src/pages/admin/AdminFeatureFlagsPage.tsx` — replace mock `useState(initialFlags)` with `useQuery` calling `adminFeatureFlagsApi.listFlags()`; wire "Lưu thay đổi" button to call `adminFeatureFlagsApi.updateFlag()` per changed flag; map `is_enabled` (API) → `status: 'READY' | 'DISABLED'` for existing UI
-- [x] T009 [P] [US2] Add `AI_REVENUE_ANALYTICS` entry to `rcfield-fe/src/shared/data/admin-mock-data.ts` → `mockFeatureFlags` array (for dev without backend): `{ key: "AI_REVENUE_ANALYTICS", description: "Bảng phân tích doanh thu bằng AI Gemini trong Provider Dashboard", status: "DISABLED" }`
+- [x] T004 [US2] Create `backend/src/controllers/admin-feature-flags.controller.ts` — `list` handler (GET all flags) and `update` handler (PATCH by key, accepts `isEnabled` and/or `config`)
+- [x] T005 [US2] Create `backend/src/routes/admin-feature-flags.routes.ts` — `adminFeatureFlagsRouter` with `authenticate, authorize(UserRole.ADMIN)` middleware; `GET /` → list, `PATCH /:key` → update
+- [x] T006 [US2] Mount router in `backend/src/routes/index.ts` — add import and `router.use('/admin/feature-flags', adminFeatureFlagsRouter)` after line 110 (after `/admin/dashboard`)
+- [x] T007 [P] [US2] Create `frontend/src/features/admin/api/admin-feature-flags.api.ts` — `listFlags()` → `GET /v1/admin/feature-flags`, `updateFlag(key, payload)` → `PATCH /v1/admin/feature-flags/:key`
+- [x] T008 [US2] Update `frontend/src/pages/admin/AdminFeatureFlagsPage.tsx` — replace mock `useState(initialFlags)` with `useQuery` calling `adminFeatureFlagsApi.listFlags()`; wire "Lưu thay đổi" button to call `adminFeatureFlagsApi.updateFlag()` per changed flag; map `is_enabled` (API) → `status: 'READY' | 'DISABLED'` for existing UI
+- [x] T009 [P] [US2] Add `AI_REVENUE_ANALYTICS` entry to `frontend/src/shared/data/admin-mock-data.ts` → `mockFeatureFlags` array (for dev without backend): `{ key: "AI_REVENUE_ANALYTICS", description: "Bảng phân tích doanh thu bằng AI Gemini trong Provider Dashboard", status: "DISABLED" }`
 
 **Checkpoint**: Admin can toggle the flag via UI; DB row updates; flag state persists across page reload.
 
@@ -67,22 +67,22 @@ description: "Task list for AI Revenue Analytics implementation"
 
 ### Implementation for User Story 1 — Backend
 
-- [x] T010 [US1] Create `rcfeild-be/src/services/ai-revenue-analytics.service.ts` — implement in order:
+- [x] T010 [US1] Create `backend/src/services/ai-revenue-analytics.service.ts` — implement in order:
   1. `checkAnalyticsGate(providerId)` — query `feature_flags WHERE feature_key='AI_REVENUE_ANALYTICS' AND entity_type='GLOBAL'`; admin bypass; return `{ monthlyQuota }`
   2. `checkAndLogAnalyticsQuota(providerId, monthlyQuota, from, to, cafeId)` — COUNT SUCCESS logs for current month; INSERT placeholder log row; return `logId`
   3. `fetchRevenueData(providerId, from, to, cafeId?)` — `Promise.all` across `getProviderKpi`, `getProviderRevenueTrend` (weekly), `getProviderRevenueBreakdown`, `getProviderBranchPerformance`, `getProviderTopStats`
   4. `computeDerivedMetrics(data)` — completion rate, revenue/booking, linear slope → trendDirection (rising/flat/falling), topSource
   5. `buildPrompt(data, metrics, from, to)` — Vietnamese RC Cafe context prompt; request JSON output `{ summary, insights[], topOpportunity, watchouts[] }`
   6. `generateAiInsights(providerId, from, to, cafeId?)` — orchestrate all above; call `ai.models.generateContent({ model: env.ai.supportModel, ... })`; `finally` block updates log with status/tokens/duration
-- [x] T011 [US1] Create `rcfeild-be/src/controllers/ai-revenue-analytics.controller.ts` — `generateInsights` handler; zod validate `from`, `to` (date regex), optional `cafeId` (uuid); call `generateAiInsights`; return `{ type: 'SUCCESS'|'INSUFFICIENT_DATA', data }`
-- [ ] T012 [US1] Add route to `rcfeild-be/src/routes/provider-subscription.routes.ts` — import `aiRevenueAnalyticsController`; add `providerSubscriptionRouter.post('/dashboard/ai-insights', requireActiveProvider, aiRevenueAnalyticsController.generateInsights)` after the `top-stats` route (line 85+)
+- [x] T011 [US1] Create `backend/src/controllers/ai-revenue-analytics.controller.ts` — `generateInsights` handler; zod validate `from`, `to` (date regex), optional `cafeId` (uuid); call `generateAiInsights`; return `{ type: 'SUCCESS'|'INSUFFICIENT_DATA', data }`
+- [ ] T012 [US1] Add route to `backend/src/routes/provider-subscription.routes.ts` — import `aiRevenueAnalyticsController`; add `providerSubscriptionRouter.post('/dashboard/ai-insights', requireActiveProvider, aiRevenueAnalyticsController.generateInsights)` after the `top-stats` route (line 85+)
 
 ### Implementation for User Story 1 — Frontend
 
-- [ ] T013 [P] [US1] Add types to `rcfield-fe/src/features/dashboard/types/dashboard.types.ts` — `InsightSeverity`, `AiInsight`, `AiInsightResponse`, `AiInsightResult`
-- [ ] T014 [P] [US1] Add `generateAiInsights(params)` to `rcfield-fe/src/features/dashboard/api/provider-dashboard.api.ts` — `POST /v1/provider/dashboard/ai-insights` with query params `from`, `to`, `cafeId`
-- [ ] T015 [US1] Create `rcfield-fe/src/features/dashboard/components/AiInsightsPanel.tsx` — props: `{ from, to, cafeId?, isFeatureEnabled }`; states: Idle (show "✨ Phân tích AI" button), Loading (spinner + "Đang phân tích..."), InsufficientData (friendly message), Error 503 (retry prompt — no raw error), Success (summary paragraph + insight cards + topOpportunity box + watchouts list); on filter change after result → reset to Idle with "Phân tích lại" label; duplicate-click protection (disable button while loading)
-- [ ] T016 [US1] Inject `<AiInsightsPanel>` into `rcfield-fe/src/pages/provider/ProviderDashboardPage.tsx` — import component; pass existing `from`, `to`, `selectedCafeId` state; render after existing charts section; hardcode `isFeatureEnabled={true}` for initial wiring (replace with real flag check in US2 integration)
+- [ ] T013 [P] [US1] Add types to `frontend/src/features/dashboard/types/dashboard.types.ts` — `InsightSeverity`, `AiInsight`, `AiInsightResponse`, `AiInsightResult`
+- [ ] T014 [P] [US1] Add `generateAiInsights(params)` to `frontend/src/features/dashboard/api/provider-dashboard.api.ts` — `POST /v1/provider/dashboard/ai-insights` with query params `from`, `to`, `cafeId`
+- [ ] T015 [US1] Create `frontend/src/features/dashboard/components/AiInsightsPanel.tsx` — props: `{ from, to, cafeId?, isFeatureEnabled }`; states: Idle (show "✨ Phân tích AI" button), Loading (spinner + "Đang phân tích..."), InsufficientData (friendly message), Error 503 (retry prompt — no raw error), Success (summary paragraph + insight cards + topOpportunity box + watchouts list); on filter change after result → reset to Idle with "Phân tích lại" label; duplicate-click protection (disable button while loading)
+- [ ] T016 [US1] Inject `<AiInsightsPanel>` into `frontend/src/pages/provider/ProviderDashboardPage.tsx` — import component; pass existing `from`, `to`, `selectedCafeId` state; render after existing charts section; hardcode `isFeatureEnabled={true}` for initial wiring (replace with real flag check in US2 integration)
 
 **Checkpoint**: Full E2E happy path works — click button, Gemini responds, panel renders Vietnamese insights.
 
@@ -96,9 +96,9 @@ description: "Task list for AI Revenue Analytics implementation"
 
 ### Implementation for User Story 3
 
-- [x] T017 [US3] Extend `buildPrompt()` in `rcfeild-be/src/services/ai-revenue-analytics.service.ts` — strengthen prompt to enforce insight `type` values (`trend`, `revenue_mix`, `fleet`, `retention`, `branch`) and `severity` rules matching spec acceptance scenarios (e.g., 3 weeks decline → `warning`, utilization < 40% → fleet insight, extension fees > 20% → revenue_mix insight, 1 customer > 30% revenue → retention warning)
-- [x] T018 [P] [US3] Add severity color map to `rcfield-fe/src/features/dashboard/components/AiInsightsPanel.tsx` — `positive` → emerald, `neutral` → blue, `warning` → amber, `critical` → red; apply to insight card border + background + text
-- [x] T019 [P] [US3] Add insight type badge to each card in `rcfield-fe/src/features/dashboard/components/AiInsightsPanel.tsx` — display `type` as a small label (e.g., "📈 Xu hướng", "🚗 Phương tiện", "👥 Khách hàng") using a type→label map
+- [x] T017 [US3] Extend `buildPrompt()` in `backend/src/services/ai-revenue-analytics.service.ts` — strengthen prompt to enforce insight `type` values (`trend`, `revenue_mix`, `fleet`, `retention`, `branch`) and `severity` rules matching spec acceptance scenarios (e.g., 3 weeks decline → `warning`, utilization < 40% → fleet insight, extension fees > 20% → revenue_mix insight, 1 customer > 30% revenue → retention warning)
+- [x] T018 [P] [US3] Add severity color map to `frontend/src/features/dashboard/components/AiInsightsPanel.tsx` — `positive` → emerald, `neutral` → blue, `warning` → amber, `critical` → red; apply to insight card border + background + text
+- [x] T019 [P] [US3] Add insight type badge to each card in `frontend/src/features/dashboard/components/AiInsightsPanel.tsx` — display `type` as a small label (e.g., "📈 Xu hướng", "🚗 Phương tiện", "👥 Khách hàng") using a type→label map
 
 **Checkpoint**: Each insight card visually distinguishes severity; correct insight categories appear for known data patterns.
 
@@ -112,8 +112,8 @@ description: "Task list for AI Revenue Analytics implementation"
 
 ### Implementation for User Story 4
 
-- [x] T020 [US4] Add quota exhausted UI state to `rcfield-fe/src/features/dashboard/components/AiInsightsPanel.tsx` — catch 429 `AI_QUOTA_EXCEEDED` error response; show disabled button with label "Hết lượt — reset DD/MM" (derive reset date from 1st of next month); clear message explaining when quota resets
-- [x] T021 [P] [US4] Add `monthly_quota` config display to `rcfield-fe/src/pages/admin/AdminFeatureFlagsPage.tsx` — when viewing `AI_REVENUE_ANALYTICS` flag row, show current `monthly_quota` from `config` and allow admin to edit and save via PATCH
+- [x] T020 [US4] Add quota exhausted UI state to `frontend/src/features/dashboard/components/AiInsightsPanel.tsx` — catch 429 `AI_QUOTA_EXCEEDED` error response; show disabled button with label "Hết lượt — reset DD/MM" (derive reset date from 1st of next month); clear message explaining when quota resets
+- [x] T021 [P] [US4] Add `monthly_quota` config display to `frontend/src/pages/admin/AdminFeatureFlagsPage.tsx` — when viewing `AI_REVENUE_ANALYTICS` flag row, show current `monthly_quota` from `config` and allow admin to edit and save via PATCH
 
 **Checkpoint**: Quota exhaustion blocks button with clear reset date; admin can adjust quota; `monthly_quota=0` means unlimited (no blocking).
 
@@ -121,8 +121,8 @@ description: "Task list for AI Revenue Analytics implementation"
 
 ## Phase 7: Polish & Cross-Cutting Concerns
 
-- [x] T022 [P] Validate `rcfield-fe/src/features/dashboard/components/AiInsightsPanel.tsx` handles all edge cases: flag disabled mid-session (503 → friendly error), Gemini JSON parse error (503 → retry prompt), `isFeatureEnabled=false` hides panel entirely
-- [x] T023 Wire `isFeatureEnabled` in `rcfield-fe/src/pages/provider/ProviderDashboardPage.tsx` — replace hardcoded `true` with a query to `GET /v1/provider/dashboard/feature-flags`; hide panel entirely when flag is disabled
+- [x] T022 [P] Validate `frontend/src/features/dashboard/components/AiInsightsPanel.tsx` handles all edge cases: flag disabled mid-session (503 → friendly error), Gemini JSON parse error (503 → retry prompt), `isFeatureEnabled=false` hides panel entirely
+- [x] T023 Wire `isFeatureEnabled` in `frontend/src/pages/provider/ProviderDashboardPage.tsx` — replace hardcoded `true` with a query to `GET /v1/provider/dashboard/feature-flags`; hide panel entirely when flag is disabled
 - [x] T024 [P] Update `website/sidebars-specs.ts` — confirm `ai-revenue-analytics/tasks` entry is present *(already done in plan phase)*
 
 ---

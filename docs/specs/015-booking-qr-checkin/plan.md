@@ -59,7 +59,7 @@ specs/015-booking-qr-checkin/
 ### Source Code
 
 ```text
-rcfeild-be/
+backend/
 ├── src/
 │   ├── controllers/
 │   │   └── booking.controller.ts        ← Thêm handler getBookingQR()
@@ -69,7 +69,7 @@ rcfeild-be/
 │       └── email.service.ts             ← Thêm sendCheckInEmail(bookingId)
 ├── package.json                         ← Thêm qrcode + @types/qrcode
 
-rcfield-fe/
+frontend/
 ├── src/
 │   ├── pages/
 │   │   └── customer/
@@ -91,7 +91,7 @@ rcfield-fe/
 ### 1. Install package
 
 ```bash
-cd rcfeild-be
+cd backend
 npm install qrcode @types/qrcode
 ```
 
@@ -190,7 +190,7 @@ apiBaseUrl: process.env.API_BASE_URL ?? 'http://localhost:3001',
 ### 5. Install packages
 
 ```bash
-cd rcfield-fe
+cd frontend
 npm install jsqr qrcode.react
 ```
 
@@ -291,16 +291,16 @@ const [bookingId, setBookingId] = useState('');
 
 | File | Action | Notes |
 |------|--------|-------|
-| `rcfeild-be/package.json` | Modified | Thêm `qrcode`, `@types/qrcode` |
-| `rcfeild-be/src/config/env.ts` | Modified | Thêm `apiBaseUrl` |
-| `rcfeild-be/src/services/email.service.ts` | Modified | Thêm `sendCheckInEmail()` |
-| `rcfeild-be/src/services/payment.service.ts` | Modified | Thêm `sendCheckInEmail()` vào Promise.all |
-| `rcfeild-be/src/controllers/booking.controller.ts` | Modified | Thêm `getBookingQr()` handler |
-| `rcfeild-be/src/routes/booking.routes.ts` | Modified | Thêm `GET /:id/qr` (public) |
-| `rcfield-fe/package.json` | Modified | Thêm `jsqr`, `qrcode.react` |
-| `rcfield-fe/src/pages/customer/BookingDetailPage.tsx` | Modified | Thêm QR display section |
-| `rcfield-fe/src/features/staff/components/QrCheckinUploader.tsx` | Created | Component mới |
-| `rcfield-fe/src/pages/staff/StaffCheckinPage.tsx` | Modified | Tích hợp QrCheckinUploader |
+| `backend/package.json` | Modified | Thêm `qrcode`, `@types/qrcode` |
+| `backend/src/config/env.ts` | Modified | Thêm `apiBaseUrl` |
+| `backend/src/services/email.service.ts` | Modified | Thêm `sendCheckInEmail()` |
+| `backend/src/services/payment.service.ts` | Modified | Thêm `sendCheckInEmail()` vào Promise.all |
+| `backend/src/controllers/booking.controller.ts` | Modified | Thêm `getBookingQr()` handler |
+| `backend/src/routes/booking.routes.ts` | Modified | Thêm `GET /:id/qr` (public) |
+| `frontend/package.json` | Modified | Thêm `jsqr`, `qrcode.react` |
+| `frontend/src/pages/customer/BookingDetailPage.tsx` | Modified | Thêm QR display section |
+| `frontend/src/features/staff/components/QrCheckinUploader.tsx` | Created | Component mới |
+| `frontend/src/pages/staff/StaffCheckinPage.tsx` | Modified | Tích hợp QrCheckinUploader |
 
 ---
 

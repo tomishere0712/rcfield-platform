@@ -125,7 +125,7 @@ graph TD
 
 ## 5. Tech Stack
 
-### Backend (`rcfield-app/apps/api`)
+### Backend (`rcfield-platform/apps/api`)
 
 | Layer | Technology | Ghi chú |
 |-------|-----------|---------|
@@ -140,7 +140,7 @@ graph TD
 | Storage | Cloudinary | Upload ảnh inspection — lưu URL về DB |
 | Jobs | node-cron | Timeout rules (PENDING 30m, no-show, checkout auto-confirm) |
 
-### Frontend (`rcfield-app/apps/web`)
+### Frontend (`rcfield-platform/apps/web`)
 
 | Layer | Technology | Ghi chú |
 |-------|-----------|---------|

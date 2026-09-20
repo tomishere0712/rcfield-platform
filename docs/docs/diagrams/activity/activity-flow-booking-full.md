@@ -468,11 +468,11 @@ flowchart LR
 - `docs/diagrams/sequence/sequence-flow-booking-operations.md` — Check-in, F&B, extension, checkout
 
 ### Source code
-- `rcfeild-be/src/services/booking.service.ts` — `createBooking`, `cancelBooking`, `transition`
-- `rcfeild-be/src/services/payment.service.ts` — `createCheckoutUrl`, `processConfirmation`, settlement
-- `rcfeild-be/src/services/session.service.ts` — `createSession`, `checkout`, `settle`
-- `rcfeild-be/src/services/inspection.service.ts` — Inspection evidence, checklist
-- `rcfeild-be/src/jobs/booking-timeout.job.ts` — Cron: PENDING timeout, NO_SHOW detection
+- `backend/src/services/booking.service.ts` — `createBooking`, `cancelBooking`, `transition`
+- `backend/src/services/payment.service.ts` — `createCheckoutUrl`, `processConfirmation`, settlement
+- `backend/src/services/session.service.ts` — `createSession`, `checkout`, `settle`
+- `backend/src/services/inspection.service.ts` — Inspection evidence, checklist
+- `backend/src/jobs/booking-timeout.job.ts` — Cron: PENDING timeout, NO_SHOW detection
 
 ### Naming Convention
 - **Action nodes** `[...]`: Cụm động từ ngắn gọn — mô tả **việc gì xảy ra**, không có code syntax

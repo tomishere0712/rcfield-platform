@@ -443,7 +443,7 @@ sequenceDiagram
 
 ## 7. Key Files
 
-### Backend (`rcfeild-be`)
+### Backend (`backend`)
 
 | Area | Path | Note |
 |------|------|-------|
@@ -463,7 +463,7 @@ sequenceDiagram
 | Entity | `src/models/customer-package.entity.ts` | Gói slot của customer |
 | Validate | `src/validate/index.ts` | CreateBookingSchema, CancelBookingSchema |
 
-### Frontend (`rcfield-fe`)
+### Frontend (`frontend`)
 
 | Area | Path | Note |
 |------|------|-------|

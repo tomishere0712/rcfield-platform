@@ -75,7 +75,7 @@ specs/002-branch-ai-chat-rag/
 ### Source Code Layout (backend)
 
 ```text
-rcfeild-be/src/
+backend/src/
 ├── routes/
 │   └── chat.routes.ts          ← tất cả 6 endpoints của feature này
 ├── controllers/

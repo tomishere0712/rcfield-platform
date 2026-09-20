@@ -239,7 +239,7 @@ Các nghiệp vụ bị loại khỏi schema Phase 1:
 
 ## 4. Enum Chuẩn
 
-Khối dưới đây **trích thẳng từ `rcfeild-be/src/types/index.ts`** — 72 enum, đúng
+Khối dưới đây **trích thẳng từ `backend/src/types/index.ts`** — 72 enum, đúng
 với mã đang chạy. Chỗ nào giá trị TypeScript khác chuỗi lưu xuống DB thì ghi rõ
 dạng `KEY='giá_trị_db'`.
 
@@ -348,7 +348,7 @@ enum WidgetPosition { BOTTOM_RIGHT, BOTTOM_LEFT }
 ## 5. Bảng Chi Tiết
 
 > ⚠️ **Mục này chưa đầy đủ.** 23/70 bảng đang chạy chưa có mô tả chi tiết ở đây.
-> Với những bảng đó, đọc entity trong `rcfeild-be/src/models/` hoặc migration tương ứng.
+> Với những bảng đó, đọc entity trong `backend/src/models/` hoặc migration tương ứng.
 >
 > Chưa có mô tả: `achievement_definitions`, `ai_analysis_logs`, `bank_transactions`, `cafe_payment_settings`, `contest_bans`, `contest_fee_orders`, `contest_fee_plans`, `contest_formats`, `contest_ledger_entries`, `contest_staff_assignments`, `contest_templates`, `contest_types`, `customer_packages`, `damage_line_items`, `featured_popups`, `fnb_order_items`, `fnb_orders`, `menu_categories`, `menu_item_components`, `menu_item_variants`, `menu_items`, `packages`, `push_tokens`
 

@@ -61,7 +61,7 @@ specs/012-provider-kyc/
 ### Source Code — Backend
 
 ```text
-rcfeild-be/src/
+backend/src/
 ├── migrations/
 │   └── {timestamp}-AddKycColumnsToProviderProfiles.ts  ← NEW (ALTER TABLE only)
 ├── models/
@@ -83,7 +83,7 @@ rcfeild-be/src/
 ### Source Code — Frontend
 
 ```text
-rcfield-fe/src/
+frontend/src/
 ├── pages/
 │   ├── auth/
 │   │   └── ProviderRegisterPage.tsx          ← EXTEND: thêm Step 3 (document upload)

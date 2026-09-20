@@ -72,7 +72,7 @@ specs/016-damage-charge-redesign/
 └── tasks.md             ← Chưa tạo (cần /speckit-tasks)
 ```
 
-### Source Code — Backend (`rcfeild-be/`)
+### Source Code — Backend (`backend/`)
 
 ```text
 src/
@@ -91,7 +91,7 @@ src/
     └── YYYYMMDD-create-damage-line-items.ts   NEW
 ```
 
-### Source Code — Frontend (`rcfield-fe/`)
+### Source Code — Frontend (`frontend/`)
 
 ```text
 src/
@@ -106,7 +106,7 @@ src/
     └── StaffOperationContext.tsx          MODIFY: cập nhật submitInspection handler
 ```
 
-### Router changes (`rcfield-fe/`)
+### Router changes (`frontend/`)
 
 ```text
 src/
@@ -191,7 +191,7 @@ Inputs: sessionId, inspectionId, note, staffUserId
 - `PUT /staff/sessions/:sessionId/inspections/:inspectionId/damage-items` → `updateDamageLineItems`
 - `POST /staff/sessions/:sessionId/escalate-dispute` → `escalateDisputeToProvider`
 
-**Coding conventions (từ `rcfeild-be/CLAUDE.md`)**:
+**Coding conventions (từ `backend/CLAUDE.md`)**:
 - Mỗi handler PHẢI có comment `// METHOD /api/v1/<path> [auth]` ngay trên function
 - Zod schema KHÔNG được định nghĩa trong controller — phải thêm vào `src/validate/index.ts` (grouped by table), import từ `'../validate'`
 - Dùng `logger.info('Staff', 'action', {...})` — KHÔNG dùng `console.log`

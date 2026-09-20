@@ -9,14 +9,14 @@
 
 | Hạng mục | Vị trí | Chi tiết |
 |---|---|---|
-| Enum nguồn | `rcfeild-be/src/types/index.ts:334` | `FnbCategory` = FOOD, DRINK, SNACK, DESSERT, COMBO, OTHER |
+| Enum nguồn | `backend/src/types/index.ts:334` | `FnbCategory` = FOOD, DRINK, SNACK, DESSERT, COMBO, OTHER |
 | Kiểu cột DB | `menu_items.category` | Postgres native enum `fnb_category_enum`, tạo ở migration `1751300000002` |
 | Entity | `src/models/menu-item.entity.ts:31` | `@Column({ type: 'enum', enum: FnbCategory, nullable: true })` |
 | Validate | `src/validate/index.ts:877, 895` | `z.nativeEnum(FnbCategory)` ở `MenuListQuerySchema` và `CreateMenuItemSchema` |
 | Ép combo | `src/services/menu.service.ts:214` | `category: FnbCategory.COMBO` hardcode |
 | Filter + sort | `src/services/menu.service.ts:111, 122` | `WHERE item.category = :category`, `ORDER BY item.category NULLS LAST` |
 | Chatbot | `src/services/chat-tools/get-menu.ts:26` | `ORDER BY category ASC`, group theo giá trị enum thô |
-| FE hardcode | `rcfield-fe/src/features/menu/types/index.ts:1-18` | `FNB_CATEGORIES` + `FNB_CATEGORY_LABEL` |
+| FE hardcode | `frontend/src/features/menu/types/index.ts:1-18` | `FNB_CATEGORIES` + `FNB_CATEGORY_LABEL` |
 
 **Xác minh quan trọng — enum chỉ được dùng bởi đúng một bảng.** `grep fnb_category_enum` trên toàn bộ `src/migrations/` chỉ trả về file `1751300000002`, tức chỉ `menu_items.category` tham chiếu type này. Do đó `DROP TYPE` an toàn, không có bảng nào khác giữ tham chiếu.
 
@@ -91,7 +91,7 @@ Danh mục mới tạo nhận `display_order = (max hiện tại) + 1` để rơ
 
 **Decision**: `MenuItem` trả về **bỏ** trường `category`, thêm `categoryId: string | null` và `categoryName: string | null`.
 
-**Rationale**: Frontend là consumer duy nhất của endpoint này (`rcfield-fe/src/features/menu/api/menu.api.ts`) và được sửa trong cùng PR — không có bên thứ ba nào tiêu thụ hợp đồng này. Cần cả hai trường vì chúng phục vụ hai việc khác nhau: `categoryId` để lọc và để form chọn đúng giá trị, `categoryName` để hiển thị mà không phải tải thêm danh sách danh mục rồi tự map. Trả `categoryName` sẵn cũng khiến việc sửa `FnbStep.tsx` và `CafeFnbSection.tsx` chỉ là đổi tên trường, không phải thêm query mới.
+**Rationale**: Frontend là consumer duy nhất của endpoint này (`frontend/src/features/menu/api/menu.api.ts`) và được sửa trong cùng PR — không có bên thứ ba nào tiêu thụ hợp đồng này. Cần cả hai trường vì chúng phục vụ hai việc khác nhau: `categoryId` để lọc và để form chọn đúng giá trị, `categoryName` để hiển thị mà không phải tải thêm danh sách danh mục rồi tự map. Trả `categoryName` sẵn cũng khiến việc sửa `FnbStep.tsx` và `CafeFnbSection.tsx` chỉ là đổi tên trường, không phải thêm query mới.
 
 **Alternatives rejected**:
 - *Giữ tên trường `category` nhưng đổi giá trị thành tên danh mục* — nhìn thì "backward compatible" nhưng thực chất là bẫy: `FnbStep`/`CafeFnbSection` sẽ hiển thị đúng mà không cần sửa gì, nên lỗi hiện mã thô có vẻ tự khỏi, trong khi bộ lọc ở `ProviderMenuPage` vẫn cần id và sẽ âm thầm sai. Một trường mang hai ngữ nghĩa là nguồn lỗi lâu dài.

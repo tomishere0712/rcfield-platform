@@ -18,7 +18,7 @@
 
 **Purpose**: No new project structure needed — extending existing codebase. Create the frontend feature folder.
 
-- [X] T001 Create feature folder `rcfield-fe/src/features/provider-kyc/` with subdirectories `api/`, `components/`
+- [X] T001 Create feature folder `frontend/src/features/provider-kyc/` with subdirectories `api/`, `components/`
 
 ---
 
@@ -28,12 +28,12 @@
 
 **⚠️ CRITICAL**: No user story can start until this phase is complete.
 
-- [X] T002 Run DB migration — create `rcfeild-be/src/migrations/{timestamp}-AddKycColumnsToProviderProfiles.ts` with `ALTER TABLE provider_profiles ADD COLUMN business_type varchar(20), kyc_documents jsonb NOT NULL DEFAULT '[]', kyc_submitted_at timestamptz`
-- [X] T003 [P] Add TypeScript enums and interface to `rcfeild-be/src/types/index.ts`: `KycBusinessType { INDIVIDUAL, BUSINESS }`, `KycDocumentType { CCCD_FRONT, CCCD_BACK, GPKD, REPRESENTATIVE_ID, VENUE_PHOTO }`, `KycDocumentItem { documentType, cloudinaryUrl, cloudinaryPublicId, originalFilename }`
-- [X] T004 Extend `rcfeild-be/src/models/provider-profile.entity.ts` — add 3 `@Column` fields: `businessType: KycBusinessType | null`, `kycDocuments: KycDocumentItem[]`, `kycSubmittedAt: Date | null` (depends on T003)
-- [X] T005 [P] Add `uploadFile(buffer, folder, originalname)` method to `rcfeild-be/src/services/cloudinary.service.ts` — use `resource_type: 'auto'` to support JPEG/PNG/PDF; do NOT modify existing `uploadImage()`
-- [X] T006 [P] Create `kycUpload` multer instance in `rcfeild-be/src/config/multer.config.ts` (or inline at top of routes file) — `memoryStorage()`, 10MB limit, accept `image/jpeg|image/png|image/jpg|application/pdf`, named fields: `cccd_front(1)`, `cccd_back(1)`, `gpkd(1)`, `representative_id(1)`, `venue_photo(1)`
-- [X] T007 [P] Add KYC TypeScript types to `rcfield-fe/src/features/provider-kyc/types.ts` — `KycBusinessType`, `KycDocumentType`, `KycDocumentItem`, `KycStatusResponse` matching API contracts
+- [X] T002 Run DB migration — create `backend/src/migrations/{timestamp}-AddKycColumnsToProviderProfiles.ts` with `ALTER TABLE provider_profiles ADD COLUMN business_type varchar(20), kyc_documents jsonb NOT NULL DEFAULT '[]', kyc_submitted_at timestamptz`
+- [X] T003 [P] Add TypeScript enums and interface to `backend/src/types/index.ts`: `KycBusinessType { INDIVIDUAL, BUSINESS }`, `KycDocumentType { CCCD_FRONT, CCCD_BACK, GPKD, REPRESENTATIVE_ID, VENUE_PHOTO }`, `KycDocumentItem { documentType, cloudinaryUrl, cloudinaryPublicId, originalFilename }`
+- [X] T004 Extend `backend/src/models/provider-profile.entity.ts` — add 3 `@Column` fields: `businessType: KycBusinessType | null`, `kycDocuments: KycDocumentItem[]`, `kycSubmittedAt: Date | null` (depends on T003)
+- [X] T005 [P] Add `uploadFile(buffer, folder, originalname)` method to `backend/src/services/cloudinary.service.ts` — use `resource_type: 'auto'` to support JPEG/PNG/PDF; do NOT modify existing `uploadImage()`
+- [X] T006 [P] Create `kycUpload` multer instance in `backend/src/config/multer.config.ts` (or inline at top of routes file) — `memoryStorage()`, 10MB limit, accept `image/jpeg|image/png|image/jpg|application/pdf`, named fields: `cccd_front(1)`, `cccd_back(1)`, `gpkd(1)`, `representative_id(1)`, `venue_photo(1)`
+- [X] T007 [P] Add KYC TypeScript types to `frontend/src/features/provider-kyc/types.ts` — `KycBusinessType`, `KycDocumentType`, `KycDocumentItem`, `KycStatusResponse` matching API contracts
 
 **Checkpoint**: Migration applied + entity updated + Cloudinary uploadFile() ready + multer config ready → shared infrastructure complete
 
@@ -47,13 +47,13 @@
 
 ### Implementation for User Story 1
 
-- [X] T008 [US1] Update `RegisterProviderSchema` in `rcfeild-be/src/validate/index.ts` — add `business_type: z.enum(['INDIVIDUAL', 'BUSINESS'])` as required field
-- [X] T009 [US1] Extend `register()` in `rcfeild-be/src/services/provider-onboarding.service.ts` — accept `files: Record<string, Express.Multer.File[]>`, validate required docs per business_type (throw `MISSING_DOCUMENTS` if missing), upload each file via `cloudinary.uploadFile()` into folder `rcfield/kyc/{profileId}/`, save `kyc_documents` JSONB array + `business_type` + `kyc_submitted_at` on ProviderProfile; wrap Cloudinary uploads + DB save in try/catch (delete uploaded files if DB fails)
-- [X] T010 [US1] Update `registerProvider()` handler in `rcfeild-be/src/controllers/provider-onboarding.controller.ts` — parse `req.files` from multer, validate `business_type` + required files, call updated `register()` service; multer populates `req.body` as strings (not JSON) so run Zod parse AFTER multer
-- [X] T011 [US1] Update `rcfeild-be/src/routes/provider-onboarding.routes.ts` — mount `kycUpload.fields([...])` middleware on `POST /auth/register-provider` BEFORE Zod validation middleware
-- [X] T012 [P] [US1] Create `KycDocumentUpload` component in `rcfield-fe/src/features/provider-kyc/components/KycDocumentUpload.tsx` — accepts `businessType` prop, renders correct file input fields (INDIVIDUAL: cccd_front, cccd_back, venue_photo; BUSINESS: gpkd, representative_id, venue_photo), client-side file validation (type + size), highlights missing required files on submit attempt
-- [X] T013 [US1] Extend `rcfield-fe/src/pages/auth/ProviderRegisterPage.tsx` — add Step 3 using `KycDocumentUpload` component, track selected files in state, update form submit to build `FormData` with all text fields + file fields instead of JSON body
-- [X] T014 [US1] Update `registerProvider()` in `rcfield-fe/src/features/subscriptions/api/subscription.api.ts` — change signature to accept `FormData`, send `Content-Type: multipart/form-data` (let browser set boundary automatically, do NOT manually set Content-Type header when using FormData)
+- [X] T008 [US1] Update `RegisterProviderSchema` in `backend/src/validate/index.ts` — add `business_type: z.enum(['INDIVIDUAL', 'BUSINESS'])` as required field
+- [X] T009 [US1] Extend `register()` in `backend/src/services/provider-onboarding.service.ts` — accept `files: Record<string, Express.Multer.File[]>`, validate required docs per business_type (throw `MISSING_DOCUMENTS` if missing), upload each file via `cloudinary.uploadFile()` into folder `rcfield/kyc/{profileId}/`, save `kyc_documents` JSONB array + `business_type` + `kyc_submitted_at` on ProviderProfile; wrap Cloudinary uploads + DB save in try/catch (delete uploaded files if DB fails)
+- [X] T010 [US1] Update `registerProvider()` handler in `backend/src/controllers/provider-onboarding.controller.ts` — parse `req.files` from multer, validate `business_type` + required files, call updated `register()` service; multer populates `req.body` as strings (not JSON) so run Zod parse AFTER multer
+- [X] T011 [US1] Update `backend/src/routes/provider-onboarding.routes.ts` — mount `kycUpload.fields([...])` middleware on `POST /auth/register-provider` BEFORE Zod validation middleware
+- [X] T012 [P] [US1] Create `KycDocumentUpload` component in `frontend/src/features/provider-kyc/components/KycDocumentUpload.tsx` — accepts `businessType` prop, renders correct file input fields (INDIVIDUAL: cccd_front, cccd_back, venue_photo; BUSINESS: gpkd, representative_id, venue_photo), client-side file validation (type + size), highlights missing required files on submit attempt
+- [X] T013 [US1] Extend `frontend/src/pages/auth/ProviderRegisterPage.tsx` — add Step 3 using `KycDocumentUpload` component, track selected files in state, update form submit to build `FormData` with all text fields + file fields instead of JSON body
+- [X] T014 [US1] Update `registerProvider()` in `frontend/src/features/subscriptions/api/subscription.api.ts` — change signature to accept `FormData`, send `Content-Type: multipart/form-data` (let browser set boundary automatically, do NOT manually set Content-Type header when using FormData)
 
 **Checkpoint**: Full 3-step registration works end-to-end. ProviderProfile created with kyc_documents. Frontend shows "Đang chờ xét duyệt" success screen.
 
@@ -67,10 +67,10 @@
 
 ### Implementation for User Story 2
 
-- [X] T015 [US2] Extend `getProviderDetail()` in `rcfeild-be/src/services/provider-onboarding.service.ts` — join/include `kyc_documents`, `business_type`, `kyc_submitted_at`, `rejection_reason` from ProviderProfile; return as nested `kyc` object with `documents[]` including `cloudinaryUrl` (ADMIN-only response path)
-- [X] T016 [US2] Verify `approve()` and `reject()` service methods in `rcfeild-be/src/services/provider-onboarding.service.ts` correctly update `registrationStatus` and trigger in-app notification with rejection reason in message; add rejection_reason to notification payload if not already present
-- [X] T017 [P] [US2] Create `KycDocumentViewer` component in `rcfield-fe/src/features/provider-kyc/components/KycDocumentViewer.tsx` — accepts `documents: KycDocumentItem[]`, renders `<img>` for image documents, `<a target="_blank">` link for PDF, shows `documentType` label in Vietnamese
-- [X] T018 [US2] Extend `rcfield-fe/src/pages/admin/AdminProviderDetailPage.tsx` — add "Giấy tờ xác thực" section using `KycDocumentViewer`, display `businessType`, `submittedAt`; section only renders when `kyc` object is present in API response
+- [X] T015 [US2] Extend `getProviderDetail()` in `backend/src/services/provider-onboarding.service.ts` — join/include `kyc_documents`, `business_type`, `kyc_submitted_at`, `rejection_reason` from ProviderProfile; return as nested `kyc` object with `documents[]` including `cloudinaryUrl` (ADMIN-only response path)
+- [X] T016 [US2] Verify `approve()` and `reject()` service methods in `backend/src/services/provider-onboarding.service.ts` correctly update `registrationStatus` and trigger in-app notification with rejection reason in message; add rejection_reason to notification payload if not already present
+- [X] T017 [P] [US2] Create `KycDocumentViewer` component in `frontend/src/features/provider-kyc/components/KycDocumentViewer.tsx` — accepts `documents: KycDocumentItem[]`, renders `<img>` for image documents, `<a target="_blank">` link for PDF, shows `documentType` label in Vietnamese
+- [X] T018 [US2] Extend `frontend/src/pages/admin/AdminProviderDetailPage.tsx` — add "Giấy tờ xác thực" section using `KycDocumentViewer`, display `businessType`, `submittedAt`; section only renders when `kyc` object is present in API response
 
 **Checkpoint**: ADMIN can view all KYC documents inline on provider detail page. Approve/reject flows with notifications work correctly.
 
@@ -84,13 +84,13 @@
 
 ### Implementation for User Story 3
 
-- [X] T019 [US3] Update `PROVIDER_STATUS_TRANSITIONS` in `rcfeild-be/src/services/provider-onboarding.service.ts` — change `REJECTED: []` to `REJECTED: [ProviderStatus.PENDING]` to allow resubmission state transition
-- [X] T020 [US3] Add `resubmit(providerId, files, businessType)` method to `rcfeild-be/src/services/provider-onboarding.service.ts` — guard: throw `RESUBMIT_NOT_ALLOWED` if `registrationStatus !== REJECTED`; upload new files to Cloudinary folder `rcfield/kyc/{profileId}/resubmit-{timestamp}/`; overwrite `kyc_documents`, `business_type`, `kyc_submitted_at` on ProviderProfile; call `assertTransition(REJECTED → PENDING)` to set new status
-- [X] T021 [US3] Add `getKycStatus(providerId)` method to `rcfeild-be/src/services/provider-onboarding.service.ts` — return `{ providerStatus, businessType, rejectionReason, kycSubmittedAt, documents[] }` where `documents[]` contains only `{ documentType, originalFilename }` (NO cloudinaryUrl — provider cannot view doc content)
-- [X] T022 [US3] Add `resubmitKyc()` and `getKycStatus()` handlers to `rcfeild-be/src/controllers/provider-onboarding.controller.ts` — `resubmitKyc` parses multer files + business_type, validates required docs, calls service; `getKycStatus` reads from JWT providerId
-- [X] T023 [US3] Add routes to `rcfeild-be/src/routes/provider-subscription.routes.ts` — `POST /provider/kyc/resubmit` (PROVIDER auth + kycUpload middleware), `GET /provider/kyc/status` (PROVIDER auth)
-- [X] T024 [P] [US3] Create `rcfield-fe/src/features/provider-kyc/api/kyc.api.ts` — export `resubmitKyc(formData: FormData)` → `POST /api/v1/provider/kyc/resubmit`, `getKycStatus()` → `GET /api/v1/provider/kyc/status`
-- [X] T025 [US3] Extend `rcfield-fe/src/pages/provider/ProviderRejectedPage.tsx` — show `rejectionReason` from `getKycStatus()` API, embed `KycDocumentUpload` component with current `businessType` pre-selected, call `resubmitKyc()` on submit, redirect to `/pending-review` on success (ProviderStatusGuard will handle routing once status becomes PENDING)
+- [X] T019 [US3] Update `PROVIDER_STATUS_TRANSITIONS` in `backend/src/services/provider-onboarding.service.ts` — change `REJECTED: []` to `REJECTED: [ProviderStatus.PENDING]` to allow resubmission state transition
+- [X] T020 [US3] Add `resubmit(providerId, files, businessType)` method to `backend/src/services/provider-onboarding.service.ts` — guard: throw `RESUBMIT_NOT_ALLOWED` if `registrationStatus !== REJECTED`; upload new files to Cloudinary folder `rcfield/kyc/{profileId}/resubmit-{timestamp}/`; overwrite `kyc_documents`, `business_type`, `kyc_submitted_at` on ProviderProfile; call `assertTransition(REJECTED → PENDING)` to set new status
+- [X] T021 [US3] Add `getKycStatus(providerId)` method to `backend/src/services/provider-onboarding.service.ts` — return `{ providerStatus, businessType, rejectionReason, kycSubmittedAt, documents[] }` where `documents[]` contains only `{ documentType, originalFilename }` (NO cloudinaryUrl — provider cannot view doc content)
+- [X] T022 [US3] Add `resubmitKyc()` and `getKycStatus()` handlers to `backend/src/controllers/provider-onboarding.controller.ts` — `resubmitKyc` parses multer files + business_type, validates required docs, calls service; `getKycStatus` reads from JWT providerId
+- [X] T023 [US3] Add routes to `backend/src/routes/provider-subscription.routes.ts` — `POST /provider/kyc/resubmit` (PROVIDER auth + kycUpload middleware), `GET /provider/kyc/status` (PROVIDER auth)
+- [X] T024 [P] [US3] Create `frontend/src/features/provider-kyc/api/kyc.api.ts` — export `resubmitKyc(formData: FormData)` → `POST /api/v1/provider/kyc/resubmit`, `getKycStatus()` → `GET /api/v1/provider/kyc/status`
+- [X] T025 [US3] Extend `frontend/src/pages/provider/ProviderRejectedPage.tsx` — show `rejectionReason` from `getKycStatus()` API, embed `KycDocumentUpload` component with current `businessType` pre-selected, call `resubmitKyc()` on submit, redirect to `/pending-review` on success (ProviderStatusGuard will handle routing once status becomes PENDING)
 
 **Checkpoint**: Full resubmit cycle works. Scenario 4 from quickstart.md passes end-to-end.
 
@@ -189,7 +189,7 @@ Agent B: T024 (FE kyc.api.ts)
 - `[P]` = different files, no shared incomplete dependencies — safe to parallelize
 - multer middleware MUST be mounted BEFORE Zod validation (multipart `req.body` = strings, not JSON)
 - When sending `FormData` from React, do NOT set `Content-Type` header manually — browser sets it with boundary
-- `rcfeild-be` path uses typo ("rcfeild") — this matches the actual repo directory name
+- `backend` path uses typo ("rcfeild") — this matches the actual repo directory name
 - `uploadFile()` uses `resource_type: 'auto'` — do NOT change existing `uploadImage()` (regression risk)
 - Resubmit overwrites `kyc_documents` JSONB — no history of previous submissions is stored (intentional trade-off)
 - `assertTransition()` in state machine must be called for all status changes — never direct-update status

@@ -7,13 +7,13 @@
 ## Chuẩn bị
 
 ```bash
-# rcfeild-be/.env
+# backend/.env
 SANDBOX_BANK_ENABLED=true
 BANK_WEBHOOK_API_KEY=<chuỗi ngẫu nhiên đủ dài>
 ```
 
 ```bash
-cd rcfeild-be
+cd backend
 npm run migration:run
 npm run dev
 ```

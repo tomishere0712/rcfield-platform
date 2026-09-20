@@ -16,13 +16,13 @@
 
 **Purpose**: New DB table + entity + type changes that ALL user stories depend on.
 
-- [X] T001 Write migration `rcfeild-be/src/migrations/TIMESTAMP-AddStaffInviteTokens.ts` — CREATE TABLE `staff_invite_tokens` (id, user_id, token, expires_at, used_at, created_at) with index on user_id
-- [X] T002 Create TypeORM entity `rcfeild-be/src/models/staff-invite-token.entity.ts` — mirrors `password-reset-token.entity.ts` pattern
-- [X] T003 Add optional `cafeId?: string` to `AuthPayload` interface in `rcfeild-be/src/types/index.ts`
-- [X] T004 Modify `issueTokenPair` in `rcfeild-be/src/services/auth.service.ts` — call `getAssignedCafeId(user.id)` when `role === STAFF`, embed `cafeId` in JWT payload
-- [X] T005 Add `sendStaffInvite({ to, fullName, inviteUrl })` method to `rcfeild-be/src/services/email.service.ts` — follows `sendPasswordResetCode` pattern using Brevo
-- [X] T006 [P] Add `InviteStaffSchema` to `rcfeild-be/src/validate/index.ts` — fields: `cafe_id` (uuid), `full_name` (string), `email` (email), `phone` (string, optional). Remove `password` field from previous schema.
-- [X] T007 [P] Add `ActivateStaffSchema` to `rcfeild-be/src/validate/index.ts` — fields: `token` (string), `password` (min 8 chars)
+- [X] T001 Write migration `backend/src/migrations/TIMESTAMP-AddStaffInviteTokens.ts` — CREATE TABLE `staff_invite_tokens` (id, user_id, token, expires_at, used_at, created_at) with index on user_id
+- [X] T002 Create TypeORM entity `backend/src/models/staff-invite-token.entity.ts` — mirrors `password-reset-token.entity.ts` pattern
+- [X] T003 Add optional `cafeId?: string` to `AuthPayload` interface in `backend/src/types/index.ts`
+- [X] T004 Modify `issueTokenPair` in `backend/src/services/auth.service.ts` — call `getAssignedCafeId(user.id)` when `role === STAFF`, embed `cafeId` in JWT payload
+- [X] T005 Add `sendStaffInvite({ to, fullName, inviteUrl })` method to `backend/src/services/email.service.ts` — follows `sendPasswordResetCode` pattern using Brevo
+- [X] T006 [P] Add `InviteStaffSchema` to `backend/src/validate/index.ts` — fields: `cafe_id` (uuid), `full_name` (string), `email` (email), `phone` (string, optional). Remove `password` field from previous schema.
+- [X] T007 [P] Add `ActivateStaffSchema` to `backend/src/validate/index.ts` — fields: `token` (string), `password` (min 8 chars)
 
 **Checkpoint**: DB table ready, entity registered in TypeORM, JWT includes cafeId for STAFF, email method exists, schemas defined — US implementation can begin.
 
@@ -34,7 +34,7 @@
 
 > ⚠️ Complete route file creation tasks in Phase 3–6 first, then return here to register.
 
-- [X] T008 Register `staffInviteRouter` and `staffRouter` in `rcfeild-be/src/routes/index.ts`:
+- [X] T008 Register `staffInviteRouter` and `staffRouter` in `backend/src/routes/index.ts`:
   - `router.use('/auth/staff-invite', staffInviteRouter)` (public)
   - `router.use('/staff', staffRouter)` (authenticated STAFF)
 
@@ -48,13 +48,13 @@
 
 ### Implementation
 
-- [X] T009 [US1] Modify `createStaffForProvider` in `rcfeild-be/src/services/staff.service.ts`:
+- [X] T009 [US1] Modify `createStaffForProvider` in `backend/src/services/staff.service.ts`:
   - Change `is_active: true` → `is_active: false` on user creation
   - Generate raw invite token (`crypto.randomBytes(32).toString('hex')`)
   - Hash token with SHA-256, save to `staff_invite_tokens` with `expires_at = now() + 48h`
   - Call `emailService.sendStaffInvite({ to, fullName, inviteUrl })` — catch errors, log, do NOT rethrow (per clarification Q2)
   - Return `{ ...profile, emailSent: boolean }` instead of just profile
-- [X] T010 [US1] Update `createStaff` handler in `rcfeild-be/src/controllers/staff.controller.ts`:
+- [X] T010 [US1] Update `createStaff` handler in `backend/src/controllers/staff.controller.ts`:
   - Use updated `InviteStaffSchema` (no password field)
   - Pass `req.user.userId` as providerId
   - Return 201 with `{ success: true, data: { id, email, fullName, cafeId, status: "PENDING", emailSent } }`
@@ -71,44 +71,44 @@
 
 ### Implementation
 
-- [X] T011 [P] [US2] Add `listStaffForProvider(providerId: string, cafeId?: string)` to `rcfeild-be/src/services/staff.service.ts`:
+- [X] T011 [P] [US2] Add `listStaffForProvider(providerId: string, cafeId?: string)` to `backend/src/services/staff.service.ts`:
   - JOIN `users` + `staff_cafe_assignments` + `cafes` + LEFT JOIN `staff_invite_tokens` (active: used_at IS NULL AND expires_at > NOW())
   - Derive status: PENDING / ACTIVE / DISABLED per research.md Decision 1
   - Filter by `cafe.provider_id = providerId`, optionally filter by `cafeId`
   - Return `StaffListItem[]` per data-model.md
-- [X] T012 [P] [US2] Add `deactivateStaff(providerId: string, staffId: string)` to `rcfeild-be/src/services/staff.service.ts`:
+- [X] T012 [P] [US2] Add `deactivateStaff(providerId: string, staffId: string)` to `backend/src/services/staff.service.ts`:
   - Verify staff belongs to a cafe owned by providerId
   - Reject if `is_active = false` AND no active token (already DISABLED) → 409 STAFF_ALREADY_DISABLED
   - Set `users.is_active = false`
-- [X] T013 [P] [US2] Add `reactivateStaff(providerId: string, staffId: string)` to `rcfeild-be/src/services/staff.service.ts`:
+- [X] T013 [P] [US2] Add `reactivateStaff(providerId: string, staffId: string)` to `backend/src/services/staff.service.ts`:
   - Verify ownership
   - Reject if `is_active = true` → 409 STAFF_NOT_DISABLED
   - Reject if `is_active = false` AND active invite token exists → 409 STAFF_PENDING_ACTIVATION
   - Set `users.is_active = true`
-- [X] T014 [P] [US2] Add `resendInvite(providerId: string, staffId: string)` to `rcfeild-be/src/services/staff.service.ts`:
+- [X] T014 [P] [US2] Add `resendInvite(providerId: string, staffId: string)` to `backend/src/services/staff.service.ts`:
   - Verify ownership
   - Reject if `users.is_active = true` → 409 STAFF_ALREADY_ACTIVE
   - Delete existing `staff_invite_tokens` for user, create new token (48h TTL)
   - Call `emailService.sendStaffInvite()` — catch errors, return `{ emailSent: boolean }`
-- [X] T015 [US2] Add handlers to `rcfeild-be/src/controllers/staff.controller.ts`:
+- [X] T015 [US2] Add handlers to `backend/src/controllers/staff.controller.ts`:
   - `listStaff`: GET handler, reads optional `?cafe_id` query param
   - `deactivateStaff`: PATCH handler, reads `req.params.staffId`
   - `reactivateStaff`: PATCH handler, reads `req.params.staffId`
   - `resendInvite`: POST handler, reads `req.params.staffId`
-- [X] T016 [US2] Add routes to `rcfeild-be/src/routes/provider-subscription.routes.ts`:
+- [X] T016 [US2] Add routes to `backend/src/routes/provider-subscription.routes.ts`:
   - `GET /staff` → `staffController.listStaff`
   - `PATCH /staff/:staffId/deactivate` → `staffController.deactivateStaff`
   - `PATCH /staff/:staffId/reactivate` → `staffController.reactivateStaff`
   - `POST /staff/:staffId/resend-invite` → `staffController.resendInvite`
   - All behind existing `authenticate, authorize(PROVIDER), requireActiveProvider`
-- [X] T017 [P] [US2] Create `rcfield-fe/src/features/staff/api/staff.api.ts` — React Query functions:
+- [X] T017 [P] [US2] Create `frontend/src/features/staff/api/staff.api.ts` — React Query functions:
   - `staffQueryKeys` object
   - `staffApi.listStaff(cafeId?)` → GET /provider/staff
   - `staffApi.inviteStaff(body)` → POST /provider/staff
   - `staffApi.deactivateStaff(staffId)` → PATCH /provider/staff/:staffId/deactivate
   - `staffApi.reactivateStaff(staffId)` → PATCH /provider/staff/:staffId/reactivate
   - `staffApi.resendInvite(staffId)` → POST /provider/staff/:staffId/resend-invite
-- [X] T018 [US2] Modify `rcfield-fe/src/pages/provider/ProviderStaffPage.tsx` — replace all mock data with real API:
+- [X] T018 [US2] Modify `frontend/src/pages/provider/ProviderStaffPage.tsx` — replace all mock data with real API:
   - Use `useQuery(staffQueryKeys.list(), staffApi.listStaff)` for staff list
   - Use `useMutation(staffApi.inviteStaff)` for invite form submission
   - Use `useMutation(staffApi.deactivateStaff)` / `reactivateStaff` / `resendInvite` for row actions
@@ -126,34 +126,34 @@
 
 ### Implementation
 
-- [X] T019 [P] [US3] Add `validateInviteToken(rawToken: string)` to `rcfeild-be/src/services/staff.service.ts`:
+- [X] T019 [P] [US3] Add `validateInviteToken(rawToken: string)` to `backend/src/services/staff.service.ts`:
   - Hash raw token with SHA-256
   - Look up in `staff_invite_tokens` where `token = hash AND used_at IS NULL`
   - Throw `INVITE_TOKEN_INVALID` (400) if not found
   - Throw `INVITE_TOKEN_EXPIRED` (410) if `expires_at <= now()`
   - Return `{ email, fullName }` from joined `users`
-- [X] T020 [P] [US3] Add `activateStaffAccount(rawToken: string, password: string)` to `rcfeild-be/src/services/staff.service.ts`:
+- [X] T020 [P] [US3] Add `activateStaffAccount(rawToken: string, password: string)` to `backend/src/services/staff.service.ts`:
   - Validate token (reuse `validateInviteToken` logic)
   - Hash password with bcrypt(10)
   - Set `users.password_hash = hash`, `users.is_active = true`
   - Set `staff_invite_tokens.used_at = now()`
   - Issue JWT pair via `authService.issueTokenPair(user)` (or equivalent inline)
   - Return JWT pair + user profile with cafeId
-- [X] T021 [US3] Create `rcfeild-be/src/controllers/staff-invite.controller.ts`:
+- [X] T021 [US3] Create `backend/src/controllers/staff-invite.controller.ts`:
   - `validateToken`: GET handler, reads `?token` query param, returns `{ email, fullName }`
   - `activateAccount`: POST handler, validates with `ActivateStaffSchema`, calls service
-- [X] T022 [US3] Create `rcfeild-be/src/routes/staff-invite.routes.ts`:
+- [X] T022 [US3] Create `backend/src/routes/staff-invite.routes.ts`:
   - NO `authenticate` middleware
   - `GET /validate` → `staffInviteController.validateToken`
   - `POST /activate` → `staffInviteController.activateAccount`
   - Export `staffInviteRouter`
-- [X] T023 [US3] Create `rcfield-fe/src/pages/staff/activate/StaffActivatePage.tsx`:
+- [X] T023 [US3] Create `frontend/src/pages/staff/activate/StaffActivatePage.tsx`:
   - On mount: call `GET /auth/staff-invite/validate?token=<token_from_url>` 
   - If 410: show "Link đã hết hạn, liên hệ Provider để gửi lại"
   - If 400: show "Link không hợp lệ"
   - If 200: show "Kích hoạt tài khoản cho [email]" + password form
   - On submit: call `POST /auth/staff-invite/activate`, on success redirect to staff dashboard
-- [X] T024 [US3] Add `/staff-invite/activate` route to FE router (wherever routes are configured in `rcfield-fe/src/`) pointing to `StaffActivatePage`
+- [X] T024 [US3] Add `/staff-invite/activate` route to FE router (wherever routes are configured in `frontend/src/`) pointing to `StaffActivatePage`
 
 **Checkpoint**: Staff can click invite link, set password, be auto-logged in to staff dashboard.
 
@@ -167,20 +167,20 @@
 
 ### Implementation
 
-- [X] T025 [P] [US4] Add `getTodayBookings(cafeId: string)` to `rcfeild-be/src/services/staff.service.ts`:
+- [X] T025 [P] [US4] Add `getTodayBookings(cafeId: string)` to `backend/src/services/staff.service.ts`:
   - Query `bookings` where `cafe_id = cafeId` AND date portion of `start_time` = today (UTC+7) AND `status IN ('CONFIRMED', 'ACTIVE', 'EXTENDING', 'CHECKING_OUT')`
   - JOIN customer user for `customerName`, `customerPhone`
   - JOIN vehicle (if RENTAL mode) for `vehicleName`
   - Return array of `TodayBookingItem` per contracts/api.md
-- [X] T026 [P] [US4] Add `todayBookings` handler to `rcfeild-be/src/controllers/staff.controller.ts`:
+- [X] T026 [P] [US4] Add `todayBookings` handler to `backend/src/controllers/staff.controller.ts`:
   - Read `cafeId` from `req.user.cafeId` (populated from JWT per Phase 1 T004)
   - Throw 403 if `cafeId` is missing (staff not yet assigned)
   - Return `{ success: true, data: [...] }`
-- [X] T027 [US4] Create `rcfeild-be/src/routes/staff.routes.ts`:
+- [X] T027 [US4] Create `backend/src/routes/staff.routes.ts`:
   - `staffRouter.use(authenticate, authorize(UserRole.STAFF))`
   - `GET /today-bookings` → `staffController.todayBookings`
   - Export `staffRouter`
-- [X] T028 [US4] Modify `rcfield-fe/src/pages/staff/StaffTodayBookingsPage.tsx` — replace mock data:
+- [X] T028 [US4] Modify `frontend/src/pages/staff/StaffTodayBookingsPage.tsx` — replace mock data:
   - Add `useQuery(['staff', 'today-bookings'], () => api.get('/staff/today-bookings'))` 
   - Render real booking list; show empty state when array is empty
   - Show loading skeleton during fetch
@@ -191,9 +191,9 @@
 
 ## Phase 7: Polish & Cross-Cutting Concerns
 
-- [X] T029 Complete Phase 2 T008 — register `staffInviteRouter` and `staffRouter` in `rcfeild-be/src/routes/index.ts`
-- [X] T030 [P] Run TypeScript compiler (`tsc --noEmit`) in `rcfeild-be/` — fix any type errors from `AuthPayload.cafeId` addition
-- [ ] T031 [P] Run migration to verify `staff_invite_tokens` table created correctly: `npm run migration:run` in `rcfeild-be/`
+- [X] T029 Complete Phase 2 T008 — register `staffInviteRouter` and `staffRouter` in `backend/src/routes/index.ts`
+- [X] T030 [P] Run TypeScript compiler (`tsc --noEmit`) in `backend/` — fix any type errors from `AuthPayload.cafeId` addition
+- [ ] T031 [P] Run migration to verify `staff_invite_tokens` table created correctly: `npm run migration:run` in `backend/`
 - [ ] T032 Validate end-to-end with quickstart.md Scenario A (invite → activate → login → today-bookings)
 - [ ] T033 [P] Validate Scenario E (email conflict) and Scenario C (Brevo failure path)
 
@@ -256,7 +256,7 @@
 ## Notes
 
 - All tasks touching `staff.service.ts` in Phase 4 can be written in a single pass (add all 4 functions at once) — don't edit the same file 4 times separately
-- `rcfeild-be` vs `rcfield-fe` — note the spelling difference: backend is `rcfeild-be`, frontend is `rcfield-fe`
+- `backend` vs `frontend` — note the spelling difference: backend is `backend`, frontend is `frontend`
 - `staff_invite_tokens.token` stores the SHA-256 hash; the raw token goes in the email URL only
 - cafeId added to JWT only for `UserRole.STAFF` — no change for CUSTOMER/PROVIDER/ADMIN tokens
 - Brevo failure must NOT throw — catch error, set `emailSent = false`, continue

@@ -284,7 +284,7 @@ sequenceDiagram
 
 ## 7. Key Files
 
-### Backend (`rcfeild-be/src`)
+### Backend (`backend/src`)
 
 | Area | Path | Note |
 |------|------|------|
@@ -470,7 +470,7 @@ classDiagram
 - `src/controllers/fb-webhook.controller.ts` — session + message dedup
 
 ### Legend
-- **B** = `rcfeild-be` Express + TypeScript backend
+- **B** = `backend` Express + TypeScript backend
 - **R** = Redis (ioredis in production, `MemoryRedis` in `NODE_ENV=test`)
 - **DB** = PostgreSQL via TypeORM
 - `-->>` = response / return value
@@ -481,4 +481,4 @@ classDiagram
 
 ---
 
-*Last updated: 2026-06-16 · Based on: codegraph exploration của rcfeild-be codebase*
+*Last updated: 2026-06-16 · Based on: codegraph exploration của backend codebase*

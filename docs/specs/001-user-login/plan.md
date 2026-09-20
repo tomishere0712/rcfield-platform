@@ -49,7 +49,7 @@ specs/001-user-login/
 └── tasks.md             ← Phase 2 (/speckit-tasks — not yet created)
 ```
 
-### Source Code (backend `rcfeild-be/`)
+### Source Code (backend `backend/`)
 
 ```text
 src/

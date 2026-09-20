@@ -52,7 +52,7 @@ specs/007-booking-payment/
 
 ### Source Code
 
-**Backend** (`rcfeild-be/src/`):
+**Backend** (`backend/src/`):
 
 ```text
 models/
@@ -90,7 +90,7 @@ __tests__/
 └── services/payment.service.test.ts [NEW] — R1/R2/R3 refund calculations (TDD first)
 ```
 
-**Frontend** (`rcfield-fe/src/`):
+**Frontend** (`frontend/src/`):
 
 ```text
 features/booking/

@@ -1,0 +1,104 @@
+<!doctype html>
+<!--
+  lang="vi" chứ không phải "en".
+
+  Toàn bộ nội dung là tiếng Việt; khai sai ngôn ngữ khiến công cụ tìm kiếm đánh
+  giá sai mức độ liên quan với truy vấn tiếng Việt, và trình đọc màn hình đọc
+  tiếng Việt bằng giọng tiếng Anh.
+-->
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/brand/rcfield-logo.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#ea3229" />
+
+    <title>RCField — Đặt lịch sân RC, thuê xe RC tại Việt Nam</title>
+    <!--
+      Không có thẻ này thì Google tự nhặt một đoạn bất kỳ trong trang làm mô tả —
+      đúng thứ đang xảy ra trên kết quả tìm kiếm hiện tại.
+    -->
+    <meta
+      name="description"
+      content="Tìm sân chơi xe RC gần bạn, xem giá theo giờ, đặt lịch và thuê xe trực tuyến. Đặt trước khung giờ, gọi món tại sân, thanh toán một lần — không lo hết chỗ."
+    />
+    <link rel="canonical" href="https://www.rcfield.site/" />
+
+    <!--
+      Open Graph — quyết định cách đường dẫn hiện ra khi chia sẻ qua Zalo và
+      Facebook, hai kênh chính khách Việt gửi link cho nhau. Thiếu thì link dán
+      ra chỉ còn một dòng chữ trơ trọi, không ảnh, không mô tả.
+    -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="RCField" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:url" content="https://www.rcfield.site/" />
+    <meta
+      property="og:title"
+      content="RCField — Đặt lịch sân RC, thuê xe RC tại Việt Nam"
+    />
+    <meta
+      property="og:description"
+      content="Tìm sân chơi xe RC gần bạn, xem giá theo giờ, đặt lịch và thuê xe trực tuyến."
+    />
+    <meta property="og:image" content="https://www.rcfield.site/brand/og-cover.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="RCField — Đặt lịch sân RC, thuê xe RC tại Việt Nam"
+    />
+    <meta
+      name="twitter:description"
+      content="Tìm sân chơi xe RC gần bạn, xem giá theo giờ, đặt lịch và thuê xe trực tuyến."
+    />
+    <meta name="twitter:image" content="https://www.rcfield.site/brand/og-cover.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;500;600;700&family=Russo+One&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <!--
+      Dữ liệu có cấu trúc. `SearchAction` là thứ giúp Google hiện thêm ô tìm
+      kiếm ngay dưới kết quả — chỉ có tác dụng khi trang đã có thẩm quyền nhất
+      định, nên khai sẵn chứ không kỳ vọng thấy ngay.
+    -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://www.rcfield.site/#organization",
+            "name": "RCField",
+            "url": "https://www.rcfield.site/",
+            "logo": "https://www.rcfield.site/brand/rcfield-logo.png",
+            "areaServed": "VN"
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://www.rcfield.site/#website",
+            "url": "https://www.rcfield.site/",
+            "name": "RCField",
+            "inLanguage": "vi-VN",
+            "publisher": { "@id": "https://www.rcfield.site/#organization" },
+            "potentialAction": {
+              "@type": "SearchAction",
+              "target": {
+                "@type": "EntryPoint",
+                "urlTemplate": "https://www.rcfield.site/cafes?query={search_term_string}"
+              },
+              "query-input": "required name=search_term_string"
+            }
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

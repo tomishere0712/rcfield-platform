@@ -1,0 +1,21 @@
+# RCField — https://www.rcfield.site
+#
+# Chặn các khu vực sau đăng nhập. Không phải vì bí mật — chúng đã được bảo vệ
+# bằng xác thực — mà vì để bot bò vào đó chỉ tốn hạn mức thu thập cho những
+# trang luôn trả về màn hình đăng nhập, trong khi trang cơ sở và giải đấu mới
+# là thứ cần được lập chỉ mục.
+
+User-agent: *
+Allow: /
+
+Disallow: /auth/
+Disallow: /profile
+Disallow: /customer/
+Disallow: /staff/
+Disallow: /staff-invite/
+Disallow: /provider/
+Disallow: /admin/
+Disallow: /booking/
+Disallow: /payment/
+
+Sitemap: https://www.rcfield.site/sitemap.xml

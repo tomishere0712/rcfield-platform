@@ -1,0 +1,136 @@
+name: FE Build Check
+
+on:
+  # Trước đây là `branches-ignore: [main]` — chạy mọi nhánh TRỪ main, tức đúng
+  # ngược với thứ cần bảo vệ nhất. Nay chỉ chạy khi đẩy thẳng lên `main`; các
+  # nhánh khác đã được pull request phía dưới lo.
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - develop
+      - main
+  # Chạy lại mỗi ngày dù không ai đẩy mã — cùng khung giờ với CI backend
+  # (01:00 UTC = 08:00 giờ Việt Nam) để một buổi sáng chỉ phải đọc một chỗ.
+  schedule:
+    - cron: '0 1 * * *'
+  workflow_dispatch:
+
+jobs:
+  build:
+    permissions:
+      contents: read
+      issues: write
+    name: Kiểm tra${{ matrix.ref && format(' · {0}', matrix.ref) || '' }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        # Lịch định kỳ của GitHub chỉ chạy trên nhánh mặc định, nên phải chỉ đích
+        # danh nhánh cần kiểm. Chỉ kiểm `main` — đó là mã đang chạy thật.
+        ref: ${{ github.event_name == 'schedule' && fromJSON('["main"]') || fromJSON('[""]') }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Rỗng khi chạy theo push/PR → giữ nguyên hành vi cũ.
+          ref: ${{ matrix.ref }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      # 62 test đơn vị trước đây KHÔNG chạy trong CI — workflow này chỉ build.
+      # `pnpm build` dùng `tsc -b` nên bắt được lỗi kiểu, nhưng không chạy một
+      # dòng test nào: mọi hồi quy về logic đều lọt qua.
+      - name: Test
+        run: pnpm test
+
+      - name: Build
+        run: pnpm build
+
+      # Với sự kiện pull request, `github.ref_name` là ref hợp nhất dạng `60/merge`.
+      # Dấu `/` không hợp lệ trong tên artifact, và "60/merge" cũng chẳng nói cho
+      # ai biết đang kiểm nhánh nào. Tính sẵn một nhãn sạch dùng chung cho artifact,
+      # tiêu đề mail và tiêu đề issue.
+      - name: Xác định nhãn nhánh
+        if: always()
+        run: |
+          RAW="${{ matrix.ref || github.head_ref || github.ref_name }}"
+          SAFE=$(printf '%s' "$RAW" | tr '/' '-' | tr -cd '[:alnum:]._-')
+          echo "BRANCH_LABEL=${SAFE:-unknown}" >> "$GITHUB_ENV"
+          echo "Nhãn nhánh: ${SAFE:-unknown} (gốc: $RAW)"
+
+      # ── Thông báo khi lần chạy định kỳ thất bại ─────────────────────────────
+      #
+      # Chỉ áp cho `schedule`: hỏng do commit thì người đẩy mã đã thấy ngay trên
+      # PR, không cần mở issue.
+      #
+      # Gom vào MỘT issue mở sẵn cho mỗi nhánh thay vì tạo mới mỗi ngày. Chạy
+      # hằng ngày mà mỗi lần một issue thì một tháng có 30 cái, không ai đọc nữa.
+      # Hỏng lại thì thêm bình luận vào issue cũ.
+      - name: Báo lỗi cho cả nhóm
+        if: failure() && github.event_name == 'schedule'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: ${{ env.BRANCH_LABEL }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          TITLE="🔴 CI định kỳ thất bại trên nhánh \`$BRANCH\`"
+          BODY=$(cat <<EOF
+          Lần chạy định kỳ lúc $(TZ=Asia/Ho_Chi_Minh date '+%H:%M %d/%m/%Y') (giờ VN) đã thất bại.
+
+          - Nhánh: \`$BRANCH\`
+          - Nhật ký: $RUN_URL
+
+          **Không ai đẩy mã mà vẫn đỏ** nghĩa là nguyên nhân nằm ngoài mã nguồn:
+          test phụ thuộc thời gian, phụ thuộc ngoài trôi phiên bản, hoặc hạ tầng
+          CI thay đổi. Mở nhật ký xem bước nào hỏng trước.
+
+          Issue này tự đóng khi lần chạy định kỳ kế tiếp thành công.
+          EOF
+          )
+
+          EXISTING=$(gh issue list --state open --label ci-daily \
+            --search "in:title $TITLE" --json number,title \
+            --jq ".[] | select(.title == \"$TITLE\") | .number" | head -1)
+
+          if [ -n "$EXISTING" ]; then
+            gh issue comment "$EXISTING" --body "$BODY"
+            echo "Đã thêm bình luận vào issue #$EXISTING"
+          else
+            gh label create ci-daily --color B60205 --description "CI chạy định kỳ" 2>/dev/null || true
+            gh issue create --title "$TITLE" --body "$BODY" --label ci-daily
+          fi
+
+      # Lần chạy định kỳ xanh trở lại thì đóng issue, để danh sách issue mở luôn
+      # phản ánh đúng tình trạng hiện tại chứ không phải lịch sử.
+      - name: Đóng cảnh báo khi đã xanh trở lại
+        if: success() && github.event_name == 'schedule'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: ${{ env.BRANCH_LABEL }}
+        run: |
+          TITLE="🔴 CI định kỳ thất bại trên nhánh \`$BRANCH\`"
+          NUM=$(gh issue list --state open --label ci-daily \
+            --search "in:title $TITLE" --json number,title \
+            --jq ".[] | select(.title == \"$TITLE\") | .number" | head -1)
+          if [ -n "$NUM" ]; then
+            gh issue close "$NUM" --comment "✅ Lần chạy định kỳ hôm nay đã xanh trở lại."
+            echo "Đã đóng issue #$NUM"
+          fi

@@ -1,0 +1,449 @@
+@import "@fontsource/be-vietnam-pro/400.css";
+@import "@fontsource/be-vietnam-pro/500.css";
+@import "@fontsource/be-vietnam-pro/600.css";
+@import "@fontsource/be-vietnam-pro/700.css";
+@import "@fontsource/be-vietnam-pro/vietnamese-400.css";
+@import "@fontsource/be-vietnam-pro/vietnamese-500.css";
+@import "@fontsource/be-vietnam-pro/vietnamese-600.css";
+@import "@fontsource/be-vietnam-pro/vietnamese-700.css";
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* Leaflet overrides img max-width globally — re-scope it to tile images only */
+img.leaflet-tile,
+img.leaflet-tile-loaded {
+  max-width: none;
+}
+
+html {
+  font-size: 90%;
+}
+
+:root {
+  font-family:
+    "Be Vietnam Pro",
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  color-scheme: light;
+  background: var(--background);
+  color: var(--foreground);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  --radius: 0.5rem;
+
+  /* Brand Premium Theme Colors (Antigravity & RCField Sporty Accent) */
+  --background: oklch(0.98 0.005 240);
+  --foreground: oklch(0.12 0.015 240);
+
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.12 0.015 240);
+
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.12 0.015 240);
+
+  --primary: oklch(0.61 0.22 28.5); /* Vibrant Sporty Racing Orange */
+  --primary-foreground: oklch(0.99 0.002 0);
+
+  --secondary: oklch(0.25 0.12 280); /* Cyber Deep Indigo */
+  --secondary-foreground: oklch(0.99 0.002 0);
+
+  --muted: oklch(0.94 0.01 240);
+  --muted-foreground: oklch(0.45 0.02 240);
+
+  --accent: oklch(0.85 0.17 75); /* Luminous Racing Amber */
+  --accent-foreground: oklch(0.12 0.015 240);
+
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.9 0.01 240);
+  --input: oklch(0.9 0.01 240);
+  --ring: oklch(0.61 0.22 28.5 / 30%);
+
+  --chart-1: oklch(0.61 0.22 28.5);
+  --chart-2: oklch(0.25 0.12 280);
+  --chart-3: oklch(0.85 0.17 75);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+
+  --sidebar: oklch(0.99 0.005 240);
+  --sidebar-foreground: oklch(0.12 0.015 240);
+  --sidebar-primary: oklch(0.61 0.22 28.5);
+  --sidebar-primary-foreground: oklch(0.99 0.002 0);
+  --sidebar-accent: oklch(0.94 0.01 240);
+  --sidebar-accent-foreground: oklch(0.61 0.22 28.5);
+  --sidebar-border: oklch(0.9 0.01 240);
+  --sidebar-ring: oklch(0.61 0.22 28.5 / 30%);
+}
+
+.dark {
+  color-scheme: dark;
+  --background: oklch(0.1 0.01 240); /* Deep Obsidian Tech Background */
+  --foreground: oklch(0.98 0.005 240);
+
+  --card: oklch(0.13 0.015 240);
+  --card-foreground: oklch(0.98 0.005 240);
+
+  --popover: oklch(0.13 0.015 240);
+  --popover-foreground: oklch(0.98 0.005 240);
+
+  --primary: oklch(0.61 0.22 28.5);
+  --primary-foreground: oklch(0.99 0.002 0);
+
+  --secondary: oklch(0.55 0.18 280); /* Neon Purple-Indigo Accent */
+  --secondary-foreground: oklch(0.99 0.002 0);
+
+  --muted: oklch(0.18 0.015 240);
+  --muted-foreground: oklch(0.65 0.02 240);
+
+  --accent: oklch(0.85 0.17 75);
+  --accent-foreground: oklch(0.1 0.01 240);
+
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 12%);
+  --ring: oklch(0.61 0.22 28.5 / 50%);
+
+  --sidebar: oklch(0.12 0.015 240);
+  --sidebar-foreground: oklch(0.98 0.005 240);
+  --sidebar-primary: oklch(0.61 0.22 28.5);
+  --sidebar-primary-foreground: oklch(0.99 0.002 0);
+  --sidebar-accent: oklch(0.18 0.015 240);
+  --sidebar-accent-foreground: oklch(0.98 0.005 240);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.61 0.22 28.5 / 50%);
+}
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 2px);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Brand-specific Tailwind Aliases */
+  --color-brand-orange: oklch(0.61 0.22 28.5);
+  --color-brand-indigo: oklch(0.55 0.18 280);
+  --color-brand-amber: oklch(0.85 0.17 75);
+  --color-brand-dark: oklch(0.1 0.01 240);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --font-heading: "Be Vietnam Pro", sans-serif;
+  --font-sans: "Be Vietnam Pro", sans-serif;
+
+  --radius-2xl: calc(var(--radius) * 1.5);
+  --radius-3xl: calc(var(--radius) * 2);
+  --radius-4xl: calc(var(--radius) * 2.5);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply min-h-svh bg-background text-foreground antialiased;
+    margin: 0;
+    margin-right: 0px !important;
+  }
+
+  /* Smooth transitions globally */
+  a,
+  button,
+  input,
+  select,
+  textarea {
+    @apply transition-all duration-200 ease-out;
+  }
+
+  /* Softer scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-muted-foreground/20 rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/30;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+  html {
+    @apply font-sans;
+    scrollbar-gutter: stable;
+  }
+  table,
+  th,
+  td {
+    font-family: "Be Vietnam Pro", Inter, sans-serif !important;
+  }
+}
+
+@layer utilities {
+  .partner-page {
+    --font-sans: "Plus Jakarta Sans", sans-serif;
+    --font-heading: "Plus Jakarta Sans", sans-serif;
+    font-family: "Plus Jakarta Sans", sans-serif;
+  }
+
+  .contest-hero-gradient {
+    background: linear-gradient(
+      135deg,
+      var(--color-brand-dark) 0%,
+      var(--color-brand-indigo) 55%,
+      var(--color-brand-orange) 100%
+    );
+  }
+
+  .contest-hero-gradient-subtle {
+    background: linear-gradient(
+      135deg,
+      var(--color-brand-dark) 0%,
+      color-mix(
+          in oklch,
+          var(--color-brand-indigo) 60%,
+          var(--color-brand-dark)
+        )
+        70%,
+      color-mix(
+          in oklch,
+          var(--color-brand-orange) 40%,
+          var(--color-brand-dark)
+        )
+        100%
+    );
+  }
+
+  .live-pulse-dot {
+    position: relative;
+  }
+
+  .live-pulse-dot::before {
+    content: "";
+    position: absolute;
+    left: -0.75rem;
+    top: 50%;
+    width: 0.375rem;
+    height: 0.375rem;
+    transform: translateY(-50%);
+    border-radius: 9999px;
+    background-color: var(--color-destructive);
+    animation: live-pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  @keyframes live-pulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.35;
+    }
+  }
+}
+
+@layer components {
+  .home-landing {
+    --landing-background: linear-gradient(180deg, #f8f6f2 0%, #f7f4ef 100%);
+    --landing-surface-soft: #f3efe8;
+    --landing-charcoal: #2f3335;
+    --landing-shadow-soft: 0 24px 60px -34px rgba(15, 23, 42, 0.22);
+    --landing-shadow-strong: 0 42px 90px -48px rgba(15, 23, 42, 0.34);
+  }
+
+  .home-search-panel input[type="date"]::-webkit-calendar-picker-indicator {
+    opacity: 0.55;
+    cursor: pointer;
+  }
+
+  .home-search-panel select {
+    background-image:
+      linear-gradient(45deg, transparent 50%, #64748b 50%),
+      linear-gradient(135deg, #64748b 50%, transparent 50%);
+    background-position:
+      calc(100% - 14px) calc(50% - 2px),
+      calc(100% - 9px) calc(50% - 2px);
+    background-size:
+      5px 5px,
+      5px 5px;
+    background-repeat: no-repeat;
+    padding-right: 1.75rem;
+  }
+
+  .provider-orange-theme {
+    color: #1c1b1b;
+    --provider-surface: #fcf8f8;
+    --provider-surface-low: #f6f3f2;
+    --provider-surface-container: #f1edec;
+    --provider-surface-high: #ebe7e7;
+    --provider-surface-highest: #e5e2e1;
+    --provider-outline: #c4c7c8;
+    --provider-text: #1c1b1b;
+    --provider-text-muted: #444748;
+    --provider-text-subtle: #747878;
+    --provider-orange-50: #fff7ed;
+    --provider-orange-100: #ffedd5;
+    --provider-orange-200: #fed7aa;
+    --provider-orange-600: #ea580c;
+    --provider-orange-700: #c2410c;
+    --provider-orange-800: #9a3412;
+    --provider-orange-900: #7c2d12;
+    --provider-orange-950: #431407;
+  }
+
+  .provider-orange-theme,
+  .provider-orange-theme .bg-\[\#fcf8f8\] {
+    background-color: var(--provider-surface) !important;
+  }
+
+  .provider-orange-theme .text-\[\#1c1b1b\],
+  .provider-orange-theme h1,
+  .provider-orange-theme h2,
+  .provider-orange-theme h3,
+  .provider-orange-theme h4 {
+    color: var(--provider-text) !important;
+  }
+
+  .provider-orange-theme .text-\[\#444748\],
+  .provider-orange-theme .text-\[\#5d5f5f\],
+  .provider-orange-theme .text-\[\#63646c\] {
+    color: var(--provider-text-muted) !important;
+  }
+
+  .provider-orange-theme .text-\[\#747878\],
+  .provider-orange-theme .placeholder\:text-\[\#747878\]::placeholder,
+  .provider-orange-theme .placeholder\:text-\[\#444748\]::placeholder {
+    color: var(--provider-text-subtle) !important;
+  }
+
+  .provider-orange-theme .bg-\[\#1c1b1b\],
+  .provider-orange-theme
+    .peer-checked\:bg-\[\#1c1b1b\]:is(:where(.peer):checked ~ *) {
+    background-color: var(--provider-orange-600) !important;
+  }
+
+  /*
+    Nền tối cho khối mở đầu của một trang.
+
+    Luật ngay trên đổi mọi `bg-[#1c1b1b]` thành cam — đúng cho NÚT, nhưng quét
+    trúng cả những mảng lớn. Một khối cam đặc chiếm nửa màn hình thì chữ trắng
+    đọc mỏi mắt, số liệu cam nhạt nằm trên nền cam gần như biến mất, và màu nhấn
+    của thương hiệu hết tác dụng vì chỗ nào cũng cam. Lớp riêng này để mảng lớn
+    giữ nền tối, còn cam quay về đúng vai trò điểm nhấn.
+  */
+  .provider-hero-surface {
+    background-color: #1c1b1b;
+  }
+
+  /*
+    Trả lại chữ sáng cho mảng tối.
+
+    Luật `.provider-orange-theme h2` phía trên ép mọi tiêu đề về màu chữ tối kèm
+    !important. Viết `text-white!` ở JSX KHÔNG thắng được: hai bên cùng
+    !important thì selector cụ thể hơn thắng, mà `.provider-orange-theme h2`
+    (hai thành phần) hơn `.text-white` (một). Phải cụ thể hơn nữa mới lật lại
+    được, nên khai ở đây thay vì rải lớp ở từng chỗ dùng.
+  */
+  .provider-orange-theme .provider-hero-surface h1,
+  .provider-orange-theme .provider-hero-surface h2,
+  .provider-orange-theme .provider-hero-surface h3,
+  .provider-orange-theme .provider-hero-surface h4 {
+    color: #ffffff !important;
+  }
+
+  .provider-orange-theme .hover\:bg-\[\#313030\]:hover {
+    background-color: var(--provider-orange-700) !important;
+  }
+
+  .provider-orange-theme .hover\:text-\[\#1c1b1b\]:hover {
+    color: white !important;
+  }
+
+  .provider-orange-theme .bg-\[\#f6f3f2\] {
+    background-color: var(--provider-surface-low) !important;
+  }
+
+  .provider-orange-theme .bg-\[\#f1edec\],
+  .provider-orange-theme .bg-\[\#e2e1eb\] {
+    background-color: var(--provider-surface-container) !important;
+  }
+
+  .provider-orange-theme .bg-\[\#ebe7e7\] {
+    background-color: var(--provider-surface-high) !important;
+  }
+
+  .provider-orange-theme .bg-\[\#e5e2e1\] {
+    background-color: var(--provider-surface-highest) !important;
+  }
+
+  .provider-orange-theme .border-\[\#c4c7c8\],
+  .provider-orange-theme .border-\[\#e5e2e1\],
+  .provider-orange-theme .border-\[\#747878\] {
+    border-color: var(--provider-outline) !important;
+  }
+
+  .provider-orange-theme .focus\:border-\[\#5d5f5f\]:focus,
+  .provider-orange-theme .focus\:ring-\[\#5d5f5f\]:focus,
+  .provider-orange-theme .focus\:ring-\[\#747878\]:focus {
+    border-color: var(--provider-orange-600) !important;
+    --tw-ring-color: color-mix(
+      in srgb,
+      var(--provider-orange-600) 35%,
+      transparent
+    ) !important;
+  }
+
+  .provider-orange-theme .hover\:bg-\[\#e5e2e1\]:hover,
+  .provider-orange-theme .hover\:bg-\[\#f1edec\]:hover,
+  .provider-orange-theme .hover\:bg-\[\#f6f3f2\]:hover,
+  .provider-orange-theme .hover\:bg-\[\#ebe7e7\]:hover {
+    background-color: var(--provider-surface-high) !important;
+  }
+
+  .provider-orange-theme .hover\:border-\[\#5d5f5f\]:hover,
+  .provider-orange-theme .hover\:border-\[\#747878\]:hover {
+    border-color: var(--provider-orange-600) !important;
+  }
+}

@@ -1,0 +1,110 @@
+version: '3.8' # Thêm version nếu file cũ chưa có, hoặc giữ nguyên dòng đầu của bạn
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: rcfeild_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: rcfeild_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5435:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d rcfeild_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: rcfeild_redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  nlu-service:
+    build:
+      context: ./nlu-service
+      dockerfile: Dockerfile
+    container_name: rcfeild_nlu
+    restart: unless-stopped
+    environment:
+      INTENTS_FILE: /app/intents/rcfield.json
+    volumes:
+      - ./nlu-service/intents:/app/intents:ro
+    expose:
+      - "8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # === RC FIELD BACKEND API ===
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rcfeild_backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: rcfeild_db
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      DB_AUTO_MIGRATE: "true"
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      # REDIS_PASSWORD: ""
+      # Copy các biến còn lại (JWT, Cloudinary, VNPAY, GOOGLE_API_KEY, ...) vào phần Environment Variables của PaaS hoặc file .env
+    ports:
+      - "3000:3000"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/api/v1/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # === SCHEMASPY VÀO ĐÂY ===
+  schemaspy:
+    image: schemaspy/schemaspy:latest
+    container_name: rcfeild_schemaspy
+    depends_on:
+      postgres:
+        condition: service_healthy # Chỉ chạy khi Postgres đã qua vòng healthcheck thành công
+    command: >
+      -t pgsql
+      -host postgres
+      -port 5432
+      -db rcfeild_db
+      -u postgres
+      -p postgres
+    volumes:
+      # Kết quả xuất ra thư mục schemaspy_output nằm ngay cạnh file docker-compose này
+      - ./schemaspy_output:/output
+
+volumes:
+  postgres_data:
+  redis_data:

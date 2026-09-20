@@ -1,0 +1,890 @@
+{
+  "info": {
+    "name": "RCField — Vehicle Catalogs & Units",
+    "description": "Collection test hoàn chỉnh cho Vehicle Catalogs (Dòng xe) và Physical Units (Xe vật lý) thuộc chi nhánh.\n\n**Yêu cầu trước khi chạy:**\n1. Đã chạy DB seed (`npm run seed:all`) để khởi tạo các tài khoản test và dữ liệu xe.\n2. Cấu hình đúng `base_url` trong collection variables.\n\n**Các tài khoản test có sẵn:**\n- Admin: `admin@gmail.com` / `123456`\n- Provider sở hữu Cafe A & B: `provider@gmail.com` / `123456`\n- Provider khác (unrelated): `provider_other@gmail.com` / `123456`\n- Staff assigned Cafe A (RC Arena Hà Nội): `staff@gmail.com` / `123456`\n- Staff khác (unassigned/unrelated): `staff_other@gmail.com` / `123456`\n- Customer: `customer@gmail.com` / `123456`\n\nTokens và ID được capture tự động bằng test scripts.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:3000/api/v1" },
+    { "key": "provider_email", "value": "provider@gmail.com" },
+    { "key": "provider_password", "value": "123456" },
+    { "key": "provider_other_email", "value": "provider_other@gmail.com" },
+    { "key": "provider_other_password", "value": "123456" },
+    { "key": "staff_email", "value": "staff@gmail.com" },
+    { "key": "staff_password", "value": "123456" },
+    { "key": "staff_other_email", "value": "staff_other@gmail.com" },
+    { "key": "staff_other_password", "value": "123456" },
+    { "key": "customer_email", "value": "customer@gmail.com" },
+    { "key": "customer_password", "value": "123456" },
+    { "key": "admin_email", "value": "admin@gmail.com" },
+    { "key": "admin_password", "value": "123456" },
+    { "key": "cafe_id", "value": "8389caf4-3025-4a14-ba89-508bf4ba7e80" },
+    { "key": "other_cafe_id", "value": "12a1d75e-c1b1-4095-9545-99b9e8ce1334" },
+    { "key": "catalog_id", "value": "" },
+    { "key": "unit_id", "value": "" },
+    { "key": "provider_token", "value": "" },
+    { "key": "provider_other_token", "value": "" },
+    { "key": "staff_token", "value": "" },
+    { "key": "staff_other_token", "value": "" },
+    { "key": "customer_token", "value": "" },
+    { "key": "admin_token", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "0. Auth & Logins",
+      "description": "Logins cho từng role để lấy JWT token và lưu vào variables tương ứng.",
+      "item": [
+        {
+          "name": "Login Provider (Owner)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let res;",
+                  "try { res = pm.response.json(); } catch(e) { res = {}; }",
+                  "pm.test('Status 200 OK', () => {",
+                  "  if (pm.response.code !== 200) {",
+                  "    pm.expect.fail('Status code ' + pm.response.code + '. Error: ' + (res.message || JSON.stringify(res)));",
+                  "  }",
+                  "});",
+                  "if (res.data && res.data.access_token) {",
+                  "  pm.collectionVariables.set('provider_token', res.data.access_token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{provider_email}}\",\n  \"password\": \"{{provider_password}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Login Provider (Other)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let res;",
+                  "try { res = pm.response.json(); } catch(e) { res = {}; }",
+                  "pm.test('Status 200 OK', () => {",
+                  "  if (pm.response.code !== 200) {",
+                  "    pm.expect.fail('Status code ' + pm.response.code + '. Error: ' + (res.message || JSON.stringify(res)));",
+                  "  }",
+                  "});",
+                  "if (res.data && res.data.access_token) {",
+                  "  pm.collectionVariables.set('provider_other_token', res.data.access_token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{provider_other_email}}\",\n  \"password\": \"{{provider_other_password}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Login Staff (Cafe Hà Nội)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let res;",
+                  "try { res = pm.response.json(); } catch(e) { res = {}; }",
+                  "pm.test('Status 200 OK', () => {",
+                  "  if (pm.response.code !== 200) {",
+                  "    pm.expect.fail('Status code ' + pm.response.code + '. Error: ' + (res.message || JSON.stringify(res)));",
+                  "  }",
+                  "});",
+                  "if (res.data && res.data.access_token) {",
+                  "  pm.collectionVariables.set('staff_token', res.data.access_token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{staff_email}}\",\n  \"password\": \"{{staff_password}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Login Staff (Other/Unassigned)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let res;",
+                  "try { res = pm.response.json(); } catch(e) { res = {}; }",
+                  "pm.test('Status 200 OK', () => {",
+                  "  if (pm.response.code !== 200) {",
+                  "    pm.expect.fail('Status code ' + pm.response.code + '. Error: ' + (res.message || JSON.stringify(res)));",
+                  "  }",
+                  "});",
+                  "if (res.data && res.data.access_token) {",
+                  "  pm.collectionVariables.set('staff_other_token', res.data.access_token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{staff_other_email}}\",\n  \"password\": \"{{staff_other_password}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Login Customer",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let res;",
+                  "try { res = pm.response.json(); } catch(e) { res = {}; }",
+                  "pm.test('Status 200 OK', () => {",
+                  "  if (pm.response.code !== 200) {",
+                  "    pm.expect.fail('Status code ' + pm.response.code + '. Error: ' + (res.message || JSON.stringify(res)));",
+                  "  }",
+                  "});",
+                  "if (res.data && res.data.access_token) {",
+                  "  pm.collectionVariables.set('customer_token', res.data.access_token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{customer_email}}\",\n  \"password\": \"{{customer_password}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Login Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let res;",
+                  "try { res = pm.response.json(); } catch(e) { res = {}; }",
+                  "pm.test('Status 200 OK', () => {",
+                  "  if (pm.response.code !== 200) {",
+                  "    pm.expect.fail('Status code ' + pm.response.code + '. Error: ' + (res.message || JSON.stringify(res)));",
+                  "  }",
+                  "});",
+                  "if (res.data && res.data.access_token) {",
+                  "  pm.collectionVariables.set('admin_token', res.data.access_token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{admin_email}}\",\n  \"password\": \"{{admin_password}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "1. Vehicle Catalog Flows",
+      "description": "Các APIs quản lý dòng xe (Catalog). Chỉ Provider sở hữu chi nhánh mới được phép sửa đổi.",
+      "item": [
+        {
+          "name": "Tạo Catalog (Owner)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let res;",
+                  "try { res = pm.response.json(); } catch(e) { res = {}; }",
+                  "pm.test('Status 201 Created', () => {",
+                  "  if (pm.response.code !== 201) {",
+                  "    pm.expect.fail('Status code ' + pm.response.code + '. Error: ' + (res.message || JSON.stringify(res)));",
+                  "  }",
+                  "});",
+                  "pm.test('Has id', () => {",
+                  "  pm.expect(res.data).to.be.an('object');",
+                  "  pm.expect(res.data.id).to.be.a('string');",
+                  "});",
+                  "if (res.data && res.data.id) {",
+                  "  pm.collectionVariables.set('catalog_id', res.data.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{provider_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Yokomo YD-2Z RWD Spec\",\n  \"description\": \"Thế hệ khung xe RWD mới từ Yokomo.\",\n  \"tier\": \"PREMIUM\",\n  \"hourly_rate\": 110000,\n  \"security_deposit\": 400000,\n  \"compatible_track_types\": [\"DRIFT\"],\n  \"cover_image_url\": \"https://cdn.rcfield.vn/vehicles/yokomo-yd2z.jpg\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/cafes/{{cafe_id}}/vehicle-catalogs",
+              "host": ["{{base_url}}"],
+              "path": ["cafes", "{{cafe_id}}", "vehicle-catalogs"]
+            }
+          }
+        },
+        {
+          "name": "Tạo Catalog — Unrelated Provider (403)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 403 Forbidden', () => pm.response.to.have.status(403));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{provider_other_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Hack Catalog\",\n  \"tier\": \"STANDARD\",\n  \"hourly_rate\": 50000,\n  \"security_deposit\": 100000,\n  \"compatible_track_types\": [\"DRIFT\"]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/cafes/{{cafe_id}}/vehicle-catalogs",
+              "host": ["{{base_url}}"],
+              "path": ["cafes", "{{cafe_id}}", "vehicle-catalogs"]
+            }
+          }
+        },
+        {
+          "name": "Tạo Catalog — Staff (403)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 403 Forbidden', () => pm.response.to.have.status(403));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{staff_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Staff Fake Catalog\",\n  \"tier\": \"STANDARD\",\n  \"hourly_rate\": 50000,\n  \"security_deposit\": 100000,\n  \"compatible_track_types\": [\"DRIFT\"]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/cafes/{{cafe_id}}/vehicle-catalogs",
+              "host": ["{{base_url}}"],
+              "path": ["cafes", "{{cafe_id}}", "vehicle-catalogs"]
+            }
+          }
+        },
+        {
+          "name": "Tạo Catalog — Customer (403)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 403 Forbidden', () => pm.response.to.have.status(403));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{customer_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Customer Catalog\",\n  \"tier\": \"STANDARD\",\n  \"hourly_rate\": 50000,\n  \"security_deposit\": 100000,\n  \"compatible_track_types\": [\"DRIFT\"]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/cafes/{{cafe_id}}/vehicle-catalogs",
+              "host": ["{{base_url}}"],
+              "path": ["cafes", "{{cafe_id}}", "vehicle-catalogs"]
+            }
+          }
+        },
+        {
+          "name": "Xem danh sách Catalogs (Guest - Public)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let res;",
+                  "try { res = pm.response.json(); } catch(e) { res = {}; }",
+                  "pm.test('Status 200 OK', () => {",
+                  "  if (pm.response.code !== 200) {",
+                  "    pm.expect.fail('Status code ' + pm.response.code + '. Error: ' + (res.message || JSON.stringify(res)));",
+                  "  }",
+                  "});",
+                  "pm.test('Is array', () => {",
+                  "  pm.expect(res.data).to.be.an('array');",
+                  "});",
+                  "pm.test('Catalog count is greater than 0', () => {",
+                  "  pm.expect(res.data.length).to.be.above(0);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/cafes/{{cafe_id}}/vehicle-catalogs",
+              "host": ["{{base_url}}"],
+              "path": ["cafes", "{{cafe_id}}", "vehicle-catalogs"]
+            }
+          }
+        },
+        {
+          "name": "Xem chi tiết Catalog (Guest - Public)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let res;",
+                  "try { res = pm.response.json(); } catch(e) { res = {}; }",
+                  "pm.test('Status 200 OK', () => {",
+                  "  if (pm.response.code !== 200) {",
+                  "    pm.expect.fail('Status code ' + pm.response.code + '. Error: ' + (res.message || JSON.stringify(res)));",
+                  "  }",
+                  "});",
+                  "pm.test('Catalog details matches', () => {",
+                  "  pm.expect(res.data).to.be.an('object');",
+                  "  pm.expect(res.data.id).to.eql(pm.collectionVariables.get('catalog_id'));",
+                  "  pm.expect(res.data.name).to.eql('Yokomo YD-2Z RWD Spec');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/cafes/{{cafe_id}}/vehicle-catalogs/{{catalog_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["cafes", "{{cafe_id}}", "vehicle-catalogs", "{{catalog_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Cập nhật Catalog (Owner)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let res;",
+                  "try { res = pm.response.json(); } catch(e) { res = {}; }",
+                  "pm.test('Status 200 OK', () => {",
+                  "  if (pm.response.code !== 200) {",
+                  "    pm.expect.fail('Status code ' + pm.response.code + '. Error: ' + (res.message || JSON.stringify(res)));",
+                  "  }",
+                  "});",
+                  "pm.test('Hourly rate updated', () => {",
+                  "  pm.expect(res.data).to.be.an('object');",
+                  "  pm.expect(parseFloat(res.data.hourlyRate)).to.eql(115000);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{provider_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hourly_rate\": 115000\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/cafes/{{cafe_id}}/vehicle-catalogs/{{catalog_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["cafes", "{{cafe_id}}", "vehicle-catalogs", "{{catalog_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Cập nhật Catalog — Staff Blocked (403)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 403 Forbidden', () => pm.response.to.have.status(403));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{staff_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hourly_rate\": 20000\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/cafes/{{cafe_id}}/vehicle-catalogs/{{catalog_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["cafes", "{{cafe_id}}", "vehicle-catalogs", "{{catalog_id}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Physical Units (Vehicles) Flows",
+      "description": "APIs cho các xe vật lý (Physical Units). Có các quy tắc lọc trạng thái theo role.",
+      "item": [
+        {
+          "name": "Tạo xe vật lý (Owner)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let res;",
+                  "try { res = pm.response.json(); } catch(e) { res = {}; }",
+                  "pm.test('Status 201 Created', () => {",
+                  "  if (pm.response.code !== 201) {",
+                  "    pm.expect.fail('Status code ' + pm.response.code + '. Error: ' + (res.message || JSON.stringify(res)));",
+                  "  }",
+                  "});",
+                  "pm.test('Has unit id', () => {",
+                  "  pm.expect(res.data).to.be.an('object');",
+                  "  pm.expect(res.data.id).to.be.a('string');",
+                  "});",
+                  "if (res.data && res.data.id) {",
+                  "  pm.collectionVariables.set('unit_id', res.data.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{provider_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"AVAILABLE\",\n  \"identifier\": \"YK-YD2Z-001\",\n  \"color\": \"Green\",\n  \"distinctive_image_url\": \"https://cdn.rcfield.vn/vehicles/yokomo-green.jpg\",\n  \"notes\": \"Xe đua drift màu xanh lục.\",\n  \"metadata\": {\n    \"body_shell\": \"Mazda RX-7\",\n    \"led\": \"Full RGB\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/cafes/{{cafe_id}}/vehicle-catalogs/{{catalog_id}}/units",
+              "host": ["{{base_url}}"],
+              "path": ["cafes", "{{cafe_id}}", "vehicle-catalogs", "{{catalog_id}}", "units"]
+            }
+          }
+        },
+        {
+          "name": "Tạo xe vật lý — Staff Blocked (403)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let res;",
+                  "try { res = pm.response.json(); } catch(e) { res = {}; }",
+                  "pm.test('Status 403 Forbidden', () => {",
+                  "  if (pm.response.code !== 403) {",
+                  "    pm.expect.fail('Status code ' + pm.response.code + '. Error: ' + (res.message || JSON.stringify(res)));",
+                  "  }",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{staff_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"identifier\": \"HACK-UNIT\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/cafes/{{cafe_id}}/vehicle-catalogs/{{catalog_id}}/units",
+              "host": ["{{base_url}}"],
+              "path": ["cafes", "{{cafe_id}}", "vehicle-catalogs", "{{catalog_id}}", "units"]
+            }
+          }
+        },
+        {
+          "name": "Danh sách xe phẳng — Customer / Guest (Lọc RETIRED và Ẩn maintenance date)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let res;",
+                  "try { res = pm.response.json(); } catch(e) { res = {}; }",
+                  "pm.test('Status 200 OK', () => {",
+                  "  if (pm.response.code !== 200) {",
+                  "    pm.expect.fail('Status code ' + pm.response.code + '. Error: ' + (res.message || JSON.stringify(res)));",
+                  "  }",
+                  "});",
+                  "pm.test('Retired units are hidden', () => {",
+                  "  pm.expect(res.data).to.be.an('array');",
+                  "  const retired = res.data.filter(u => u.status === 'RETIRED');",
+                  "  pm.expect(retired.length).to.eql(0);",
+                  "});",
+                  "pm.test('last_maintenance_at is hidden', () => {",
+                  "  res.data.forEach(u => {",
+                  "    pm.expect(u.lastMaintenanceAt).to.be.undefined;",
+                  "  });",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{customer_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/cafes/{{cafe_id}}/vehicles",
+              "host": ["{{base_url}}"],
+              "path": ["cafes", "{{cafe_id}}", "vehicles"]
+            }
+          }
+        },
+        {
+          "name": "Danh sách xe phẳng — Staff assigned (Thấy RETIRED và maintenance date)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let res;",
+                  "try { res = pm.response.json(); } catch(e) { res = {}; }",
+                  "pm.test('Status 200 OK', () => {",
+                  "  if (pm.response.code !== 200) {",
+                  "    pm.expect.fail('Status code ' + pm.response.code + '. Error: ' + (res.message || JSON.stringify(res)));",
+                  "  }",
+                  "});",
+                  "pm.test('Retired units are visible', () => {",
+                  "  pm.expect(res.data).to.be.an('array');",
+                  "  const retired = res.data.filter(u => u.status === 'RETIRED');",
+                  "  pm.expect(retired.length).to.be.above(0);",
+                  "});",
+                  "pm.test('lastMaintenanceAt is present in some units', () => {",
+                  "  const maint = res.data.filter(u => u.lastMaintenanceAt !== null && u.lastMaintenanceAt !== undefined);",
+                  "  pm.expect(maint.length).to.be.above(0);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{staff_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/cafes/{{cafe_id}}/vehicles",
+              "host": ["{{base_url}}"],
+              "path": ["cafes", "{{cafe_id}}", "vehicles"]
+            }
+          }
+        },
+        {
+          "name": "Xem chi tiết xe vật lý — Customer / Guest (Ẩn maintenance date)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let res;",
+                  "try { res = pm.response.json(); } catch(e) { res = {}; }",
+                  "pm.test('Status 200 OK', () => {",
+                  "  if (pm.response.code !== 200) {",
+                  "    pm.expect.fail('Status code ' + pm.response.code + '. Error: ' + (res.message || JSON.stringify(res)));",
+                  "  }",
+                  "});",
+                  "pm.test('lastMaintenanceAt is hidden', () => {",
+                  "  pm.expect(res.data).to.be.an('object');",
+                  "  pm.expect(res.data.lastMaintenanceAt).to.be.undefined;",
+                  "});",
+                  "pm.test('Metadata is visible', () => {",
+                  "  pm.expect(res.data.metadata.body_shell).to.eql('Mazda RX-7');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{customer_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/cafes/{{cafe_id}}/vehicle-catalogs/{{catalog_id}}/units/{{unit_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["cafes", "{{cafe_id}}", "vehicle-catalogs", "{{catalog_id}}", "units", "{{unit_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Xem chi tiết xe vật lý — Staff assigned (Thấy maintenance date)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let res;",
+                  "try { res = pm.response.json(); } catch(e) { res = {}; }",
+                  "pm.test('Status 200 OK', () => {",
+                  "  if (pm.response.code !== 200) {",
+                  "    pm.expect.fail('Status code ' + pm.response.code + '. Error: ' + (res.message || JSON.stringify(res)));",
+                  "  }",
+                  "});",
+                  "pm.test('lastMaintenanceAt is returned (null initially)', () => {",
+                  "  pm.expect(res.data).to.be.an('object');",
+                  "  pm.expect(res.data).to.have.property('lastMaintenanceAt');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{staff_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/cafes/{{cafe_id}}/vehicle-catalogs/{{catalog_id}}/units/{{unit_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["cafes", "{{cafe_id}}", "vehicle-catalogs", "{{catalog_id}}", "units", "{{unit_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Cập nhật xe vật lý (Assigned Staff)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let res;",
+                  "try { res = pm.response.json(); } catch(e) { res = {}; }",
+                  "pm.test('Status 200 OK', () => {",
+                  "  if (pm.response.code !== 200) {",
+                  "    pm.expect.fail('Status code ' + pm.response.code + '. Error: ' + (res.message || JSON.stringify(res)));",
+                  "  }",
+                  "});",
+                  "pm.test('Status changed to MAINTENANCE', () => {",
+                  "  pm.expect(res.data).to.be.an('object');",
+                  "  pm.expect(res.data.status).to.eql('MAINTENANCE');",
+                  "});",
+                  "pm.test('lastMaintenanceAt updated', () => {",
+                  "  pm.expect(res.data.lastMaintenanceAt).to.not.be.null;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{staff_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"MAINTENANCE\",\n  \"notes\": \"Bảo trì định kỳ bởi Staff.\",\n  \"last_maintenance_at\": \"2026-05-30T10:00:00.000Z\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/cafes/{{cafe_id}}/vehicle-catalogs/{{catalog_id}}/units/{{unit_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["cafes", "{{cafe_id}}", "vehicle-catalogs", "{{catalog_id}}", "units", "{{unit_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Cập nhật xe vật lý — Unassigned/Other Staff Blocked (403)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let res;",
+                  "try { res = pm.response.json(); } catch(e) { res = {}; }",
+                  "pm.test('Status 403 Forbidden', () => {",
+                  "  if (pm.response.code !== 403) {",
+                  "    pm.expect.fail('Status code ' + pm.response.code + '. Error: ' + (res.message || JSON.stringify(res)));",
+                  "  }",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{staff_other_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"AVAILABLE\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/cafes/{{cafe_id}}/vehicle-catalogs/{{catalog_id}}/units/{{unit_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["cafes", "{{cafe_id}}", "vehicle-catalogs", "{{catalog_id}}", "units", "{{unit_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Xóa xe vật lý — Staff Blocked (403)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let res;",
+                  "try { res = pm.response.json(); } catch(e) { res = {}; }",
+                  "pm.test('Status 403 Forbidden', () => {",
+                  "  if (pm.response.code !== 403) {",
+                  "    pm.expect.fail('Status code ' + pm.response.code + '. Error: ' + (res.message || JSON.stringify(res)));",
+                  "  }",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{staff_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/cafes/{{cafe_id}}/vehicle-catalogs/{{catalog_id}}/units/{{unit_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["cafes", "{{cafe_id}}", "vehicle-catalogs", "{{catalog_id}}", "units", "{{unit_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Xóa xe vật lý (Owner)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let res;",
+                  "try { res = pm.response.json(); } catch(e) { res = {}; }",
+                  "pm.test('Status 200 OK', () => {",
+                  "  if (pm.response.code !== 200) {",
+                  "    pm.expect.fail('Status code ' + pm.response.code + '. Error: ' + (res.message || JSON.stringify(res)));",
+                  "  }",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{provider_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/cafes/{{cafe_id}}/vehicle-catalogs/{{catalog_id}}/units/{{unit_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["cafes", "{{cafe_id}}", "vehicle-catalogs", "{{catalog_id}}", "units", "{{unit_id}}"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

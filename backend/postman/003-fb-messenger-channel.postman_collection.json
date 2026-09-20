@@ -1,0 +1,441 @@
+{
+  "info": {
+    "name": "003 - FB Messenger Channel",
+    "description": "Test collection for Facebook Messenger Channel Integration.\n\nVariables cần set trong Environment:\n- `baseUrl`: http://localhost:3000/api/v1\n- `providerToken`: JWT token của Provider (lấy từ POST /auth/login)\n- `cafeId`: UUID của cafe thuộc Provider đó\n- `fbVerifyToken`: giá trị FB_VERIFY_TOKEN trong .env",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000/api/v1" },
+    { "key": "providerToken", "value": "" },
+    { "key": "cafeId", "value": "" },
+    { "key": "fbVerifyToken", "value": "rcfield-webhook-2026" }
+  ],
+  "item": [
+    {
+      "name": "0. Auth — Lấy Provider Token",
+      "item": [
+        {
+          "name": "Login as Provider",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.access_token) {",
+                  "  pm.collectionVariables.set('providerToken', res.access_token);",
+                  "  console.log('Token saved');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"provider@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "1. Channel Management (Provider)",
+      "item": [
+        {
+          "name": "GET auth-url — Lấy Facebook OAuth URL",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Response có url', () => {",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.url).to.include('facebook.com');",
+                  "  pm.expect(res.url).to.include('pages_messaging');",
+                  "  console.log('OAuth URL:', res.url);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{providerToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/channels/facebook/auth-url?cafeId={{cafeId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["channels", "facebook", "auth-url"],
+              "query": [{ "key": "cafeId", "value": "{{cafeId}}" }]
+            },
+            "description": "Trả về Facebook OAuth URL. Copy URL từ response, paste vào browser để hoàn thành OAuth flow."
+          }
+        },
+        {
+          "name": "GET status — Kiểm tra trạng thái kết nối",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Response có connected field', () => {",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res).to.have.property('connected');",
+                  "  if (res.connected) {",
+                  "    pm.expect(res.pageName).to.be.a('string');",
+                  "    pm.expect(res.pageId).to.be.a('string');",
+                  "    console.log('Connected to:', res.pageName, '(', res.pageId, ')');",
+                  "  } else {",
+                  "    console.log('Not connected');",
+                  "  }",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{providerToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/channels/facebook/status?cafeId={{cafeId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["channels", "facebook", "status"],
+              "query": [{ "key": "cafeId", "value": "{{cafeId}}" }]
+            }
+          }
+        },
+        {
+          "name": "DELETE — Ngắt kết nối Facebook Page",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('success = true', () => {",
+                  "  const res = pm.response.json();",
+                  "  pm.expect(res.success).to.be.true;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{providerToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/channels/facebook?cafeId={{cafeId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["channels", "facebook"],
+              "query": [{ "key": "cafeId", "value": "{{cafeId}}" }]
+            }
+          }
+        },
+        {
+          "name": "[Error] GET auth-url — cafeId không phải UUID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 400', () => pm.response.to.have.status(400));",
+                  "pm.test('code = VALIDATION_ERROR', () => {",
+                  "  pm.expect(pm.response.json().code).to.equal('VALIDATION_ERROR');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{providerToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/channels/facebook/auth-url?cafeId=not-a-uuid",
+              "host": ["{{baseUrl}}"],
+              "path": ["channels", "facebook", "auth-url"],
+              "query": [{ "key": "cafeId", "value": "not-a-uuid" }]
+            }
+          }
+        },
+        {
+          "name": "[Error] GET auth-url — Không có token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 401', () => pm.response.to.have.status(401));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/channels/facebook/auth-url?cafeId={{cafeId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["channels", "facebook", "auth-url"],
+              "query": [{ "key": "cafeId", "value": "{{cafeId}}" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Webhook",
+      "item": [
+        {
+          "name": "GET — Verify webhook (Facebook challenge)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Body là challenge string', () => {",
+                  "  pm.expect(pm.response.text()).to.equal('test_challenge_12345');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/webhook/facebook?hub.mode=subscribe&hub.verify_token={{fbVerifyToken}}&hub.challenge=test_challenge_12345",
+              "host": ["{{baseUrl}}"],
+              "path": ["webhook", "facebook"],
+              "query": [
+                { "key": "hub.mode", "value": "subscribe" },
+                { "key": "hub.verify_token", "value": "{{fbVerifyToken}}" },
+                { "key": "hub.challenge", "value": "test_challenge_12345" }
+              ]
+            },
+            "description": "Simulates Facebook's webhook verification handshake."
+          }
+        },
+        {
+          "name": "GET — Verify webhook — Sai token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 403', () => pm.response.to.have.status(403));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/webhook/facebook?hub.mode=subscribe&hub.verify_token=wrong-token&hub.challenge=abc",
+              "host": ["{{baseUrl}}"],
+              "path": ["webhook", "facebook"],
+              "query": [
+                { "key": "hub.mode", "value": "subscribe" },
+                { "key": "hub.verify_token", "value": "wrong-token" },
+                { "key": "hub.challenge", "value": "abc" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "POST — Tin nhắn text (page đã kết nối)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 (ack ngay)', () => pm.response.to.have.status(200));",
+                  "console.log('Webhook ACK nhận được. Kiểm tra log server để xem AI đã reply chưa.');"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"object\": \"page\",\n  \"entry\": [\n    {\n      \"id\": \"{{pageId}}\",\n      \"time\": 1716580000000,\n      \"messaging\": [\n        {\n          \"sender\": { \"id\": \"USER_PSID_123\" },\n          \"recipient\": { \"id\": \"{{pageId}}\" },\n          \"timestamp\": 1716580000000,\n          \"message\": {\n            \"mid\": \"mid_test_{{$timestamp}}\",\n            \"text\": \"Giá thuê xe bao nhiêu vậy?\"\n          }\n        }\n      ]\n    }\n  ]\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/webhook/facebook",
+              "host": ["{{baseUrl}}"],
+              "path": ["webhook", "facebook"]
+            },
+            "description": "Cần set variable `pageId` = page_id của cafe đã kết nối trong DB.\nServer sẽ return 200 ngay, xử lý AI async — kiểm tra log server."
+          }
+        },
+        {
+          "name": "POST — Non-text message (sticker) — nên bị bỏ qua",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "console.log('Server phải bỏ qua message này (không có text). Kiểm tra log: không nên có AI reply.');"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"object\": \"page\",\n  \"entry\": [\n    {\n      \"id\": \"{{pageId}}\",\n      \"messaging\": [\n        {\n          \"sender\": { \"id\": \"USER_PSID_456\" },\n          \"recipient\": { \"id\": \"{{pageId}}\" },\n          \"timestamp\": 1716580001000,\n          \"message\": {\n            \"mid\": \"mid_sticker_{{$timestamp}}\",\n            \"attachments\": [\n              { \"type\": \"image\", \"payload\": { \"sticker_id\": 369239263222822 } }\n            ]\n          }\n        }\n      ]\n    }\n  ]\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/webhook/facebook",
+              "host": ["{{baseUrl}}"],
+              "path": ["webhook", "facebook"]
+            }
+          }
+        },
+        {
+          "name": "POST — Echo message (is_echo=true) — nên bị bỏ qua",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "console.log('Echo message — server phải bỏ qua, không gửi lại.');"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"object\": \"page\",\n  \"entry\": [\n    {\n      \"id\": \"{{pageId}}\",\n      \"messaging\": [\n        {\n          \"sender\": { \"id\": \"{{pageId}}\" },\n          \"recipient\": { \"id\": \"USER_PSID_789\" },\n          \"timestamp\": 1716580002000,\n          \"message\": {\n            \"mid\": \"mid_echo_{{$timestamp}}\",\n            \"text\": \"Đây là tin nhắn bot vừa gửi\",\n            \"is_echo\": true\n          }\n        }\n      ]\n    }\n  ]\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/webhook/facebook",
+              "host": ["{{baseUrl}}"],
+              "path": ["webhook", "facebook"]
+            }
+          }
+        },
+        {
+          "name": "POST — Duplicate mid (dedup test)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "console.log('Gửi lần 2 với cùng mid. Kiểm tra log: AI chỉ reply 1 lần (lần đầu).');"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"object\": \"page\",\n  \"entry\": [\n    {\n      \"id\": \"{{pageId}}\",\n      \"messaging\": [\n        {\n          \"sender\": { \"id\": \"USER_PSID_123\" },\n          \"recipient\": { \"id\": \"{{pageId}}\" },\n          \"timestamp\": 1716580003000,\n          \"message\": {\n            \"mid\": \"mid_fixed_dedup_test\",\n            \"text\": \"Tin nhắn này gửi 2 lần để test dedup\"\n          }\n        }\n      ]\n    }\n  ]\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/webhook/facebook",
+              "host": ["{{baseUrl}}"],
+              "path": ["webhook", "facebook"]
+            },
+            "description": "Gửi request này 2 lần liên tiếp. `mid` cố định là `mid_fixed_dedup_test`.\nLần đầu: AI xử lý và reply.\nLần thứ 2: Redis đã có key → bỏ qua, không reply thêm."
+          }
+        },
+        {
+          "name": "POST — Unknown page_id — nên bị bỏ qua",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "console.log('page_id không tồn tại trong DB. Kiểm tra log: warning \"unknown page_id\".');"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"object\": \"page\",\n  \"entry\": [\n    {\n      \"id\": \"999999999999999\",\n      \"messaging\": [\n        {\n          \"sender\": { \"id\": \"USER_PSID_000\" },\n          \"recipient\": { \"id\": \"999999999999999\" },\n          \"timestamp\": 1716580004000,\n          \"message\": {\n            \"mid\": \"mid_unknown_{{$timestamp}}\",\n            \"text\": \"Tin nhắn đến page không tồn tại\"\n          }\n        }\n      ]\n    }\n  ]\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/webhook/facebook",
+              "host": ["{{baseUrl}}"],
+              "path": ["webhook", "facebook"]
+            }
+          }
+        },
+        {
+          "name": "POST — object không phải page — nên bị bỏ qua",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"object\": \"instagram\",\n  \"entry\": []\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/webhook/facebook",
+              "host": ["{{baseUrl}}"],
+              "path": ["webhook", "facebook"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

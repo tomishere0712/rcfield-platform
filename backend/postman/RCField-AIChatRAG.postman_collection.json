@@ -1,0 +1,898 @@
+{
+  "info": {
+    "name": "RCField API — AI Chat & KB",
+    "description": "AI Chat Widget + Knowledge Base endpoints. Feature: 002-branch-ai-chat-rag.\n\nSetup:\n1. Chạy 'Login' từ collection Auth để set accessToken\n2. Set cafeId vào collection variable\n3. Test theo thứ tự folder: Widget Config → KB Documents → Chat",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "accessToken",
+      "value": "",
+      "type": "string",
+      "description": "Copy từ Auth collection sau khi login"
+    },
+    {
+      "key": "cafeId",
+      "value": "",
+      "type": "string",
+      "description": "UUID của cafe cần test — lấy từ DB: SELECT id FROM cafes LIMIT 1"
+    },
+    {
+      "key": "documentId",
+      "value": "",
+      "type": "string",
+      "description": "Auto-set sau khi upload document thành công"
+    }
+  ],
+  "item": [
+    {
+      "name": "Widget Config",
+      "description": "Cấu hình giao diện chat widget per-cafe. GET là public, PUT cần PROVIDER auth.",
+      "item": [
+        {
+          "name": "GET /chat/config — default (chưa cấu hình)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Has greeting_message', () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body).to.have.property('greeting_message');",
+                  "  pm.expect(body).to.have.property('position');",
+                  "  pm.expect(body).to.have.property('primary_color');",
+                  "  pm.expect(body).to.have.property('quick_replies');",
+                  "});",
+                  "pm.test('is_default true khi chưa cấu hình', () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.is_default).to.be.true;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/cafes/{{cafeId}}/chat/config",
+              "host": ["{{baseUrl}}"],
+              "path": ["cafes", "{{cafeId}}", "chat", "config"]
+            },
+            "description": "Public endpoint — không cần auth. Widget FE gọi khi khởi tạo."
+          }
+        },
+        {
+          "name": "PUT /chat/config — cập nhật cấu hình",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Greeting message đã được lưu', () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.greeting_message).to.equal('Chào mừng đến RC Arena! Hỏi tôi bất cứ điều gì nhé!');",
+                  "});",
+                  "pm.test('Quick replies đúng số lượng', () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.quick_replies).to.have.lengthOf(3);",
+                  "});",
+                  "pm.test('is_default false sau khi cấu hình', () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.is_default).to.be.false;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"greeting_message\": \"Chào mừng đến RC Arena! Hỏi tôi bất cứ điều gì nhé!\",\n  \"position\": \"BOTTOM_RIGHT\",\n  \"primary_color\": \"#FF6B35\",\n  \"avatar_url\": null,\n  \"quick_replies\": [\"Xem giá xe\", \"Còn slot không?\", \"Nội quy sân\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/cafes/{{cafeId}}/chat/config",
+              "host": ["{{baseUrl}}"],
+              "path": ["cafes", "{{cafeId}}", "chat", "config"]
+            },
+            "description": "Chỉ PROVIDER sở hữu cafe mới được gọi. Upsert — có thể gọi nhiều lần."
+          }
+        },
+        {
+          "name": "PUT /chat/config — validation error (quick_replies > 5)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 400', () => pm.response.to.have.status(400));",
+                  "pm.test('VALIDATION_ERROR code', () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.code).to.equal('VALIDATION_ERROR');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"quick_replies\": [\"A\", \"B\", \"C\", \"D\", \"E\", \"F\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/cafes/{{cafeId}}/chat/config",
+              "host": ["{{baseUrl}}"],
+              "path": ["cafes", "{{cafeId}}", "chat", "config"]
+            }
+          }
+        },
+        {
+          "name": "GET /chat/config — sau khi cập nhật",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('is_default false', () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.is_default).to.be.false;",
+                  "});",
+                  "pm.test('Greeting message reflect update', () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.greeting_message).to.equal('Chào mừng đến RC Arena! Hỏi tôi bất cứ điều gì nhé!');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/cafes/{{cafeId}}/chat/config",
+              "host": ["{{baseUrl}}"],
+              "path": ["cafes", "{{cafeId}}", "chat", "config"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Knowledge Base",
+      "description": "Upload, list, delete tài liệu KB. Tất cả đều cần PROVIDER auth.",
+      "item": [
+        {
+          "name": "GET /kb/documents — danh sách (ban đầu rỗng)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Có data và total', () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body).to.have.property('data');",
+                  "  pm.expect(body).to.have.property('total');",
+                  "  pm.expect(body.data).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/cafes/{{cafeId}}/kb/documents",
+              "host": ["{{baseUrl}}"],
+              "path": ["cafes", "{{cafeId}}", "kb", "documents"]
+            }
+          }
+        },
+        {
+          "name": "POST /kb/documents — upload TXT",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "pm.test('Status là PENDING', () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.status).to.equal('PENDING');",
+                  "  pm.expect(body).to.have.property('id');",
+                  "  pm.collectionVariables.set('documentId', body.id);",
+                  "  console.log('documentId set:', body.id);",
+                  "});",
+                  "pm.test('Có title và original_filename', () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.title).to.equal('Nội quy sân test');",
+                  "  pm.expect(body.original_filename).to.be.a('string');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": [],
+                  "description": "Chọn file TXT/PDF/DOCX từ máy. Tạo file test: echo 'Nội quy sân: Không mang đồ ăn vào. Phải đội mũ bảo hiểm. Giờ mở cửa 9h-22h.' > /tmp/noi-quy.txt"
+                },
+                {
+                  "key": "title",
+                  "value": "Nội quy sân test",
+                  "type": "text"
+                },
+                {
+                  "key": "content_type",
+                  "value": "POLICY",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/cafes/{{cafeId}}/kb/documents",
+              "host": ["{{baseUrl}}"],
+              "path": ["cafes", "{{cafeId}}", "kb", "documents"]
+            },
+            "description": "Upload file. documentId được auto-set vào collection variable sau khi thành công.\n\nTạo file test nhanh:\n```\necho 'Nội quy sân: Không mang đồ ăn từ bên ngoài vào. Phải đội mũ bảo hiểm khi lái xe RC. Giờ mở cửa 9h-22h hàng ngày. Giá thuê xe Standard: 80.000đ/giờ. Giá thuê xe Premium: 120.000đ/giờ.' > /tmp/noi-quy.txt\n```"
+          }
+        },
+        {
+          "name": "POST /kb/documents — error: file quá lớn (mock)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Chỉ verify nếu thực sự upload file > 10MB",
+                  "// Multer sẽ reject với status 413 hoặc custom handler trả 422",
+                  "pm.test('Response có error code', () => {",
+                  "  const code = pm.response.code;",
+                  "  pm.expect([400, 413, 422]).to.include(code);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "title",
+                  "value": "Test không có file",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/cafes/{{cafeId}}/kb/documents",
+              "host": ["{{baseUrl}}"],
+              "path": ["cafes", "{{cafeId}}", "kb", "documents"]
+            },
+            "description": "Gửi request không có file — phải trả 400 FILE_REQUIRED"
+          }
+        },
+        {
+          "name": "GET /kb/documents — sau khi upload (có PENDING/INDEXED)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Có ít nhất 1 document', () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.total).to.be.at.least(1);",
+                  "});",
+                  "pm.test('Document có đủ fields', () => {",
+                  "  const body = pm.response.json();",
+                  "  if (body.data.length > 0) {",
+                  "    const doc = body.data[0];",
+                  "    pm.expect(doc).to.have.all.keys('id', 'title', 'original_filename', 'content_type', 'status', 'chunk_count', 'created_at', 'updated_at');",
+                  "    pm.expect(['PENDING', 'INDEXED', 'FAILED']).to.include(doc.status);",
+                  "  }",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/cafes/{{cafeId}}/kb/documents",
+              "host": ["{{baseUrl}}"],
+              "path": ["cafes", "{{cafeId}}", "kb", "documents"]
+            },
+            "description": "Gọi sau khi upload. Đợi vài giây rồi gọi lại — status sẽ đổi thành INDEXED hoặc FAILED."
+          }
+        },
+        {
+          "name": "DELETE /kb/documents/:documentId",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 204', () => pm.response.to.have.status(204));",
+                  "pm.test('Body rỗng', () => {",
+                  "  pm.expect(pm.response.text()).to.equal('');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/cafes/{{cafeId}}/kb/documents/{{documentId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["cafes", "{{cafeId}}", "kb", "documents", "{{documentId}}"]
+            },
+            "description": "documentId được auto-set từ request upload ở trên. Xóa mềm document + hard-delete chunks."
+          }
+        },
+        {
+          "name": "DELETE /kb/documents/:documentId — 404 sau khi đã xóa",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 404', () => pm.response.to.have.status(404));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/cafes/{{cafeId}}/kb/documents/{{documentId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["cafes", "{{cafeId}}", "kb", "documents", "{{documentId}}"]
+            },
+            "description": "Gọi lại với cùng documentId — phải trả 404 vì đã bị soft-delete"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Chat — NLU Routing",
+      "description": "Test 3 routing paths: fast_answer (<200ms), slot_check (<500ms), rag (<3s).\n\nLưu ý: NLU service chạy trong Docker. Khi dev local không có NLU thì tất cả fallback về RAG — bình thường.",
+      "item": [
+        {
+          "name": "POST /chat — fast_answer (xin chào)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('response_type là greeting hoặc text', () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(['greeting', 'text']).to.include(body.response_type);",
+                  "  // greeting nếu NLU service up, text nếu fallback RAG",
+                  "});",
+                  "pm.test('Có answer', () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.answer).to.be.a('string').and.not.empty;",
+                  "});",
+                  "pm.test('Response time < 3000ms', () => {",
+                  "  pm.expect(pm.response.responseTime).to.be.below(3000);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"xin chào\",\n  \"history\": []\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/cafes/{{cafeId}}/chat",
+              "host": ["{{baseUrl}}"],
+              "path": ["cafes", "{{cafeId}}", "chat"]
+            },
+            "description": "Public endpoint. Kỳ vọng: greeting nếu NLU up, text nếu fallback RAG. Phải < 200ms khi NLU up."
+          }
+        },
+        {
+          "name": "POST /chat — slot_check (hôm nay còn slot không)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('response_type là slot_list hoặc text (fallback)', () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(['slot_list', 'text']).to.include(body.response_type);",
+                  "});",
+                  "pm.test('Nếu slot_list thì có data.slots', () => {",
+                  "  const body = pm.response.json();",
+                  "  if (body.response_type === 'slot_list') {",
+                  "    pm.expect(body.data).to.have.property('slots');",
+                  "    pm.expect(body.data).to.have.property('date');",
+                  "    pm.expect(body.data.slots).to.be.an('array');",
+                  "  }",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"hôm nay còn slot không?\",\n  \"history\": []\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/cafes/{{cafeId}}/chat",
+              "host": ["{{baseUrl}}"],
+              "path": ["cafes", "{{cafeId}}", "chat"]
+            }
+          }
+        },
+        {
+          "name": "POST /chat — slot_check (cuối tuần)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Có answer', () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.answer).to.be.a('string');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"cuối tuần này còn trống không?\",\n  \"history\": []\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/cafes/{{cafeId}}/chat",
+              "host": ["{{baseUrl}}"],
+              "path": ["cafes", "{{cafeId}}", "chat"]
+            }
+          }
+        },
+        {
+          "name": "POST /chat — RAG (nội quy sân)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('response_type là text', () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.response_type).to.equal('text');",
+                  "});",
+                  "pm.test('Có answer không rỗng', () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.answer).to.be.a('string').and.not.empty;",
+                  "});",
+                  "pm.test('Có sources array', () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.sources).to.be.an('array');",
+                  "});",
+                  "pm.test('Response time < 5000ms', () => {",
+                  "  pm.expect(pm.response.responseTime).to.be.below(5000);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"nội quy sân thế nào?\",\n  \"history\": []\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/cafes/{{cafeId}}/chat",
+              "host": ["{{baseUrl}}"],
+              "path": ["cafes", "{{cafeId}}", "chat"]
+            },
+            "description": "Requires KB đã có document INDEXED. Upload file trước ở folder KB Documents."
+          }
+        },
+        {
+          "name": "POST /chat — RAG với conversation history",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Bot hiểu ngữ cảnh (không trả lỗi)', () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.answer).to.be.a('string').and.not.empty;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"thế còn giá thuê thì sao?\",\n  \"history\": [\n    { \"role\": \"user\",  \"content\": \"nội quy sân thế nào?\" },\n    { \"role\": \"model\", \"content\": \"Nội quy sân: không mang đồ ăn bên ngoài vào, phải đội mũ bảo hiểm khi lái xe RC.\" }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/cafes/{{cafeId}}/chat",
+              "host": ["{{baseUrl}}"],
+              "path": ["cafes", "{{cafeId}}", "chat"]
+            },
+            "description": "Test multi-turn — bot nhớ ngữ cảnh từ history"
+          }
+        },
+        {
+          "name": "POST /chat — RAG (giá xe)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('response_type là text hoặc vehicle_list', () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(['text', 'vehicle_list']).to.include(body.response_type);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"giá thuê xe bao nhiêu?\",\n  \"history\": []\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/cafes/{{cafeId}}/chat",
+              "host": ["{{baseUrl}}"],
+              "path": ["cafes", "{{cafeId}}", "chat"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Chat — Edge Cases & Error Handling",
+      "description": "Test các trường hợp biên và lỗi.",
+      "item": [
+        {
+          "name": "POST /chat — message rỗng (validation error)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 400', () => pm.response.to.have.status(400));",
+                  "pm.test('VALIDATION_ERROR code', () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.code).to.equal('VALIDATION_ERROR');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/cafes/{{cafeId}}/chat",
+              "host": ["{{baseUrl}}"],
+              "path": ["cafes", "{{cafeId}}", "chat"]
+            }
+          }
+        },
+        {
+          "name": "POST /chat — message quá dài (> 1000 ký tự)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 400', () => pm.response.to.have.status(400));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"{{$randomLoremParagraphs}}{{$randomLoremParagraphs}}{{$randomLoremParagraphs}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/cafes/{{cafeId}}/chat",
+              "host": ["{{baseUrl}}"],
+              "path": ["cafes", "{{cafeId}}", "chat"]
+            }
+          }
+        },
+        {
+          "name": "POST /chat — câu hỏi ngoài domain RC",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 — bot từ chối lịch sự', () => pm.response.to.have.status(200));",
+                  "pm.test('Bot không hallucinate', () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.answer).to.be.a('string').and.not.empty;",
+                  "  // Bot nên từ chối, không bịa đặt thông tin về thời tiết",
+                  "  console.log('Bot answer:', body.answer);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"hôm nay thời tiết Hà Nội thế nào?\",\n  \"history\": []\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/cafes/{{cafeId}}/chat",
+              "host": ["{{baseUrl}}"],
+              "path": ["cafes", "{{cafeId}}", "chat"]
+            }
+          }
+        },
+        {
+          "name": "POST /chat — cafe không tồn tại (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 503 hoặc 404', () => {",
+                  "  pm.expect([404, 503]).to.include(pm.response.code);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"xin chào\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/cafes/00000000-0000-0000-0000-000000000000/chat",
+              "host": ["{{baseUrl}}"],
+              "path": ["cafes", "00000000-0000-0000-0000-000000000000", "chat"]
+            },
+            "description": "cafeId giả — checkGate sẽ trả 503 AI_DISABLED (không tìm thấy feature flag)"
+          }
+        },
+        {
+          "name": "POST /kb/documents — sai định dạng (JSON file)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 422 UNSUPPORTED_FORMAT', () => {",
+                  "  pm.expect([400, 422]).to.include(pm.response.code);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": [],
+                  "description": "Upload file .json — sẽ bị reject"
+                },
+                {
+                  "key": "title",
+                  "value": "File JSON không hợp lệ",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/cafes/{{cafeId}}/kb/documents",
+              "host": ["{{baseUrl}}"],
+              "path": ["cafes", "{{cafeId}}", "kb", "documents"]
+            }
+          }
+        },
+        {
+          "name": "GET /kb/documents — không có auth (401)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 401', () => pm.response.to.have.status(401));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/cafes/{{cafeId}}/kb/documents",
+              "host": ["{{baseUrl}}"],
+              "path": ["cafes", "{{cafeId}}", "kb", "documents"]
+            },
+            "description": "Gọi không có Bearer token — phải trả 401"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Chat — Quota Gate",
+      "description": "Test feature flag và quota management. Cần Admin setup feature_flag trước.",
+      "item": [
+        {
+          "name": "[Setup SQL] INSERT feature_flag AI_CHATBOT cho cafe",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["health"]
+            },
+            "description": "Không phải request thật — đây là reminder chạy SQL setup:\n\n```sql\nINSERT INTO feature_flags (feature_key, entity_type, entity_id, enabled, config)\nVALUES (\n  'AI_CHATBOT',\n  'CAFE',\n  '<cafeId>',\n  true,\n  '{\"monthly_quota\": 100, \"used_this_month\": 0, \"quota_reset_day\": 1}'\n)\nON CONFLICT DO NOTHING;\n```"
+          }
+        },
+        {
+          "name": "POST /chat — hết quota (dùng SQL để set used = monthly)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 429 QUOTA_EXCEEDED', () => pm.response.to.have.status(429));",
+                  "pm.test('Error code QUOTA_EXCEEDED', () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.code).to.equal('QUOTA_EXCEEDED');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"xin chào\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/cafes/{{cafeId}}/chat",
+              "host": ["{{baseUrl}}"],
+              "path": ["cafes", "{{cafeId}}", "chat"]
+            },
+            "description": "Trước khi chạy, set quota đầy:\n```sql\nUPDATE feature_flags\nSET config = '{\"monthly_quota\": 5, \"used_this_month\": 5, \"quota_reset_day\": 1}'\nWHERE feature_key = 'AI_CHATBOT' AND entity_id = '<cafeId>';\n```"
+          }
+        }
+      ]
+    }
+  ]
+}

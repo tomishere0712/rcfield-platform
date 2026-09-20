@@ -1,0 +1,197 @@
+{
+  "info": {
+    "name": "RCField API — Auth",
+    "description": "Authentication endpoints cho RCField BE. Base URL: http://localhost:3000/api/v1",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "accessToken",
+      "value": "",
+      "type": "string",
+      "description": "Auto-set sau khi login thành công"
+    },
+    {
+      "key": "refreshToken",
+      "value": "",
+      "type": "string",
+      "description": "Auto-set sau khi login thành công"
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login (email + password)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  const body = pm.response.json();",
+                  "  pm.collectionVariables.set('accessToken', body.data.access_token);",
+                  "  pm.collectionVariables.set('refreshToken', body.data.refresh_token);",
+                  "  pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "  pm.test('Has access_token', () => pm.expect(body.data.access_token).to.be.a('string'));",
+                  "  pm.test('Has refresh_token', () => pm.expect(body.data.refresh_token).to.be.a('string'));",
+                  "  pm.test('Has user.role', () => pm.expect(body.data.user.role).to.be.oneOf(['CUSTOMER','PROVIDER','STAFF','ADMIN']));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test@rcfield.vn\",\n  \"password\": \"Test@123456\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Đăng nhập bằng email và mật khẩu.\n\n**Success**: 200 → `access_token` (1h) + `refresh_token` (7d) + `user.role`\n\n**Errors**:\n- 400 `VALIDATION_ERROR` — email/password sai định dạng\n- 401 `INVALID_CREDENTIALS` — sai email hoặc mật khẩu\n- 403 `ACCOUNT_LOCKED` — tài khoản bị khoá hoặc brute-force (5 lần sai)\n- 429 `TOO_MANY_REQUESTS` — vượt rate limit"
+          }
+        },
+        {
+          "name": "Login (Google OAuth)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  const body = pm.response.json();",
+                  "  pm.collectionVariables.set('accessToken', body.data.access_token);",
+                  "  pm.collectionVariables.set('refreshToken', body.data.refresh_token);",
+                  "  pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id_token\": \"<google-id-token-từ-frontend>\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/google",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "google"]
+            },
+            "description": "Đăng nhập bằng Google. Frontend dùng Google Sign-In SDK để lấy `id_token`, sau đó gửi lên đây.\n\n**Flow**:\n1. FE gọi Google Sign-In → nhận `id_token`\n2. FE POST `{ id_token }` lên endpoint này\n3. BE verify server-side và trả về JWT pair\n\n**Auto-create**: Nếu email chưa tồn tại, hệ thống tự tạo tài khoản CUSTOMER.\n\n**Errors**:\n- 401 `GOOGLE_AUTH_FAILED` — token Google không hợp lệ\n- 403 `ACCOUNT_LOCKED` — tài khoản bị khoá"
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  const body = pm.response.json();",
+                  "  pm.collectionVariables.set('accessToken', body.data.access_token);",
+                  "  pm.collectionVariables.set('refreshToken', body.data.refresh_token);",
+                  "  pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "  pm.test('New tokens issued', () => {",
+                  "    pm.expect(body.data.access_token).to.be.a('string');",
+                  "    pm.expect(body.data.refresh_token).to.be.a('string');",
+                  "  });",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh_token\": \"{{refreshToken}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/refresh",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "refresh"]
+            },
+            "description": "Làm mới access token khi hết hạn (mỗi 1 giờ).\n\nToken rotation: refresh token cũ bị vô hiệu hoá sau khi dùng, token mới được cấp.\n\n**Errors**:\n- 401 `INVALID_REFRESH_TOKEN` — token hết hạn, không tồn tại, hoặc đã dùng rồi"
+          }
+        },
+        {
+          "name": "Logout",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "if (pm.response.code === 200) {",
+                  "  pm.collectionVariables.set('accessToken', '');",
+                  "  pm.collectionVariables.set('refreshToken', '');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh_token\": \"{{refreshToken}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/logout",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "logout"]
+            },
+            "description": "Đăng xuất khỏi thiết bị hiện tại. Refresh token bị xoá — không thể dùng lại.\n\n**Requires**: `Authorization: Bearer <access_token>`\n\n**Errors**:\n- 401 `UNAUTHORIZED` — thiếu hoặc sai access token"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Health Check",
+      "item": [
+        {
+          "name": "Health",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["health"]
+            },
+            "description": "Kiểm tra server đang chạy."
+          }
+        }
+      ]
+    }
+  ]
+}

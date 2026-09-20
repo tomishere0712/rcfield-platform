@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KB Debug — RCField</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface2: #f1f5f9;
+      --border: #e2e8f0;
+      --border2: #cbd5e1;
+      --text: #0f172a;
+      --text2: #334155;
+      --muted: #94a3b8;
+      --green: #16a34a;
+      --green-bg: #f0fdf4;
+      --green-border: #bbf7d0;
+      --yellow: #d97706;
+      --yellow-bg: #fffbeb;
+      --yellow-border: #fde68a;
+      --red: #dc2626;
+      --red-bg: #fef2f2;
+      --red-border: #fecaca;
+      --blue: #2563eb;
+      --blue-bg: #eff6ff;
+      --blue-light: #dbeafe;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    /* ── Layout ─────────────────────────────────────────────── */
+    .layout {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      grid-template-rows: auto 1fr;
+      height: 100vh;
+    }
+
+    /* ── Top bar ─────────────────────────────────────────────── */
+    .topbar {
+      grid-column: 1 / -1;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .topbar-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--blue);
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .topbar input {
+      flex: 1;
+      min-width: 260px;
+      background: var(--bg);
+      border: 1px solid var(--border2);
+      border-radius: 7px;
+      padding: 7px 12px;
+      color: var(--text);
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 12px;
+      outline: none;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .topbar input:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px var(--blue-light);
+    }
+    .topbar input::placeholder { color: var(--muted); }
+
+    .btn {
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      padding: 7px 14px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background .15s;
+    }
+    .btn:hover { background: #1d4ed8; }
+    .btn:disabled { opacity: .45; cursor: not-allowed; }
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid var(--border2);
+      color: var(--text2);
+    }
+    .btn-ghost:hover { background: var(--surface2); border-color: var(--border2); }
+
+    /* ── Sidebar ─────────────────────────────────────────────── */
+    .sidebar {
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .section-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .stat-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+    }
+
+    .stat-value { font-size: 22px; font-weight: 700; line-height: 1; }
+    .stat-label { font-size: 11px; color: var(--muted); margin-top: 3px; }
+    .stat-green { background: var(--green-bg); border-color: var(--green-border); }
+    .stat-green .stat-value { color: var(--green); }
+    .stat-yellow { background: var(--yellow-bg); border-color: var(--yellow-border); }
+    .stat-yellow .stat-value { color: var(--yellow); }
+    .stat-red { background: var(--red-bg); border-color: var(--red-border); }
+    .stat-red .stat-value { color: var(--red); }
+    .stat-blue { background: var(--blue-bg); border-color: var(--blue-light); }
+    .stat-blue .stat-value { color: var(--blue); }
+
+    /* doc list */
+    .doc-item {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      cursor: pointer;
+      transition: border-color .15s, background .15s;
+      margin-bottom: 6px;
+    }
+    .doc-item:hover { border-color: var(--blue); background: var(--blue-bg); }
+    .doc-item.active { border-color: var(--blue); background: var(--blue-bg); }
+
+    .doc-title { font-weight: 600; color: var(--text); margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 13px; }
+    .doc-meta { display: flex; gap: 8px; align-items: center; }
+    .doc-delete {
+      margin-left: auto;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--muted);
+      font-size: 14px;
+      padding: 2px 4px;
+      border-radius: 4px;
+      line-height: 1;
+      transition: color .15s, background .15s;
+    }
+    .doc-delete:hover { color: #ef4444; background: #fee2e2; }
+
+    .badge {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 20px;
+      text-transform: uppercase;
+    }
+    .badge-green  { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+    .badge-yellow { background: var(--yellow-bg); color: var(--yellow); border: 1px solid var(--yellow-border); }
+    .badge-red    { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+    .badge-gray   { background: var(--surface2); color: var(--muted); border: 1px solid var(--border); }
+
+    .doc-chunks { color: var(--muted); font-size: 11px; }
+
+    /* upload area */
+    .upload-zone {
+      border: 2px dashed var(--border2);
+      border-radius: 8px;
+      padding: 16px;
+      text-align: center;
+      color: var(--muted);
+      cursor: pointer;
+      transition: border-color .15s, background .15s;
+      background: var(--surface2);
+    }
+    .upload-zone:hover, .upload-zone.drag {
+      border-color: var(--blue);
+      background: var(--blue-bg);
+      color: var(--blue);
+    }
+    .upload-zone input { display: none; }
+
+    .upload-form { display: flex; flex-direction: column; gap: 8px; }
+    .upload-form input, .upload-form select {
+      background: var(--surface);
+      border: 1px solid var(--border2);
+      border-radius: 7px;
+      padding: 7px 10px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 13px;
+      outline: none;
+      width: 100%;
+      transition: border-color .15s, box-shadow .15s;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    .upload-form input:focus, .upload-form select:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px var(--blue-light);
+    }
+    .upload-form input::placeholder { color: var(--muted); }
+    .upload-form select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2394a3b8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      padding-right: 28px;
+      cursor: pointer;
+    }
+
+    /* ── Main ────────────────────────────────────────────────── */
+    .main {
+      display: flex;
+      flex-direction: column;
+      background: var(--bg);
+      overflow: hidden;
+    }
+
+    /* tabs */
+    .tabs {
+      display: flex;
+      gap: 2px;
+      padding: 12px 20px 0;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    .tab-btn {
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      font-family: inherit;
+      transition: color .15s;
+      margin-bottom: -1px;
+    }
+    .tab-btn:hover { color: var(--text2); }
+    .tab-btn.active { color: var(--blue); border-bottom-color: var(--blue); }
+
+    .tab-panel { display: none; flex: 1; overflow: hidden; flex-direction: column; }
+    .tab-panel.active { display: flex; }
+
+    /* retrieval panel */
+    .retrieval-panel {
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* query bar */
+    .query-bar {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .query-input {
+      flex: 1;
+      background: var(--surface);
+      border: 1px solid var(--border2);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 14px;
+      outline: none;
+      transition: border-color .15s, box-shadow .15s;
+      box-shadow: 0 1px 3px rgba(0,0,0,.05);
+    }
+    .query-input:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px var(--blue-light);
+    }
+    .query-input::placeholder { color: var(--muted); }
+
+    .top-select {
+      background: var(--surface);
+      border: 1px solid var(--border2);
+      border-radius: 7px;
+      padding: 10px 10px;
+      color: var(--text2);
+      font-family: inherit;
+      font-size: 13px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    /* ── Chat panel ──────────────────────────────────────────── */
+    .chat-panel {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .chat-msg {
+      display: flex;
+      gap: 10px;
+      max-width: 75%;
+    }
+    .chat-msg.user { align-self: flex-end; flex-direction: row-reverse; }
+    .chat-msg.bot  { align-self: flex-start; }
+
+    .chat-avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+    .chat-msg.user .chat-avatar { background: var(--blue); color: #fff; }
+    .chat-msg.bot  .chat-avatar { background: var(--surface2); border: 1px solid var(--border); }
+
+    .chat-bubble {
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 13px;
+      line-height: 1.6;
+      word-break: break-word;
+    }
+    .chat-msg.user .chat-bubble {
+      background: var(--blue);
+      color: #fff;
+      border-bottom-right-radius: 4px;
+    }
+    .chat-msg.bot .chat-bubble {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-bottom-left-radius: 4px;
+    }
+    .chat-msg.bot.error .chat-bubble {
+      background: var(--red-bg);
+      border-color: var(--red-border);
+      color: var(--red);
+    }
+
+    .chat-meta {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 4px;
+      padding: 0 4px;
+    }
+    .chat-msg.user .chat-meta { text-align: right; }
+
+    .typing-status-text {
+      font-size: 13px;
+      color: var(--muted);
+      font-style: italic;
+      transition: opacity 0.25s ease;
+    }
+    .typing-status-text.fade { opacity: 0; }
+
+    .chat-input-area {
+      padding: 12px 16px;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 8px;
+      align-items: flex-end;
+    }
+
+    .chat-input {
+      flex: 1;
+      background: var(--bg);
+      border: 1px solid var(--border2);
+      border-radius: 10px;
+      padding: 10px 14px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 13px;
+      outline: none;
+      resize: none;
+      min-height: 40px;
+      max-height: 120px;
+      line-height: 1.5;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .chat-input:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px var(--blue-light);
+    }
+    .chat-input::placeholder { color: var(--muted); }
+
+    .btn-send {
+      width: 38px; height: 38px;
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background .15s;
+      font-size: 16px;
+    }
+    .btn-send:hover { background: #1d4ed8; }
+    .btn-send:disabled { opacity: .45; cursor: not-allowed; }
+
+    .chat-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 16px 0;
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .btn-clear-chat {
+      font-size: 11px;
+      color: var(--muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .btn-clear-chat:hover { background: var(--surface2); color: var(--text2); }
+
+    /* verdict banner */
+    .verdict {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      border-radius: 10px;
+      border: 1px solid;
+    }
+    .verdict-good     { background: var(--green-bg);  border-color: var(--green-border); }
+    .verdict-weak     { background: var(--yellow-bg); border-color: var(--yellow-border); }
+    .verdict-no_match { background: var(--red-bg);    border-color: var(--red-border); }
+
+    .verdict-icon { font-size: 22px; }
+    .verdict-text { flex: 1; }
+    .verdict-title { font-weight: 700; font-size: 14px; }
+    .verdict-sub { color: var(--muted); font-size: 12px; margin-top: 2px; }
+    .verdict-score { font-size: 22px; font-weight: 700; }
+    .verdict-good .verdict-score     { color: var(--green); }
+    .verdict-weak .verdict-score     { color: var(--yellow); }
+    .verdict-no_match .verdict-score { color: var(--red); }
+
+    /* chunk cards */
+    .chunk-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .chunk-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: border-color .15s, box-shadow .15s;
+      box-shadow: 0 1px 3px rgba(0,0,0,.04);
+    }
+    .chunk-card:hover {
+      border-color: var(--blue);
+      box-shadow: 0 2px 8px rgba(37,99,235,.1);
+    }
+
+    .chunk-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface2);
+    }
+
+    .chunk-rank {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      width: 24px;
+      flex-shrink: 0;
+    }
+
+    .score-wrap { display: flex; align-items: center; gap: 8px; flex: 1; }
+    .score-bar-bg {
+      flex: 1;
+      height: 5px;
+      background: var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .score-bar-fill { height: 100%; border-radius: 3px; transition: width .3s; }
+    .score-num { font-weight: 700; font-size: 13px; width: 40px; text-align: right; flex-shrink: 0; }
+
+    .chunk-doc { font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
+    .chunk-index-badge {
+      font-size: 10px;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1px 6px;
+      flex-shrink: 0;
+      background: var(--surface);
+    }
+
+    .chunk-body { padding: 12px 14px; }
+    .chunk-text {
+      color: var(--text2);
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: 12px;
+      line-height: 1.65;
+      max-height: 120px;
+      overflow: hidden;
+      transition: max-height .3s;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+    }
+    .chunk-text.expanded { max-height: 800px; }
+    .btn-expand {
+      font-size: 11px;
+      color: var(--blue);
+      background: none;
+      border: none;
+      cursor: pointer;
+      margin-top: 6px;
+      padding: 0;
+      font-family: inherit;
+    }
+
+    /* empty state */
+    .empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 60px 20px;
+      color: var(--muted);
+      text-align: center;
+    }
+    .empty-icon { font-size: 40px; }
+
+    /* spinner */
+    .spinner {
+      display: inline-block;
+      width: 16px; height: 16px;
+      border: 2px solid var(--border);
+      border-top-color: var(--blue);
+      border-radius: 50%;
+      animation: spin .6s linear infinite;
+      vertical-align: middle;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .loading-row { display: flex; align-items: center; gap: 8px; color: var(--muted); padding: 20px; }
+
+    /* toast */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 16px;
+      font-size: 13px;
+      z-index: 9999;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity .2s, transform .2s;
+      box-shadow: 0 4px 16px rgba(0,0,0,.1);
+    }
+    .toast.show { opacity: 1; transform: none; }
+    .toast-ok  { border-color: var(--green-border); color: var(--green); }
+    .toast-err { border-color: var(--red-border);   color: var(--red); }
+
+    /* system prompt */
+    .sp-textarea {
+      background: var(--surface);
+      border: 1px solid var(--border2);
+      border-radius: 7px;
+      padding: 8px 10px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 12px;
+      line-height: 1.55;
+      outline: none;
+      width: 100%;
+      resize: vertical;
+      min-height: 100px;
+      max-height: 240px;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .sp-textarea:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px var(--blue-light);
+    }
+    .sp-textarea::placeholder { color: var(--muted); }
+    .sp-char-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- Top bar -->
+  <div class="topbar">
+    <div class="topbar-title">Upload Knowledge Base</div>
+    <span id="cafe-name" style="color:var(--muted);font-size:12px"></span>
+  </div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+
+    <!-- Cafe ID -->
+    <div>
+      <div class="section-label">Cafe</div>
+      <div class="upload-form">
+        <input id="cafe-id" type="text" placeholder="Cafe ID..." onkeydown="if(event.key==='Enter') loadCafe()" />
+        <div style="display:flex;gap:6px">
+          <button class="btn" style="flex:1" onclick="loadCafe()">Load</button>
+          <button class="btn btn-ghost" onclick="clearAll()">Clear</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div>
+      <div class="section-label">KB Summary</div>
+      <div class="stat-grid" id="stats">
+        <div class="stat-card stat-blue"><div class="stat-value" id="s-docs">—</div><div class="stat-label">Documents</div></div>
+        <div class="stat-card stat-blue"><div class="stat-value" id="s-chunks">—</div><div class="stat-label">Chunks</div></div>
+        <div class="stat-card stat-green"><div class="stat-value" id="s-indexed">—</div><div class="stat-label">Indexed</div></div>
+        <div class="stat-card stat-red"><div class="stat-value" id="s-failed">—</div><div class="stat-label">Failed</div></div>
+      </div>
+    </div>
+
+    <!-- Doc list -->
+    <div>
+      <div class="section-label">Documents</div>
+      <div id="doc-list"><div class="empty"><div class="empty-icon">📂</div><div>Load cafe trước</div></div></div>
+    </div>
+
+    <!-- System Prompt -->
+    <div>
+      <div class="section-label">System Prompt</div>
+      <div class="upload-form">
+        <textarea
+          class="sp-textarea"
+          id="system-prompt-input"
+          placeholder="Ví dụ: Luôn xưng hô thân mật. Ưu tiên giới thiệu gói premium khi khách hỏi giá. Không đề cập đến đối thủ cạnh tranh."
+          oninput="updateSpCharCount()"
+        ></textarea>
+        <div class="sp-char-row">
+          <span id="sp-status" style="color:var(--muted)">Chưa load</span>
+          <span><span id="sp-char-count">0</span>/2000</span>
+        </div>
+        <div style="display:flex;gap:6px">
+          <button class="btn btn-ghost" style="flex:1" onclick="loadSystemPrompt()">Load</button>
+          <button class="btn" style="flex:1" id="btn-save-sp" onclick="saveSystemPrompt(this)">Lưu</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Login -->
+    <div>
+      <div class="section-label">Đăng nhập Provider</div>
+      <div class="upload-form" id="login-section">
+        <input type="email" id="login-email" placeholder="Email..." value="provider@gmail.com" />
+        <input type="password" id="login-password" placeholder="Password..." value="123456" />
+        <button class="btn" onclick="doLogin()">Đăng nhập</button>
+        <div id="login-status" style="font-size:11px;color:var(--muted)">Chưa đăng nhập</div>
+      </div>
+    </div>
+
+    <!-- Upload -->
+    <div>
+      <div class="section-label">Upload Document</div>
+      <div class="upload-form">
+        <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()"
+             ondragover="event.preventDefault();this.classList.add('drag')"
+             ondragleave="this.classList.remove('drag')"
+             ondrop="handleDrop(event)">
+          <input type="file" id="file-input" accept=".pdf,.docx,.txt,.md" onchange="handleFile(event)" />
+          <div id="file-label">📎 Chọn file hoặc kéo thả<br/><span style="font-size:11px;color:var(--muted)">PDF · DOCX · TXT · MD · max 10MB</span></div>
+        </div>
+        <input type="text" id="doc-title" placeholder="Tiêu đề tài liệu..." />
+        <select id="doc-type">
+          <option value="FAQ">FAQ</option>
+          <option value="POLICY">Quy định</option>
+          <option value="ANNOUNCEMENT">Thông báo</option>
+          <option value="CUSTOM">Khác</option>
+        </select>
+        <button class="btn" id="btn-upload" onclick="uploadDoc()" disabled>Upload & Index</button>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('retrieval', this)">🔍 Retrieval</button>
+      <button class="tab-btn" onclick="switchTab('chat', this)">💬 Chat Test</button>
+    </div>
+
+    <!-- Tab: Retrieval -->
+    <div class="tab-panel active" id="tab-retrieval">
+      <div class="retrieval-panel">
+        <div class="query-bar">
+          <input class="query-input" id="query-input" type="text"
+                 placeholder="Nhập câu hỏi để test retrieval..."
+                 onkeydown="if(event.key==='Enter') runQuery()" />
+          <select class="top-select" id="top-select">
+            <option value="3">Top 3</option>
+            <option value="5" selected>Top 5</option>
+            <option value="10">Top 10</option>
+          </select>
+          <button class="btn" id="btn-query" onclick="runQuery()">Run</button>
+        </div>
+        <div id="results">
+          <div class="empty">
+            <div class="empty-icon">🧪</div>
+            <div>Load cafe ID và nhập câu hỏi để test KB retrieval</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab: Chat -->
+    <div class="tab-panel" id="tab-chat">
+      <div class="chat-panel">
+        <div class="chat-toolbar">
+          <span id="chat-status" style="color:var(--muted)">Nhập câu hỏi để bắt đầu chat với AI của chi nhánh</span>
+          <button class="btn-clear-chat" onclick="clearChat()">Xoá hội thoại</button>
+        </div>
+        <div class="chat-messages" id="chat-messages">
+          <div class="empty" id="chat-empty">
+            <div class="empty-icon">💬</div>
+            <div>Load cafe ID rồi chat thử với AI</div>
+          </div>
+        </div>
+        <div class="chat-input-area">
+          <textarea class="chat-input" id="chat-input" rows="1"
+                    placeholder="Nhập tin nhắn..."
+                    onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat()}"
+                    oninput="autoResize(this)"></textarea>
+          <button class="btn-send" id="btn-send" onclick="sendChat()" title="Gửi (Enter)">➤</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // ── State ──────────────────────────────────────────────────
+  let cafeId = '';
+  let selectedFile = null;
+  let authToken = '';
+
+  // ── Init ───────────────────────────────────────────────────
+  window.onload = () => {
+    const saved = localStorage.getItem('kb_debug_cafe_id');
+    if (saved) {
+      document.getElementById('cafe-id').value = saved;
+      loadCafe();
+    }
+    const token = localStorage.getItem('kb_debug_token');
+    if (token) {
+      authToken = token;
+      document.getElementById('login-status').textContent = '✓ Đã đăng nhập (từ cache)';
+      document.getElementById('login-status').style.color = 'var(--green)';
+    }
+  };
+
+  // ── Login ──────────────────────────────────────────────────
+  async function doLogin() {
+    const email    = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
+    const status   = document.getElementById('login-status');
+    status.textContent = 'Đang đăng nhập…';
+    status.style.color = 'var(--muted)';
+    try {
+      const r = await fetch('http://localhost:3000/api/v1/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      const d = await r.json();
+      if (!r.ok || !d.data?.access_token) {
+        status.textContent = `✗ ${d.message || 'Sai email/password'}`;
+        status.style.color = 'var(--red)';
+        return;
+      }
+      authToken = d.data.access_token;
+      localStorage.setItem('kb_debug_token', authToken);
+      status.textContent = `✓ ${d.data.user.email} (${d.data.user.role})`;
+      status.style.color = 'var(--green)';
+      toast('Đăng nhập thành công', 'ok');
+    } catch {
+      status.textContent = '✗ Không kết nối được server';
+      status.style.color = 'var(--red)';
+    }
+  };
+
+  // ── Load cafe ──────────────────────────────────────────────
+  async function loadCafe() {
+    cafeId = document.getElementById('cafe-id').value.trim();
+    if (!cafeId) return;
+    localStorage.setItem('kb_debug_cafe_id', cafeId);
+    await Promise.all([refreshSummary(), loadSystemPrompt()]);
+  }
+
+  async function refreshSummary() {
+    if (!cafeId) return;
+    try {
+      const r = await fetch(`http://localhost:3000/api/v1/cafes/${cafeId}/kb/debug`);
+      const d = await r.json();
+      if (d.cafe?.name) document.getElementById('cafe-name').textContent = d.cafe.name;
+      renderSummary(d.summary, d.documents);
+    } catch (e) {
+      toast('Không kết nối được server', 'err');
+    }
+  }
+
+  function renderSummary(summary, docs) {
+    document.getElementById('s-docs').textContent    = summary.doc_count;
+    document.getElementById('s-chunks').textContent  = summary.chunk_count;
+    document.getElementById('s-indexed').textContent = summary.indexed;
+    document.getElementById('s-failed').textContent  = summary.failed;
+
+    const list = document.getElementById('doc-list');
+    if (!docs.length) {
+      list.innerHTML = `<div style="color:var(--muted);font-size:12px;padding:8px 0">Chưa có tài liệu nào.</div>`;
+      return;
+    }
+
+    list.innerHTML = docs.map(d => `
+      <div class="doc-item" id="doc-${d.id}" onclick="filterDoc('${d.id}', this)">
+        <div class="doc-title">${esc(d.title)}</div>
+        <div class="doc-meta">
+          <span class="badge ${statusBadge(d.status)}">${d.status}</span>
+          <span class="doc-chunks">${d.chunk_count} chunks</span>
+          <button class="doc-delete" title="Xóa tài liệu" onclick="event.stopPropagation(); deleteDoc('${d.id}')">✕</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function statusBadge(s) {
+    return s === 'INDEXED' ? 'badge-green' : s === 'FAILED' ? 'badge-red' : 'badge-yellow';
+  }
+
+  // ── Run query ──────────────────────────────────────────────
+  async function runQuery() {
+    const query = document.getElementById('query-input').value.trim();
+    const top   = document.getElementById('top-select').value;
+    if (!query) return;
+    if (!cafeId) { toast('Load cafe ID trước', 'err'); return; }
+
+    const btn = document.getElementById('btn-query');
+    btn.disabled = true;
+    document.getElementById('results').innerHTML = `
+      <div class="loading-row"><div class="spinner"></div> Đang embed query và tìm chunks...</div>`;
+
+    try {
+      const r = await fetch(
+        `http://localhost:3000/api/v1/cafes/${cafeId}/kb/debug?query=${encodeURIComponent(query)}&top=${top}`
+      );
+      const d = await r.json();
+      renderResults(d);
+    } catch (e) {
+      document.getElementById('results').innerHTML =
+        `<div class="empty"><div class="empty-icon">❌</div><div>Lỗi kết nối server</div></div>`;
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  function renderResults(d) {
+    const el = document.getElementById('results');
+
+    if (!d.chunks || !d.chunks.length) {
+      el.innerHTML = `<div class="empty"><div class="empty-icon">🪹</div><div>Không có chunks nào. Upload tài liệu trước.</div></div>`;
+      return;
+    }
+
+    const best = d.chunks[0].score;
+    const verdictCfg = {
+      good:     { icon: '✅', title: 'Good match', sub: 'KB có thông tin liên quan. LLM sẽ trả lời được.', color: 'var(--green)' },
+      weak:     { icon: '⚠️', title: 'Weak match', sub: 'LLM có thể trả lời mơ hồ. Cân nhắc thêm tài liệu chi tiết hơn.', color: 'var(--yellow)' },
+      no_match: { icon: '❌', title: 'No match',   sub: 'KB không có thông tin này. LLM sẽ nói "không biết".', color: 'var(--red)' },
+    }[d.verdict];
+
+    el.innerHTML = `
+      <div class="verdict verdict-${d.verdict}">
+        <div class="verdict-icon">${verdictCfg.icon}</div>
+        <div class="verdict-text">
+          <div class="verdict-title">${verdictCfg.title}</div>
+          <div class="verdict-sub">${verdictCfg.sub}</div>
+          <div class="verdict-sub" style="margin-top:4px;color:var(--muted)">
+            Query embedded → ${d.embedding_dims} dims · Top ${d.chunks.length} chunks retrieved
+          </div>
+        </div>
+        <div class="verdict-score">${best.toFixed(3)}</div>
+      </div>
+
+      <div class="chunk-list">
+        ${d.chunks.map((c, i) => renderChunk(c, i)).join('')}
+      </div>
+    `;
+  }
+
+  function renderChunk(c, i) {
+    const score = Number(c.score);
+    const color = score >= 0.7 ? 'var(--green)' : score >= 0.4 ? 'var(--yellow)' : 'var(--red)';
+    const pct   = Math.round(score * 100);
+    const id    = `chunk-text-${i}`;
+
+    return `
+      <div class="chunk-card">
+        <div class="chunk-header">
+          <div class="chunk-rank">#${i + 1}</div>
+          <div class="score-wrap">
+            <div class="score-bar-bg">
+              <div class="score-bar-fill" style="width:${pct}%;background:${color}"></div>
+            </div>
+            <div class="score-num" style="color:${color}">${score.toFixed(3)}</div>
+          </div>
+          <div class="chunk-doc" title="${esc(c.doc_title)}">${esc(c.doc_title)}</div>
+          <div class="chunk-index-badge">chunk #${c.chunk_index}</div>
+        </div>
+        <div class="chunk-body">
+          <div class="chunk-text" id="${id}">${esc(c.chunk_text)}</div>
+          ${c.chunk_text.length > 300
+            ? `<button class="btn-expand" onclick="toggleExpand('${id}', this)">▼ Xem thêm</button>`
+            : ''}
+        </div>
+      </div>`;
+  }
+
+  function toggleExpand(id, btn) {
+    const el = document.getElementById(id);
+    el.classList.toggle('expanded');
+    btn.textContent = el.classList.contains('expanded') ? '▲ Thu lại' : '▼ Xem thêm';
+  }
+
+  // ── Upload ─────────────────────────────────────────────────
+  function handleFile(e) {
+    selectedFile = e.target.files[0];
+    if (selectedFile) {
+      document.getElementById('file-label').textContent = `📄 ${selectedFile.name}`;
+      document.getElementById('btn-upload').disabled = false;
+      if (!document.getElementById('doc-title').value)
+        document.getElementById('doc-title').value = selectedFile.name.replace(/\.[^.]+$/, '');
+    }
+  }
+
+  function handleDrop(e) {
+    e.preventDefault();
+    document.getElementById('upload-zone').classList.remove('drag');
+    const f = e.dataTransfer.files[0];
+    if (f) {
+      selectedFile = f;
+      document.getElementById('file-label').textContent = `📄 ${f.name}`;
+      document.getElementById('btn-upload').disabled = false;
+      if (!document.getElementById('doc-title').value)
+        document.getElementById('doc-title').value = f.name.replace(/\.[^.]+$/, '');
+    }
+  }
+
+  async function uploadDoc() {
+    if (!selectedFile || !cafeId) return;
+    const title = document.getElementById('doc-title').value.trim() || selectedFile.name;
+    const type  = document.getElementById('doc-type').value;
+    if (!authToken) { toast('Đăng nhập trước', 'err'); return; }
+
+    const btn = document.getElementById('btn-upload');
+    btn.disabled = true;
+    btn.textContent = 'Uploading…';
+
+    const fd = new FormData();
+    fd.append('file', selectedFile);
+    fd.append('title', title);
+    fd.append('contentType', type);
+
+    try {
+      const r = await fetch(`http://localhost:3000/api/v1/cafes/${cafeId}/kb/documents`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${authToken}` },
+        body: fd,
+      });
+      const d = await r.json();
+      if (!r.ok) { toast(d.message || 'Upload failed', 'err'); return; }
+
+      toast(`✓ Uploaded — ID: ${d.id.slice(0,8)}… (indexing…)`, 'ok');
+      selectedFile = null;
+      document.getElementById('file-label').innerHTML = '📎 Chọn file hoặc kéo thả<br/><span style="font-size:11px;color:var(--muted)">PDF · DOCX · TXT · MD · max 10MB</span>';
+      document.getElementById('doc-title').value = '';
+
+      // Poll until indexed
+      pollDocStatus(d.id, token);
+    } catch (e) {
+      toast('Lỗi kết nối', 'err');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Upload & Index';
+    }
+  }
+
+  async function pollDocStatus(docId, token) {
+    for (let i = 0; i < 30; i++) {
+      await sleep(2000);
+      try {
+        const r = await fetch(`http://localhost:3000/api/v1/cafes/${cafeId}/kb/documents`, {
+          headers: { Authorization: `Bearer ${authToken}` },
+        });
+        if (r.ok) {
+          const d = await r.json();
+          const doc = d.data.find(x => x.id === docId);
+          if (doc?.status === 'INDEXED') { toast(`✅ Indexed! ${doc.chunk_count} chunks`, 'ok'); await refreshSummary(); return; }
+          if (doc?.status === 'FAILED')  { toast('❌ Indexing failed', 'err'); await refreshSummary(); return; }
+        }
+      } catch (_) {}
+    }
+  }
+
+  // ── Tabs ───────────────────────────────────────────────────
+  function switchTab(name, btn) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(`tab-${name}`).classList.add('active');
+  }
+
+  // ── Chat ───────────────────────────────────────────────────
+  let chatHistory = [];
+
+  async function sendChat() {
+    const input = document.getElementById('chat-input');
+    const msg = input.value.trim();
+    if (!msg) return;
+    if (!cafeId) { toast('Load cafe ID trước', 'err'); return; }
+
+    input.value = '';
+    input.style.height = 'auto';
+    document.getElementById('chat-empty')?.remove();
+
+    appendMsg('user', msg);
+    chatHistory.push({ role: 'user', content: msg });
+
+    const typingId = appendTyping();
+    document.getElementById('btn-send').disabled = true;
+
+    try {
+      const r = await fetch(`http://localhost:3000/api/v1/cafes/${cafeId}/chat/stream`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: msg, history: chatHistory.slice(-20) }),
+      });
+
+      if (!r.ok) {
+        removeTyping(typingId);
+        const d = await r.json().catch(() => ({}));
+        appendMsg('bot', d.message ?? `Lỗi ${r.status}`, null, true);
+        return;
+      }
+
+      const reader = r.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+      let fullAnswer = '';
+      let responseType = 'text';
+      let bubbleEl = null;
+      let firstToken = true;
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop();
+
+        for (const line of lines) {
+          if (line.startsWith('data:')) {
+            try {
+              const payload = JSON.parse(line.slice(5).trim());
+              if (payload.text !== undefined && payload.text !== '') {
+                fullAnswer += payload.text;
+                if (firstToken) {
+                  removeTyping(typingId);
+                  const bubbleId = appendMsg('bot', '');
+                  bubbleEl = document.getElementById(bubbleId)?.querySelector('.chat-bubble-text');
+                  firstToken = false;
+                }
+                if (bubbleEl) {
+                  bubbleEl.appendChild(document.createTextNode(payload.text));
+                  document.getElementById('chat-messages').scrollTop = 999999;
+                }
+              } else if (payload.full_answer !== undefined) {
+                responseType = payload.response_type ?? 'text';
+              }
+            } catch (_) {}
+          }
+        }
+      }
+
+      if (firstToken) removeTyping(typingId);
+
+      chatHistory.push({ role: 'model', content: fullAnswer });
+      document.getElementById('chat-status').textContent =
+        `response_type: ${responseType} · ${chatHistory.length/2} lượt`;
+    } catch (e) {
+      removeTyping(typingId);
+      appendMsg('bot', 'Không kết nối được server', null, true);
+    } finally {
+      document.getElementById('btn-send').disabled = false;
+      document.getElementById('chat-input').focus();
+    }
+  }
+
+  function appendMsg(role, text, type, isError) {
+    const wrap = document.getElementById('chat-messages');
+    const time = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+    const avatar = role === 'user' ? '👤' : '🤖';
+    const typeBadge = type && type !== 'text'
+      ? `<span style="display:inline-block;margin-left:6px;font-size:10px;padding:1px 6px;border-radius:10px;background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-light)">${type}</span>`
+      : '';
+    const id = 'msg-' + Date.now();
+    const div = document.createElement('div');
+    div.id = id;
+    div.className = `chat-msg ${role}${isError ? ' error' : ''}`;
+    div.innerHTML = `
+      <div class="chat-avatar">${avatar}</div>
+      <div>
+        <div class="chat-bubble"><span class="chat-bubble-text">${esc(text)}</span>${typeBadge}</div>
+        <div class="chat-meta">${time}</div>
+      </div>`;
+    wrap.appendChild(div);
+    wrap.scrollTop = wrap.scrollHeight;
+    return id;
+  }
+
+  const TYPING_STEPS = [
+    'Đang tìm kiếm tài liệu...',
+    'Đang đọc thông tin liên quan...',
+    'Đang soạn câu trả lời...',
+    'Sắp xong rồi...',
+  ];
+
+  function appendTyping() {
+    const wrap = document.getElementById('chat-messages');
+    const id = 'typing-' + Date.now();
+    const div = document.createElement('div');
+    div.className = 'chat-msg bot';
+    div.id = id;
+    div.innerHTML = `
+      <div class="chat-avatar">🤖</div>
+      <div class="chat-bubble" style="padding:10px 16px;min-width:180px">
+        <span class="typing-status-text">${TYPING_STEPS[0]}</span>
+      </div>`;
+    wrap.appendChild(div);
+    wrap.scrollTop = wrap.scrollHeight;
+
+    let step = 0;
+    const textEl = div.querySelector('.typing-status-text');
+    const timer = setInterval(() => {
+      if (step >= TYPING_STEPS.length - 1) return;
+      textEl.classList.add('fade');
+      setTimeout(() => {
+        step++;
+        textEl.textContent = TYPING_STEPS[step];
+        textEl.classList.remove('fade');
+      }, 250);
+    }, 3500);
+
+    div._timer = timer;
+    return id;
+  }
+
+  function removeTyping(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    clearInterval(el._timer);
+    el.remove();
+  }
+
+  function clearChat() {
+    chatHistory = [];
+    document.getElementById('chat-messages').innerHTML =
+      `<div class="empty" id="chat-empty"><div class="empty-icon">💬</div><div>Load cafe ID rồi chat thử với AI</div></div>`;
+    document.getElementById('chat-status').textContent = 'Nhập câu hỏi để bắt đầu chat với AI của chi nhánh';
+  }
+
+  function autoResize(el) {
+    el.style.height = 'auto';
+    el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+  }
+
+  // ── System Prompt ──────────────────────────────────────────
+  async function loadSystemPrompt() {
+    if (!cafeId) return;
+    const status = document.getElementById('sp-status');
+    status.textContent = 'Đang load…';
+    status.style.color = 'var(--muted)';
+    try {
+      const r = await fetch(`http://localhost:3000/api/v1/cafes/${cafeId}/chat/config`);
+      const d = await r.json();
+      const sp = d.system_prompt ?? '';
+      document.getElementById('system-prompt-input').value = sp;
+      updateSpCharCount();
+      if (sp) {
+        status.textContent = `✓ ${sp.length} ký tự`;
+        status.style.color = 'var(--green)';
+      } else {
+        status.textContent = 'Chưa cấu hình';
+        status.style.color = 'var(--muted)';
+      }
+    } catch {
+      status.textContent = 'Lỗi khi load';
+      status.style.color = 'var(--red)';
+    }
+  }
+
+  async function saveSystemPrompt(btn) {
+    if (!cafeId) { toast('Load cafe ID trước', 'err'); return; }
+    if (!authToken) { toast('Đăng nhập trước', 'err'); return; }
+
+    const value = document.getElementById('system-prompt-input').value.trim();
+    if (value.length > 2000) { toast('System prompt tối đa 2000 ký tự', 'err'); return; }
+
+    btn.disabled = true;
+    btn.textContent = 'Đang lưu…';
+    const status = document.getElementById('sp-status');
+
+    try {
+      const r = await fetch(`http://localhost:3000/api/v1/cafes/${cafeId}/chat/config`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${authToken}` },
+        body: JSON.stringify({ system_prompt: value || null }),
+      });
+      const d = await r.json();
+      if (!r.ok) { toast(d.message || `Lỗi ${r.status}`, 'err'); return; }
+
+      toast(value ? '✓ Đã lưu system prompt' : '✓ Đã xóa system prompt', 'ok');
+      if (value) {
+        status.textContent = `✓ ${value.length} ký tự`;
+        status.style.color = 'var(--green)';
+      } else {
+        status.textContent = 'Chưa cấu hình';
+        status.style.color = 'var(--muted)';
+      }
+    } catch {
+      toast('Lỗi kết nối', 'err');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Lưu';
+    }
+  }
+
+  function updateSpCharCount() {
+    const len = document.getElementById('system-prompt-input').value.length;
+    const el = document.getElementById('sp-char-count');
+    el.textContent = len;
+    el.style.color = len > 1800 ? 'var(--red)' : len > 1500 ? 'var(--yellow)' : 'var(--muted)';
+  }
+
+  // ── Utils ──────────────────────────────────────────────────
+  function clearAll() {
+    cafeId = '';
+    document.getElementById('cafe-id').value = '';
+    document.getElementById('cafe-name').textContent = '';
+    document.getElementById('query-input').value = '';
+    document.getElementById('results').innerHTML = `<div class="empty"><div class="empty-icon">🧪</div><div>Load cafe ID và nhập câu hỏi để test KB retrieval</div></div>`;
+    document.getElementById('s-docs').textContent = document.getElementById('s-chunks').textContent =
+    document.getElementById('s-indexed').textContent = document.getElementById('s-failed').textContent = '—';
+    document.getElementById('doc-list').innerHTML = `<div class="empty"><div class="empty-icon">📂</div><div>Load cafe trước</div></div>`;
+  }
+
+  async function deleteDoc(id) {
+    if (!cafeId) { toast('Load cafe ID trước', 'err'); return; }
+    if (!authToken) { toast('Đăng nhập trước', 'err'); return; }
+    if (!confirm('Xóa tài liệu này? Tất cả chunks liên quan sẽ bị xóa.')) return;
+
+    try {
+      const res = await fetch(`http://localhost:3000/api/v1/cafes/${cafeId}/kb/documents/${id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${authToken}` },
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        toast(err.message ?? `Lỗi ${res.status}`, 'err');
+        return;
+      }
+      document.getElementById(`doc-${id}`)?.remove();
+      toast('Đã xóa tài liệu', 'ok');
+      refreshSummary();
+    } catch (e) {
+      toast('Lỗi kết nối', 'err');
+    }
+  }
+
+  function filterDoc(id, el) {
+    document.querySelectorAll('.doc-item').forEach(e => e.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  function toast(msg, type = 'ok') {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.className = `toast toast-${type} show`;
+    setTimeout(() => el.classList.remove('show'), 3000);
+  }
+
+  function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+  function esc(s) {
+    return String(s ?? '')
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+</script>
+</body>
+</html>

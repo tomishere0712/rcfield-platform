@@ -1,0 +1,319 @@
+{
+  "info": {
+    "name": "RCField Cafes Swagger",
+    "description": "Test collection cho Provider cafe CRUD + cafe images. Set `baseUrl` = `http://localhost:3000/api/v1`, `providerToken`, `adminToken`, và file ảnh upload trước khi chạy. Collection này không đụng KB/chat/chunk.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000/api/v1" },
+    { "key": "docsUrl", "value": "http://localhost:3000/api-docs.json" },
+    { "key": "providerToken", "value": "" },
+    { "key": "adminToken", "value": "" },
+    { "key": "cafeId", "value": "8e7f7c2a-6a5b-4a4c-9b9e-63b3e8c1f001" },
+    { "key": "cafeImageId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Swagger contract - Cafe docs generated from Zod",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Accept", "value": "application/json" }],
+        "url": "{{docsUrl}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Swagger JSON loads', () => pm.response.to.have.status(200));",
+              "const spec = pm.response.json();",
+              "pm.test('Cafe paths exist', () => {",
+              "  pm.expect(spec.paths['/api/v1/cafes']).to.exist;",
+              "  pm.expect(spec.paths['/api/v1/cafes/{cafeId}']).to.exist;",
+              "  pm.expect(spec.paths['/api/v1/cafes/{cafeId}/status']).to.exist;",
+              "  pm.expect(spec.paths['/api/v1/cafes/{cafeId}/images']).to.exist;",
+              "  pm.expect(spec.paths['/api/v1/cafe-images/{id}']).to.exist;",
+              "});",
+              "pm.test('Cafe schemas generated from Zod are present', () => {",
+              "  pm.expect(spec.components.schemas.CreateCafeRequest).to.exist;",
+              "  pm.expect(spec.components.schemas.UpdateCafeRequest).to.exist;",
+              "  pm.expect(spec.components.schemas.CafeImageUpload).to.exist;",
+              "  pm.expect(spec.components.schemas.Cafe).to.exist;",
+              "  pm.expect(spec.components.schemas.CafeImage).to.exist;",
+              "});",
+              "pm.test('Upload uses multipart files field', () => {",
+              "  const schema = spec.components.schemas.CafeImageUpload;",
+              "  pm.expect(schema.properties.files.items.format).to.eql('binary');",
+              "  pm.expect(spec.paths['/api/v1/cafes/{cafeId}/images'].post.requestBody.content['multipart/form-data'].schema.$ref).to.eql('#/components/schemas/CafeImageUpload');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "List cafes - public",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Accept", "value": "application/json" }],
+        "url": {
+          "raw": "{{baseUrl}}/cafes?page=1&limit=20",
+          "host": ["{{baseUrl}}"],
+          "path": ["cafes"],
+          "query": [
+            { "key": "page", "value": "1" },
+            { "key": "limit", "value": "20" }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 200', () => pm.response.to.have.status(200));",
+              "const body = pm.response.json();",
+              "pm.test('List response shape', () => {",
+              "  pm.expect(body.success).to.eql(true);",
+              "  pm.expect(body.data).to.be.an('array');",
+              "  pm.expect(body.meta).to.include.keys(['total', 'page', 'limit']);",
+              "});",
+              "if (body.data[0]?.id) pm.collectionVariables.set('cafeId', body.data[0].id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Create cafe - provider",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Accept", "value": "application/json" },
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{providerToken}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"RC Arena Sai Gon {{$timestamp}}\",\n  \"description\": \"San RC trong nha voi duong drift va obstacle.\",\n  \"phone\": \"0901234567\",\n  \"cover_image_url\": \"https://cdn.rcfield.vn/cafes/rc-arena-cover.jpg\",\n  \"address\": \"15 Hoang Van Thai\",\n  \"district\": \"Quan 7\",\n  \"city\": \"TP. Ho Chi Minh\",\n  \"latitude\": 10.7403,\n  \"longitude\": 106.712,\n  \"operating_hours\": {\n    \"mon\": { \"open\": \"09:00\", \"close\": \"22:00\", \"is_closed\": false },\n    \"tue\": { \"open\": \"09:00\", \"close\": \"22:00\", \"is_closed\": false }\n  },\n  \"track_types\": [\"DRIFT\", \"OBSTACLE\"],\n  \"slot_duration_minutes\": 60,\n  \"slot_fee_rate\": 50000,\n  \"max_concurrent_bookings\": 8,\n  \"min_booking_notice_minutes\": 30,\n  \"byoc_capacity\": 4\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/cafes",
+          "host": ["{{baseUrl}}"],
+          "path": ["cafes"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 201', () => pm.response.to.have.status(201));",
+              "const body = pm.response.json();",
+              "pm.test('Created cafe is PENDING', () => {",
+              "  pm.expect(body.success).to.eql(true);",
+              "  pm.expect(body.data.status).to.eql('PENDING');",
+              "});",
+              "pm.collectionVariables.set('cafeId', body.data.id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get cafe detail",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Accept", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{providerToken}}" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/cafes/{{cafeId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["cafes", "{{cafeId}}"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 200', () => pm.response.to.have.status(200));",
+              "const body = pm.response.json();",
+              "pm.test('Cafe detail shape', () => {",
+              "  pm.expect(body.success).to.eql(true);",
+              "  pm.expect(body.data.id).to.eql(pm.collectionVariables.get('cafeId'));",
+              "  pm.expect(body.data.trackTypes).to.be.an('array');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Update cafe - provider",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          { "key": "Accept", "value": "application/json" },
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{providerToken}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"RC Arena Sai Gon Updated {{$timestamp}}\",\n  \"phone\": \"0909999999\",\n  \"slot_fee_rate\": 60000,\n  \"max_concurrent_bookings\": 10\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/cafes/{{cafeId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["cafes", "{{cafeId}}"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 200', () => pm.response.to.have.status(200));",
+              "const body = pm.response.json();",
+              "pm.test('Cafe updated', () => {",
+              "  pm.expect(body.success).to.eql(true);",
+              "  pm.expect(body.data.phone).to.eql('0909999999');",
+              "  pm.expect(String(body.data.slotFeeRate)).to.match(/^60000/);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Update cafe status - admin",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          { "key": "Accept", "value": "application/json" },
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"ACTIVE\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/cafes/{{cafeId}}/status",
+          "host": ["{{baseUrl}}"],
+          "path": ["cafes", "{{cafeId}}", "status"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 200', () => pm.response.to.have.status(200));",
+              "const body = pm.response.json();",
+              "pm.test('Cafe ACTIVE', () => pm.expect(body.data.status).to.eql('ACTIVE'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Upload cafe images - provider",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Accept", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{providerToken}}" }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            { "key": "sort_order", "value": "0", "type": "text" },
+            { "key": "files", "type": "file", "src": [] }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/cafes/{{cafeId}}/images",
+          "host": ["{{baseUrl}}"],
+          "path": ["cafes", "{{cafeId}}", "images"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 201', () => pm.response.to.have.status(201));",
+              "const body = pm.response.json();",
+              "pm.test('Images created', () => {",
+              "  pm.expect(body.success).to.eql(true);",
+              "  pm.expect(body.data).to.be.an('array').that.is.not.empty;",
+              "});",
+              "pm.collectionVariables.set('cafeImageId', body.data[0].id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "List cafe images",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Accept", "value": "application/json" }],
+        "url": {
+          "raw": "{{baseUrl}}/cafes/{{cafeId}}/images",
+          "host": ["{{baseUrl}}"],
+          "path": ["cafes", "{{cafeId}}", "images"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 200', () => pm.response.to.have.status(200));",
+              "const body = pm.response.json();",
+              "pm.test('Image list shape', () => {",
+              "  pm.expect(body.success).to.eql(true);",
+              "  pm.expect(body.data).to.be.an('array');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Delete cafe image - provider",
+      "request": {
+        "method": "DELETE",
+        "header": [{ "key": "Authorization", "value": "Bearer {{providerToken}}" }],
+        "url": {
+          "raw": "{{baseUrl}}/cafe-images/{{cafeImageId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["cafe-images", "{{cafeImageId}}"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 204', () => pm.response.to.have.status(204));"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

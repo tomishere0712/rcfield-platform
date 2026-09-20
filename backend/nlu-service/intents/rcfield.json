@@ -1,0 +1,111 @@
+{
+  "intents": [
+    {
+      "name": "greeting",
+      "examples": [
+        "xin chào",
+        "chào bạn",
+        "hello",
+        "hi bạn",
+        "hey",
+        "alo",
+        "chào buổi sáng",
+        "chào buổi chiều",
+        "chào buổi tối",
+        "good morning",
+        "good afternoon",
+        "cho mình hỏi với",
+        "bạn ơi",
+        "shop ơi"
+      ]
+    },
+    {
+      "name": "farewell",
+      "examples": [
+        "tạm biệt",
+        "bye",
+        "goodbye",
+        "bái bai",
+        "thôi mình đi nhé",
+        "cảm ơn tạm biệt",
+        "hẹn gặp lại",
+        "chào nhé",
+        "ok thôi bye",
+        "mình đi rồi",
+        "thôi nhé",
+        "bye bạn nhé",
+        "see you",
+        "see ya",
+        "later"
+      ]
+    },
+    {
+      "name": "thanks",
+      "examples": [
+        "cảm ơn",
+        "cảm ơn bạn",
+        "cảm ơn nhiều",
+        "thanks",
+        "thank you",
+        "cảm ơn nha",
+        "cảm ơn nhé",
+        "ơn bạn nhiều",
+        "tks",
+        "thx",
+        "cảm ơn đã giúp",
+        "giúp ích lắm cảm ơn",
+        "ok cảm ơn",
+        "được rồi cảm ơn",
+        "hiểu rồi cảm ơn"
+      ]
+    },
+    {
+      "name": "slot_check",
+      "examples": [
+        "còn chỗ không",
+        "còn slot không",
+        "hôm nay còn trống không",
+        "ngày mai có thể đặt không",
+        "cuối tuần còn slot nào không",
+        "muốn đặt lịch",
+        "đặt chỗ được không",
+        "thứ 7 còn slot nào không",
+        "kiểm tra lịch trống",
+        "buổi chiều còn slot không",
+        "mấy giờ còn trống",
+        "tôi muốn book một chỗ",
+        "cho mình đặt một slot",
+        "hết chỗ chưa",
+        "available không",
+        "có thể đặt thứ 3 không",
+        "chủ nhật còn slot không",
+        "tìm slot trống buổi sáng",
+        "slot nào còn trống trong tuần",
+        "đặt được buổi tối không"
+      ]
+    }
+  ],
+  "fallback": "rag_query",
+  "signals": [
+    {
+      "pattern": "đặt|book|lịch|slot|trống|available|còn chỗ|hết chỗ",
+      "intent": "slot_check",
+      "boost": 0.10
+    },
+    {
+      "pattern": "xin chào|chào|hello|hi\\b|hey\\b|alo",
+      "intent": "greeting",
+      "boost": 0.10
+    },
+    {
+      "pattern": "cảm ơn|thanks|thank you|tks\\b|thx\\b",
+      "intent": "thanks",
+      "boost": 0.10
+    },
+    {
+      "pattern": "tạm biệt|bye|goodbye|hẹn gặp|see you|later\\b",
+      "intent": "farewell",
+      "boost": 0.10
+    }
+  ]
+}

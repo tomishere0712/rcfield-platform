@@ -1,0 +1,418 @@
+name: CI
+
+on:
+  # Chỉ chạy khi đẩy thẳng lên `main`. Đẩy lẻ lên nhánh làm việc không kiểm nữa —
+  # vòng kiểm đầy đủ mất khoảng 6 phút, chạy sau mỗi commit thì vừa tốn phút
+  # Actions vừa tạo ra nhiều thông báo đỏ tới mức không ai còn đọc.
+  #
+  # Lưới an toàn vẫn nguyên: mọi pull request đều chạy đủ, nên không nhánh nào
+  # merge được vào develop hay main mà chưa qua kiểm thử.
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+  # Chạy lại mỗi ngày dù không ai đẩy mã.
+  #
+  # 01:00 UTC = 08:00 giờ Việt Nam, đầu giờ làm việc: hỏng thì cả nhóm thấy ngay
+  # chứ không phát hiện lúc sắp nộp.
+  #
+  # Lịch định kỳ bắt được những thứ CI theo commit không bắt được:
+  #   - test phụ thuộc thời gian (đã từng có ca chỉ hỏng trong khung 14:00–14:59)
+  #   - phụ thuộc ngoài trôi phiên bản dù mã nguồn đứng yên
+  #   - hạ tầng CI đổi (ảnh Postgres, Redis, Node)
+  # Mã không đổi mà hôm nay đỏ thì nguyên nhân chắc chắn nằm ngoài mã.
+  schedule:
+    - cron: '0 1 * * *'
+  # Cho phép bấm chạy tay khi cần dựng lại bằng chứng cho báo cáo.
+  workflow_dispatch:
+
+# Huỷ lần chạy trước trên cùng nhánh khi có commit mới — nhưng KHÔNG áp cho lịch
+# định kỳ, vì mỗi lần chạy hằng ngày là một mốc quan sát riêng.
+# Những lần chạy đáng gửi báo cáo đầy đủ (đo độ phủ + mail cho cả nhóm):
+#   schedule           — kiểm tra định kỳ hằng ngày
+#   workflow_dispatch  — bấm chạy tay để kiểm chứng
+#   push lên `main`    — mỗi lần merge vào nhánh đang chạy thật, cả nhóm nhận
+#                        một mốc "sau khi merge, hệ thống còn lành hay không"
+#
+# Push lên nhánh khác thì KHÔNG gửi: người đẩy mã đã thấy đỏ ngay trên PR, gửi
+# mail nữa chỉ làm mọi người quen bỏ qua thư từ CI.
+env:
+  FULL_REPORT: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/main') }}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
+  cancel-in-progress: ${{ github.event_name != 'schedule' }}
+
+jobs:
+  ci:
+    permissions:
+      contents: read
+      issues: write
+    name: CI${{ matrix.ref && format(' · {0}', matrix.ref) || '' }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        # Lịch định kỳ của GitHub chỉ chạy trên nhánh mặc định, nên phải tự chỉ
+        # định nhánh cần kiểm. Chỉ kiểm `main` — đó là mã đang chạy thật.
+        ref: ${{ github.event_name == 'schedule' && fromJSON('["main"]') || fromJSON('[""]') }}
+
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Rỗng khi chạy theo push/PR → giữ nguyên hành vi cũ.
+          ref: ${{ matrix.ref }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Format check
+        run: npm run format:check
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Type check
+        run: npx tsc --noEmit
+
+      # Lần chạy định kỳ đo thêm độ phủ (chậm hơn ~55 giây); chạy theo commit thì
+      # bỏ qua để không kéo dài vòng phản hồi của người đang code.
+      - name: Run tests
+        run: |
+          npm test -- --forceExit --runInBand \
+            --json --outputFile=jest-results.json \
+            ${{ env.FULL_REPORT == 'true' && '--coverage --coverageReporters=json-summary --coverageDirectory=coverage' || '' }}
+        env:
+          # Runner GitHub có ~7GB RAM nên Node đặt heap mặc định khoảng 2GB. Chạy
+          # kèm `--coverage` trên 357 file nguồn thì vượt ngưỡng đó và chết với
+          # "JavaScript heap out of memory".
+          #
+          # Máy lập trình viên thường có heap mặc định 4GB nên chạy lọt — đó là lý
+          # do lỗi này chỉ lộ ra trên CI, không lộ khi thử ở máy.
+          NODE_OPTIONS: --max-old-space-size=4096
+          NODE_ENV: test
+          PORT: 3001
+          DB_HOST: localhost
+          DB_PORT: 5432
+          DB_NAME: rcfeild_test
+          DB_USERNAME: postgres
+          DB_PASSWORD: postgres
+          JWT_SECRET: ci-jwt-secret
+          JWT_EXPIRES_IN: 1h
+          JWT_REFRESH_SECRET: ci-refresh-secret
+          JWT_REFRESH_EXPIRES_IN: 7d
+          REDIS_HOST: localhost
+          REDIS_PORT: 6379
+          REDIS_PASSWORD: ''
+          PAYMENT_WINDOW_MINUTES: '30'
+          SLOT_LOCK_TTL_SECONDS: '1800'
+          GOOGLE_CLIENT_ID: ci-google-client-id
+          GOOGLE_API_KEY: ci-placeholder
+          GOOGLE_MODEL: gemini-2.0-flash
+          GOOGLE_SUPPORT_MODEL: gemini-2.0-flash
+          GOOGLE_EMBEDDING_MODEL: gemini-embedding-001
+          CLOUDINARY_CLOUD_NAME: ci-placeholder
+          CLOUDINARY_API_KEY: ci-placeholder
+          CLOUDINARY_API_SECRET: ci-placeholder
+          FB_APP_ID: ci-placeholder
+          FB_APP_SECRET: ci-placeholder
+          FB_VERIFY_TOKEN: ci-verify-token
+          FB_REDIRECT_URI: http://localhost:3001/api/v1/channels/facebook/callback
+          CHANNEL_ENCRYPTION_KEY: '0000000000000000000000000000000000000000000000000000000000000001'
+
+      # Với sự kiện pull request, `github.ref_name` là ref hợp nhất dạng `60/merge`.
+      # Dấu `/` không hợp lệ trong tên artifact, và "60/merge" cũng chẳng nói cho
+      # ai biết đang kiểm nhánh nào. Tính sẵn một nhãn sạch dùng chung cho artifact,
+      # tiêu đề mail và tiêu đề issue.
+      - name: Xác định nhãn nhánh
+        if: always()
+        run: |
+          RAW="${{ matrix.ref || github.head_ref || github.ref_name }}"
+          SAFE=$(printf '%s' "$RAW" | tr '/' '-' | tr -cd '[:alnum:]._-')
+          echo "BRANCH_LABEL=${SAFE:-unknown}" >> "$GITHUB_ENV"
+          echo "Nhãn nhánh: ${SAFE:-unknown} (gốc: $RAW)"
+
+      # ── Báo cáo kiểm thử ────────────────────────────────────────────────────
+      #
+      # ── Số liệu API, sinh TRƯỚC khi dựng báo cáo ────────────────────────────
+      #
+      # Phải chạy trước, vì hai tệp JSON dưới đây được nhồi thẳng vào báo cáo
+      # kiểm thử. Sinh sau thì báo cáo gửi cho nhóm thiếu mất phần API — mà đó
+      # lại là phần trả lời câu hỏi hay bị hỏi nhất: bao nhiêu API đã có kiểm thử.
+      - name: Đo độ phủ kiểm thử API
+        if: always()
+        run: node scripts/api-coverage.js --json > api-coverage.json
+
+      # Đối chiếu lệnh gọi của giao diện với route máy chủ. Loại lệch này chỉ lộ
+      # ra khi người dùng bấm đúng nút đó, nên phải bắt ở đây.
+      - name: Đối chiếu hợp đồng API với giao diện
+        if: always()
+        continue-on-error: true
+        run: |
+          if [ -d ../rcfield-fe ]; then
+            node scripts/check-api-contract.js ../rcfield-fe --json > api-contract.json
+          else
+            echo "Không có mã nguồn giao diện cạnh bên, bỏ qua bước đối chiếu."
+          fi
+
+      # `always()` để test hỏng vẫn có báo cáo — đó chính là lúc cần báo cáo nhất.
+      - name: Dựng báo cáo kiểm thử
+        if: always()
+        run: |
+          ARGS=""
+          [ -f api-coverage.json ] && ARGS="$ARGS --api-coverage=api-coverage.json"
+          [ -f api-contract.json ] && ARGS="$ARGS --api-contract=api-contract.json"
+          node scripts/build-test-report.js jest-results.json coverage/coverage-summary.json test-report $ARGS
+
+      # Tóm tắt hiện thẳng ở trang tổng kết của lần chạy, khỏi phải tải về.
+      - name: Đưa tóm tắt lên trang tổng kết
+        if: always()
+        run: cat test-report/test-report.md >> "$GITHUB_STEP_SUMMARY"
+
+      # Giữ 90 ngày: đủ dài để đính vào báo cáo đồ án và đối chiếu về sau.
+      - name: Lưu báo cáo
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bao-cao-kiem-thu-${{ env.BRANCH_LABEL }}-${{ github.run_number }}
+          path: test-report/
+          retention-days: 90
+
+      # ── Gửi mail cho cả nhóm ────────────────────────────────────────────────
+      #
+      # Dùng lại Brevo mà sản phẩm đã dùng để gửi mail đặt lịch, nên không phải
+      # dựng thêm hạ tầng. Brevo chạy qua HTTP API nên chỉ cần `curl`.
+      #
+      # Thiếu secret thì bỏ qua chứ không làm đỏ cả lần chạy: CI vẫn phải cho
+      # biết mã nguồn lành hay hỏng kể cả khi chưa ai cấu hình mail.
+      - name: Gửi mail báo cáo cho nhóm
+        # Cho phép cả `workflow_dispatch` để bấm chạy tay mà kiểm thử được ngay,
+        # thay vì phải chờ tới lần chạy định kỳ hôm sau.
+        if: always() && env.FULL_REPORT == 'true'
+        env:
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          TEAM_EMAILS: ${{ secrets.TEAM_EMAILS }}
+          BRANCH: ${{ env.BRANCH_LABEL }}
+          OUTCOME: ${{ job.status }}
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          EMAIL_FROM: ${{ vars.EMAIL_FROM_EMAIL }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          if [ -z "$BREVO_API_KEY" ] || [ -z "$TEAM_EMAILS" ]; then
+            echo "Chưa cấu hình BREVO_API_KEY hoặc TEAM_EMAILS — bỏ qua bước gửi mail."
+            exit 0
+          fi
+
+          # KHÔNG đặt địa chỉ mặc định ở đây. Bản trước rơi về `no-reply@rcfield.vn`
+          # khi thiếu cấu hình; Brevo nhận yêu cầu (HTTP 201) rồi chặn ở khâu phát
+          # vì địa chỉ đó chưa xác thực — nhìn log tưởng gửi thành công mà không ai
+          # nhận được gì. Thà dừng và nói rõ còn hơn im lặng gửi vào hư không.
+          if [ -z "$EMAIL_FROM" ]; then
+            echo "Chưa đặt biến EMAIL_FROM_EMAIL — bỏ qua bước gửi mail."
+            echo "Đặt tại: Settings → Secrets and variables → Actions → Variables."
+            echo "Giá trị phải là địa chỉ ĐÃ xác thực trong Brevo (Senders & Domains)."
+            exit 0
+          fi
+
+          # `export` là bắt buộc: biến shell thường KHÔNG truyền sang tiến trình
+          # con, thiếu nó thì node đọc `process.env.SUBJECT` ra undefined và mail
+          # đi với tiêu đề rỗng.
+          # Nói rõ vì sao có thư này: đọc tiêu đề phải biết ngay đây là bản kiểm
+          # hằng ngày, bản chạy tay, hay bản chạy sau khi vừa merge vào main.
+          case "$GITHUB_EVENT_NAME" in
+            schedule)          KIND="kiểm thử định kỳ" ;;
+            workflow_dispatch) KIND="kiểm thử chạy tay" ;;
+            push)              KIND="kiểm thử sau khi merge" ;;
+            *)                 KIND="kiểm thử" ;;
+          esac
+
+          if [ "$OUTCOME" = "success" ]; then
+            export SUBJECT="✅ RCField Backend · $KIND ĐẠT · $BRANCH"
+          else
+            export SUBJECT="🔴 RCField Backend · $KIND LỖI · $BRANCH"
+          fi
+
+          export KIND
+          node -e '
+            const fs = require("fs");
+            // Báo cáo có thể không tồn tại nếu tiến trình test chết trước khi
+            // dựng được. Mail vẫn phải đi — đó chính là lúc cần báo nhất — nên
+            // lùi về một thân thư tối thiểu thay vì để bước này văng theo.
+            const reportPath = "test-report/test-report.html";
+            const hasReport = fs.existsSync(reportPath);
+            const html = hasReport
+              ? fs.readFileSync(reportPath, "utf8")
+              : `<!doctype html><html lang="vi"><body>
+                   <p style="font:14px system-ui">Không dựng được báo cáo: tiến trình kiểm thử
+                   đã chết trước khi ghi kết quả. Xem nhật ký lần chạy để biết nguyên nhân.</p>
+                 </body></html>`;
+            const to = process.env.TEAM_EMAILS.split(",")
+              .map((e) => e.trim()).filter(Boolean).map((email) => ({ email }));
+            // Chèn một khối đầu thư ngay trước nội dung báo cáo: nhánh nào,
+            // đạt hay lỗi, và LINK TỚI NHẬT KÝ. Thiếu link thì người nhận mail
+            // báo lỗi phải tự mò vào GitHub tìm đúng lần chạy.
+            const failed = process.env.OUTCOME !== "success";
+            const banner = `
+              <div style="max-width:960px;margin:0 auto 20px;padding:16px 20px;border-radius:12px;
+                          border:1px solid ${failed ? "#fecaca" : "#a7f3d0"};
+                          background:${failed ? "#fef2f2" : "#ecfdf5"};
+                          font:14px/1.6 system-ui,-apple-system,Segoe UI,sans-serif">
+                <div style="font-weight:800;font-size:16px;color:${failed ? "#b91c1c" : "#047857"}">
+                  ${failed ? "THẤT BẠI" : "ĐẠT"} — ${process.env.KIND}
+                </div>
+                <div style="margin-top:6px;color:#5d5f5f">
+                  Nhánh <strong>${process.env.BRANCH}</strong> · ${new Date().toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" })} (giờ VN)
+                </div>
+                <div style="margin-top:10px">
+                  <a href="${process.env.RUN_URL}"
+                     style="display:inline-block;padding:8px 16px;border-radius:999px;
+                            background:${failed ? "#b91c1c" : "#047857"};color:#fff;
+                            text-decoration:none;font-weight:700;font-size:13px">
+                    Mở nhật ký lần chạy
+                  </a>
+                </div>
+              </div>`;
+            const body = html.replace("<body>", `<body>${banner}`);
+
+            const payload = {
+              sender: { name: "RCField CI", email: process.env.EMAIL_FROM },
+              to,
+              subject: process.env.SUBJECT,
+              htmlContent: body,
+              ...(hasReport
+                ? {
+                    attachment: [
+                      {
+                        name: "bao-cao-kiem-thu.html",
+                        content: Buffer.from(html).toString("base64"),
+                      },
+                    ],
+                  }
+                : {}),
+            };
+            fs.writeFileSync("mail.json", JSON.stringify(payload));
+            console.log(`Gửi tới ${to.length} địa chỉ`);
+          '
+
+          HTTP=$(curl -s -o mail-resp.json -w "%{http_code}" \
+            -X POST https://api.brevo.com/v3/smtp/email \
+            -H "api-key: $BREVO_API_KEY" \
+            -H "Content-Type: application/json" \
+            --data @mail.json)
+
+          if [ "$HTTP" -ge 200 ] && [ "$HTTP" -lt 300 ]; then
+            # HTTP 201 chỉ nghĩa là Brevo NHẬN yêu cầu, KHÔNG phải đã tới hộp thư.
+            # Thư vẫn có thể bị chặn sau đó nếu địa chỉ người gửi chưa xác thực,
+            # người nhận nằm trong danh sách chặn, hoặc vượt hạn mức ngày.
+            # In `messageId` ra để tra cứu được trong Brevo → Transactional → Logs.
+            echo "Brevo đã nhận (HTTP $HTTP): $(cat mail-resp.json)"
+            echo "Người gửi: $EMAIL_FROM"
+            echo "LƯU Ý: 201 = đã nhận, chưa chắc đã phát. Không thấy thư thì tra messageId ở trên trong Brevo → Transactional → Logs."
+
+            # Đối chiếu người gửi với danh sách đã xác thực. Đây là nguyên nhân
+            # phổ biến nhất của "API báo thành công mà không ai nhận được".
+            FROM="$EMAIL_FROM"
+            SENDERS=$(curl -s -H "api-key: $BREVO_API_KEY" https://api.brevo.com/v3/senders || echo '{}')
+            if printf '%s' "$SENDERS" | grep -q "\"$FROM\""; then
+              echo "Người gửi $FROM có trong danh sách sender của Brevo."
+            else
+              echo "⚠️  Người gửi $FROM KHÔNG có trong danh sách sender đã xác thực của Brevo."
+              echo "    Thư sẽ bị chặn ở khâu phát dù API trả 201."
+              echo "    Sender hiện có: $(printf '%s' "$SENDERS" | tr ',' '\n' | grep -i 'email' | head -5)"
+            fi
+          else
+            echo "Gửi mail thất bại (HTTP $HTTP): $(cat mail-resp.json)"
+            exit 1
+          fi
+
+      # ── Thông báo khi lần chạy định kỳ thất bại ─────────────────────────────
+      #
+      # Chỉ áp cho `schedule`: hỏng do commit thì người đẩy mã đã thấy ngay trên
+      # PR, không cần mở issue.
+      #
+      # Gom vào MỘT issue mở sẵn cho mỗi nhánh thay vì tạo mới mỗi ngày. Chạy
+      # hằng ngày mà mỗi lần một issue thì một tháng có 30 cái, không ai đọc nữa.
+      # Hỏng lại thì thêm bình luận vào issue cũ.
+      - name: Báo lỗi cho cả nhóm
+        if: failure() && env.FULL_REPORT == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: ${{ env.BRANCH_LABEL }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          TITLE="🔴 CI định kỳ thất bại trên nhánh \`$BRANCH\`"
+          BODY=$(cat <<EOF
+          Lần chạy định kỳ lúc $(TZ=Asia/Ho_Chi_Minh date '+%H:%M %d/%m/%Y') (giờ VN) đã thất bại.
+
+          - Nhánh: \`$BRANCH\`
+          - Nhật ký: $RUN_URL
+
+          **Không ai đẩy mã mà vẫn đỏ** nghĩa là nguyên nhân nằm ngoài mã nguồn:
+          test phụ thuộc thời gian, phụ thuộc ngoài trôi phiên bản, hoặc hạ tầng
+          CI thay đổi. Mở nhật ký xem bước nào hỏng trước.
+
+          Issue này tự đóng khi lần chạy định kỳ kế tiếp thành công.
+          EOF
+          )
+
+          EXISTING=$(gh issue list --state open --label ci-daily \
+            --search "in:title $TITLE" --json number,title \
+            --jq ".[] | select(.title == \"$TITLE\") | .number" | head -1)
+
+          if [ -n "$EXISTING" ]; then
+            gh issue comment "$EXISTING" --body "$BODY"
+            echo "Đã thêm bình luận vào issue #$EXISTING"
+          else
+            gh label create ci-daily --color B60205 --description "CI chạy định kỳ" 2>/dev/null || true
+            gh issue create --title "$TITLE" --body "$BODY" --label ci-daily
+          fi
+
+      # Lần chạy định kỳ xanh trở lại thì đóng issue, để danh sách issue mở luôn
+      # phản ánh đúng tình trạng hiện tại chứ không phải lịch sử.
+      - name: Đóng cảnh báo khi đã xanh trở lại
+        if: success() && env.FULL_REPORT == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: ${{ env.BRANCH_LABEL }}
+        run: |
+          TITLE="🔴 CI định kỳ thất bại trên nhánh \`$BRANCH\`"
+          NUM=$(gh issue list --state open --label ci-daily \
+            --search "in:title $TITLE" --json number,title \
+            --jq ".[] | select(.title == \"$TITLE\") | .number" | head -1)
+          if [ -n "$NUM" ]; then
+            gh issue close "$NUM" --comment "✅ Lần chạy định kỳ hôm nay đã xanh trở lại."
+            echo "Đã đóng issue #$NUM"
+          fi

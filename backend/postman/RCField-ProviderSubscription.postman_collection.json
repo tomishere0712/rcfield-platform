@@ -1,0 +1,914 @@
+{
+  "info": {
+    "name": "RCField — Provider Subscription Management",
+    "description": "Test collection for the full Provider Onboarding & Subscription Management flow.\n\n**Flow order:**\n1. Auth → login as Admin & Provider\n2. Provider Registration\n3. Admin reviews (approve/reject)\n4. Admin configures subscription plans\n5. Provider checks subscription status\n6. Provider submits payment request\n7. Admin confirms/rejects payment request\n8. Provider reads notifications\n\n**Variables needed (set in Collection or Environment):**\n- `base_url` → e.g. `http://localhost:3000/api/v1`\n- `admin_email` / `admin_password`\n- `provider_email` / `provider_password` (filled after registration)\n\nTokens and IDs are captured automatically via test scripts.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url",            "value": "http://localhost:3000/api/v1" },
+    { "key": "admin_email",         "value": "admin@rcfield.vn" },
+    { "key": "admin_password",      "value": "Admin@12345" },
+    { "key": "provider_email",      "value": "owner@rcbusiness.vn" },
+    { "key": "provider_password",   "value": "Provider@12345" },
+    { "key": "admin_token",         "value": "" },
+    { "key": "provider_token",      "value": "" },
+    { "key": "provider_id",         "value": "" },
+    { "key": "trial_plan_id",       "value": "" },
+    { "key": "starter_plan_id",     "value": "" },
+    { "key": "growth_plan_id",      "value": "" },
+    { "key": "pro_plan_id",         "value": "" },
+    { "key": "payment_request_id",  "value": "" },
+    { "key": "notification_id",     "value": "" }
+  ],
+  "item": [
+    {
+      "name": "0. Auth",
+      "description": "Login to get access tokens. Run these first.",
+      "item": [
+        {
+          "name": "Login as Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json.data && json.data.accessToken) {",
+                  "  pm.collectionVariables.set('admin_token', json.data.accessToken);",
+                  "  console.log('Admin token saved');",
+                  "}",
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Has accessToken', () => pm.expect(json.data.accessToken).to.be.a('string'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/auth/login", "host": ["{{base_url}}"], "path": ["auth", "login"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{admin_email}}\",\n  \"password\": \"{{admin_password}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login as Provider",
+          "description": "Run after the provider has been registered and approved.",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json.data && json.data.accessToken) {",
+                  "  pm.collectionVariables.set('provider_token', json.data.accessToken);",
+                  "  console.log('Provider token saved');",
+                  "}",
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/auth/login", "host": ["{{base_url}}"], "path": ["auth", "login"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{provider_email}}\",\n  \"password\": \"{{provider_password}}\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "1. Provider Registration",
+      "description": "Public endpoint — no token needed.",
+      "item": [
+        {
+          "name": "Register Provider",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('Success message', () => pm.expect(json.message).to.include('chờ admin'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/auth/register-provider",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "register-provider"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{provider_email}}\",\n  \"password\": \"{{provider_password}}\",\n  \"full_name\": \"Nguyen Van A\",\n  \"phone\": \"0901234567\",\n  \"business_name\": \"RC Arena Ha Noi\",\n  \"business_description\": \"Chuỗi sân xe RC chuyên nghiệp tại Hà Nội\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Register Provider — Email đã tồn tại (409)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 409', () => pm.response.to.have.status(409));",
+                  "pm.test('CODE EMAIL_EXISTS', () => pm.expect(pm.response.json().code).to.eql('EMAIL_EXISTS'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/auth/register-provider",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "register-provider"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{provider_email}}\",\n  \"password\": \"{{provider_password}}\",\n  \"full_name\": \"Nguyen Van A\",\n  \"phone\": \"0901234567\",\n  \"business_name\": \"RC Arena Ha Noi\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Admin — Quản lý Provider",
+      "description": "Requires admin_token.",
+      "item": [
+        {
+          "name": "Danh sách Provider (tất cả)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('Has data array', () => pm.expect(json.data).to.be.an('array'));",
+                  "if (json.data.length > 0) {",
+                  "  const pending = json.data.find(p => p.registration_status === 'PENDING');",
+                  "  if (pending) {",
+                  "    pm.collectionVariables.set('provider_id', pending.id);",
+                  "    console.log('Provider ID saved:', pending.id);",
+                  "  }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": {
+              "raw": "{{base_url}}/admin/providers",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "providers"]
+            }
+          }
+        },
+        {
+          "name": "Danh sách Provider — lọc PENDING",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": {
+              "raw": "{{base_url}}/admin/providers?status=PENDING&page=1&limit=20",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "providers"],
+              "query": [
+                { "key": "status", "value": "PENDING" },
+                { "key": "page",   "value": "1" },
+                { "key": "limit",  "value": "20" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Chi tiết Provider",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('Has user', () => pm.expect(json.user).to.be.an('object'));",
+                  "pm.test('Has profile', () => pm.expect(json.profile).to.be.an('object'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": {
+              "raw": "{{base_url}}/admin/providers/{{provider_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "providers", "{{provider_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Duyệt Provider (PENDING → ACTIVE + TRIAL)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('success true', () => pm.expect(json.success).to.be.true);",
+                  "pm.test('Has subscription_id', () => pm.expect(json.subscription_id).to.be.a('string'));",
+                  "pm.test('Has branch_id', () => pm.expect(json.branch_id).to.be.a('string'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": {
+              "raw": "{{base_url}}/admin/providers/{{provider_id}}/approve",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "providers", "{{provider_id}}", "approve"]
+            }
+          }
+        },
+        {
+          "name": "Duyệt Provider — đã xử lý rồi (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 400', () => pm.response.to.have.status(400));",
+                  "pm.test('CODE ALREADY_PROCESSED', () => pm.expect(pm.response.json().code).to.eql('ALREADY_PROCESSED'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": {
+              "raw": "{{base_url}}/admin/providers/{{provider_id}}/approve",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "providers", "{{provider_id}}", "approve"]
+            }
+          }
+        },
+        {
+          "name": "Từ chối Provider (PENDING → REJECTED)",
+          "description": "Đổi provider_id sang một provider PENDING khác trước khi chạy.",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Content-Type",   "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/providers/{{provider_id}}/reject",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "providers", "{{provider_id}}", "reject"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"Thông tin doanh nghiệp không đầy đủ, vui lòng bổ sung giấy phép kinh doanh.\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Tạm khóa Provider (ACTIVE → SUSPENDED)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Content-Type",   "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/providers/{{provider_id}}/suspend",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "providers", "{{provider_id}}", "suspend"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"Vi phạm điều khoản sử dụng — spam tin nhắn.\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Bỏ khóa Provider (SUSPENDED → ACTIVE)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": {
+              "raw": "{{base_url}}/admin/providers/{{provider_id}}/unsuspend",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "providers", "{{provider_id}}", "unsuspend"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Admin — Cấu hình gói đăng ký",
+      "description": "Xem và chỉnh giới hạn của 4 gói. Requires admin_token.",
+      "item": [
+        {
+          "name": "Danh sách 4 gói",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const plans = pm.response.json();",
+                  "pm.test('4 plans returned', () => pm.expect(plans).to.have.lengthOf(4));",
+                  "plans.forEach(p => {",
+                  "  if (p.name === 'TRIAL')   pm.collectionVariables.set('trial_plan_id',   p.id);",
+                  "  if (p.name === 'STARTER') pm.collectionVariables.set('starter_plan_id', p.id);",
+                  "  if (p.name === 'GROWTH')  pm.collectionVariables.set('growth_plan_id',  p.id);",
+                  "  if (p.name === 'PRO')     pm.collectionVariables.set('pro_plan_id',     p.id);",
+                  "});",
+                  "console.log('Plan IDs saved');"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": {
+              "raw": "{{base_url}}/admin/subscription-plans",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "subscription-plans"]
+            }
+          }
+        },
+        {
+          "name": "Cập nhật gói STARTER",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const plan = pm.response.json();",
+                  "pm.test('branchLimit updated', () => pm.expect(plan.branchLimit).to.eql(2));",
+                  "pm.test('aiQuotaPerMonth updated', () => pm.expect(plan.aiQuotaPerMonth).to.eql(1500));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Content-Type",   "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/subscription-plans/{{starter_plan_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "subscription-plans", "{{starter_plan_id}}"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"branch_limit\": 2,\n  \"ai_quota_per_month\": 1500,\n  \"channel_limit\": 2,\n  \"price_per_month\": 350000\n}"
+            }
+          }
+        },
+        {
+          "name": "Cập nhật gói GROWTH",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Content-Type",   "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/subscription-plans/{{growth_plan_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "subscription-plans", "{{growth_plan_id}}"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"branch_limit\": 5,\n  \"ai_quota_per_month\": 8000,\n  \"channel_limit\": 5,\n  \"price_per_month\": 799000\n}"
+            }
+          }
+        },
+        {
+          "name": "Cập nhật gói PRO — không giới hạn (-1)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const plan = pm.response.json();",
+                  "pm.test('branchLimit = -1 (unlimited)', () => pm.expect(plan.branchLimit).to.eql(-1));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Content-Type",   "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/subscription-plans/{{pro_plan_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "subscription-plans", "{{pro_plan_id}}"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"branch_limit\": -1,\n  \"ai_quota_per_month\": -1,\n  \"channel_limit\": -1,\n  \"price_per_month\": 1499000\n}"
+            }
+          }
+        },
+        {
+          "name": "Cập nhật gói — validation lỗi (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 400', () => pm.response.to.have.status(400));",
+                  "pm.test('CODE VALIDATION_ERROR', () => pm.expect(pm.response.json().code).to.eql('VALIDATION_ERROR'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Content-Type",   "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/subscription-plans/{{starter_plan_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "subscription-plans", "{{starter_plan_id}}"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"branch_limit\": -99,\n  \"price_per_month\": -1\n}"
+            }
+          }
+        },
+        {
+          "name": "Cập nhật gói — không có quyền (401)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 401 or 403', () => pm.expect([401, 403]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{provider_token}}" },
+              { "key": "Content-Type",   "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/subscription-plans/{{starter_plan_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "subscription-plans", "{{starter_plan_id}}"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"price_per_month\": 0\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Provider — Trạng thái đăng ký",
+      "description": "Requires provider_token. Run after provider is approved.",
+      "item": [
+        {
+          "name": "Xem trạng thái gói hiện tại",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('Has plan',         () => pm.expect(json.plan).to.be.an('object'));",
+                  "pm.test('Has subscription', () => pm.expect(json.subscription).to.be.an('object'));",
+                  "pm.test('Status is TRIAL',  () => pm.expect(json.subscription.status).to.eql('TRIAL'));",
+                  "console.log('Plan:', json.plan.name, '| Sub status:', json.subscription.status,",
+                  "  '| AI used:', json.subscription.ai_messages_used);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{provider_token}}" }],
+            "url": {
+              "raw": "{{base_url}}/provider/subscription",
+              "host": ["{{base_url}}"],
+              "path": ["provider", "subscription"]
+            }
+          }
+        },
+        {
+          "name": "Xem trạng thái — chưa có gói (404)",
+          "description": "Dùng token của provider chưa được duyệt.",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 404', () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{provider_token}}" }],
+            "url": {
+              "raw": "{{base_url}}/provider/subscription",
+              "host": ["{{base_url}}"],
+              "path": ["provider", "subscription"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Provider — Yêu cầu thanh toán",
+      "description": "Provider gửi bằng chứng chuyển khoản. Requires provider_token.",
+      "item": [
+        {
+          "name": "Gửi yêu cầu thanh toán (STARTER)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('status PENDING', () => pm.expect(json.status).to.eql('PENDING'));",
+                  "pm.collectionVariables.set('payment_request_id', json.id);",
+                  "console.log('Payment request ID saved:', json.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{provider_token}}" },
+              { "key": "Content-Type",   "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/provider/payment-requests",
+              "host": ["{{base_url}}"],
+              "path": ["provider", "payment-requests"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"plan_id\": \"{{starter_plan_id}}\",\n  \"transfer_reference\": \"RCF-20260525-0042\",\n  \"transfer_date\": \"2026-05-25\",\n  \"transfer_amount\": 350000\n}"
+            }
+          }
+        },
+        {
+          "name": "Gửi yêu cầu thứ 2 — đã có PENDING (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 400', () => pm.response.to.have.status(400));",
+                  "pm.test('CODE DUPLICATE_PENDING_REQUEST', () => pm.expect(pm.response.json().code).to.eql('DUPLICATE_PENDING_REQUEST'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{provider_token}}" },
+              { "key": "Content-Type",   "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/provider/payment-requests",
+              "host": ["{{base_url}}"],
+              "path": ["provider", "payment-requests"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"plan_id\": \"{{growth_plan_id}}\",\n  \"transfer_reference\": \"RCF-20260525-0099\",\n  \"transfer_date\": \"2026-05-25\",\n  \"transfer_amount\": 799000\n}"
+            }
+          }
+        },
+        {
+          "name": "Danh sách yêu cầu của tôi",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Has data array', () => pm.expect(pm.response.json().data).to.be.an('array'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{provider_token}}" }],
+            "url": {
+              "raw": "{{base_url}}/provider/payment-requests?page=1&limit=10",
+              "host": ["{{base_url}}"],
+              "path": ["provider", "payment-requests"],
+              "query": [
+                { "key": "page",  "value": "1" },
+                { "key": "limit", "value": "10" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Admin — Xử lý yêu cầu thanh toán",
+      "description": "Admin xác nhận hoặc từ chối bằng chứng chuyển khoản. Requires admin_token.",
+      "item": [
+        {
+          "name": "Danh sách yêu cầu — tất cả",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('Has data', () => pm.expect(json.data).to.be.an('array'));",
+                  "const pending = json.data.find(r => r.status === 'PENDING');",
+                  "if (pending) {",
+                  "  pm.collectionVariables.set('payment_request_id', pending.id);",
+                  "  console.log('PENDING payment_request_id saved:', pending.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": {
+              "raw": "{{base_url}}/admin/payment-requests",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "payment-requests"]
+            }
+          }
+        },
+        {
+          "name": "Danh sách yêu cầu — lọc PENDING",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": {
+              "raw": "{{base_url}}/admin/payment-requests?status=PENDING",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "payment-requests"],
+              "query": [{ "key": "status", "value": "PENDING" }]
+            }
+          }
+        },
+        {
+          "name": "Xác nhận thanh toán → subscription ACTIVE",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('success true',       () => pm.expect(json.success).to.be.true);",
+                  "pm.test('Has new_expires_at', () => pm.expect(json.new_expires_at).to.be.a('string'));",
+                  "console.log('New expiry:', json.new_expires_at);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Content-Type",   "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/payment-requests/{{payment_request_id}}/confirm",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "payment-requests", "{{payment_request_id}}", "confirm"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"notes\": \"Đã kiểm tra giao dịch ngân hàng Vietcombank. Hợp lệ.\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Xác nhận lại — đã xử lý (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 400', () => pm.response.to.have.status(400));",
+                  "pm.test('CODE ALREADY_PROCESSED', () => pm.expect(pm.response.json().code).to.eql('ALREADY_PROCESSED'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Content-Type",   "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/payment-requests/{{payment_request_id}}/confirm",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "payment-requests", "{{payment_request_id}}", "confirm"]
+            },
+            "body": { "mode": "raw", "raw": "{}" }
+          }
+        },
+        {
+          "name": "Từ chối yêu cầu thanh toán",
+          "description": "Đổi payment_request_id sang một request PENDING khác.",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Content-Type",   "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/payment-requests/{{payment_request_id}}/reject",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "payment-requests", "{{payment_request_id}}", "reject"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"Số tiền chuyển khoản không khớp. Gói STARTER là 350,000 ₫, nhận được 300,000 ₫.\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Provider — Thông báo",
+      "description": "NotificationBell — đọc và đánh dấu đã đọc. Requires provider_token.",
+      "item": [
+        {
+          "name": "Danh sách thông báo",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('Has data array',   () => pm.expect(json.data).to.be.an('array'));",
+                  "pm.test('Has unread_count', () => pm.expect(json.unread_count).to.be.a('number'));",
+                  "if (json.data.length > 0) {",
+                  "  pm.collectionVariables.set('notification_id', json.data[0].id);",
+                  "  console.log('Notification ID saved:', json.data[0].id, '| type:', json.data[0].type);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{provider_token}}" }],
+            "url": {
+              "raw": "{{base_url}}/provider/notifications?limit=15",
+              "host": ["{{base_url}}"],
+              "path": ["provider", "notifications"],
+              "query": [{ "key": "limit", "value": "15" }]
+            }
+          }
+        },
+        {
+          "name": "Danh sách thông báo — chưa đọc",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{provider_token}}" }],
+            "url": {
+              "raw": "{{base_url}}/provider/notifications?unread_only=true",
+              "host": ["{{base_url}}"],
+              "path": ["provider", "notifications"],
+              "query": [{ "key": "unread_only", "value": "true" }]
+            }
+          }
+        },
+        {
+          "name": "Đánh dấu đã đọc (1 cái)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('success true', () => pm.expect(pm.response.json().success).to.be.true);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Authorization", "value": "Bearer {{provider_token}}" }],
+            "url": {
+              "raw": "{{base_url}}/provider/notifications/{{notification_id}}/read",
+              "host": ["{{base_url}}"],
+              "path": ["provider", "notifications", "{{notification_id}}", "read"]
+            }
+          }
+        },
+        {
+          "name": "Đánh dấu đã đọc tất cả",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const json = pm.response.json();",
+                  "pm.test('success true',  () => pm.expect(json.success).to.be.true);",
+                  "pm.test('Has updated',   () => pm.expect(json.updated).to.be.a('number'));",
+                  "console.log('Marked as read:', json.updated, 'notifications');"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Authorization", "value": "Bearer {{provider_token}}" }],
+            "url": {
+              "raw": "{{base_url}}/provider/notifications/read-all",
+              "host": ["{{base_url}}"],
+              "path": ["provider", "notifications", "read-all"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

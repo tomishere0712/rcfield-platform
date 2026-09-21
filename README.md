@@ -1,7 +1,7 @@
-# RCField Platform 🏎️🏁
+# RCField – RC Cafe Operations & Marketplace Platform 🏎️🏁
 
-> **Comprehensive RC (Remote Control) Field Management, Contest Hosting & Vehicle Rental Ecosystem.**  
-> An end-to-end fullstack platform designed for RC hobbyists, track owners, and tournament organizers.
+> **Comprehensive RC (Remote Control) Cafe Operations, Tournament Hosting & Vehicle Marketplace Platform.**  
+> An end-to-end fullstack ecosystem designed for RC hobbyists, venue owners, and tournament organizers.
 
 🌐 **Live Web Application**: [https://rcfield-platform.vercel.app](https://rcfield-platform.vercel.app)  
 ⚙️ **Backend API**: [https://rcfield-api.onrender.com](https://rcfield-api.onrender.com) *(Swagger Docs: [/api-docs](https://rcfield-api.onrender.com/api-docs))*  

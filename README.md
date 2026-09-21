@@ -137,7 +137,7 @@ npx expo start
 
 ## 👥 Team & Individual Contributions
 
-**RCField** was developed as a capstone project (**SEP490**, Team **GSU26SE29**) under the guidance of instructor **Nguyen Minh Sang** at FPT University. The project was officially [featured by FPT University Press](https://daihoc.fpt.edu.vn/hcm/tu-nhung-bai-toan-doi-song-den-giai-phap-cong-nghe-da-dang-do-an-dac-sac-cua-sinh-vien-ky-thuat-phan-mem/) as an outstanding Software Engineering capstone project.
+**RCField** was developed as a capstone project (**SEP490**, Team **GSU26SE29**) under the guidance of instructor **Nguyen Minh Sang** at FPT University. The project was officially [featured by FPT University Press](https://daihoc.fpt.edu.vn/hcm/tu-nhung-bai-toan-doi-song-den-giai-phap-cong-nghe-da-dang-do-an-dac-sac-cua-sinh-vien-ky-thuat-phan-mem/) as a notable Software Engineering capstone project.
 
 ### 👤 Individual Contribution — [Nguyen Vinh Phuc](https://github.com/tomishere0712)
 > **Role:** Frontend & Cross-Stack Engineer | **322 Commits** across all repositories

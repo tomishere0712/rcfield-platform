@@ -4,8 +4,10 @@
 > An end-to-end fullstack platform designed for RC hobbyists, track owners, and tournament organizers.
 
 🌐 **Live Web Application**: [https://rcfield-platform.vercel.app](https://rcfield-platform.vercel.app)  
-⚙️ **Backend API**: [https://rcfield-api.onrender.com](https://rcfield-api.onrender.com) *(Swagger Docs: [/api-docs](https://rcfield-api.onrender.com/api-docs))*
+⚙️ **Backend API**: [https://rcfield-api.onrender.com](https://rcfield-api.onrender.com) *(Swagger Docs: [/api-docs](https://rcfield-api.onrender.com/api-docs))*  
+📰 **University Press Feature**: [Trường Đại học FPT — "Đa dạng đồ án đặc sắc của sinh viên Kỹ thuật phần mềm"](https://daihoc.fpt.edu.vn/hcm/tu-nhung-bai-toan-doi-song-den-giai-phap-cong-nghe-da-dang-do-an-dac-sac-cua-sinh-vien-ky-thuat-phan-mem/)
 
+[![Featured on FPTU Press](https://img.shields.io/badge/Featured-FPT_University_Press-F26F21?style=flat-square)](https://daihoc.fpt.edu.vn/hcm/tu-nhung-bai-toan-doi-song-den-giai-phap-cong-nghe-da-dang-do-an-dac-sac-cua-sinh-vien-ky-thuat-phan-mem/)
 [![Vercel](https://img.shields.io/badge/Vercel-Live_Demo-black?style=flat-square&logo=vercel&logoColor=white)](https://rcfield-platform.vercel.app/)
 [![Render](https://img.shields.io/badge/Render-Backend_Live-46E3B7?style=flat-square&logo=render&logoColor=white)](https://rcfield-api.onrender.com)
 [![Neon](https://img.shields.io/badge/Postgres-Neon_Serverless-00E599?style=flat-square&logo=postgresql&logoColor=white)](https://neon.tech/)
@@ -135,7 +137,7 @@ npx expo start
 
 ## 👥 Team & Individual Contributions
 
-**RCField** was developed as a capstone project (**SEP490**) by a team of software engineering students at FPT University.
+**RCField** was developed as a capstone project (**SEP490**, Team **GSU26SE29**) under the guidance of instructor **Nguyen Minh Sang** at FPT University. The project was officially [featured by FPT University Press](https://daihoc.fpt.edu.vn/hcm/tu-nhung-bai-toan-doi-song-den-giai-phap-cong-nghe-da-dang-do-an-dac-sac-cua-sinh-vien-ky-thuat-phan-mem/) as an outstanding Software Engineering capstone project.
 
 ### 👤 Individual Contribution — [Nguyen Vinh Phuc](https://github.com/tomishere0712)
 > **Role:** Frontend & Cross-Stack Engineer | **322 Commits** across all repositories
@@ -165,4 +167,5 @@ npx expo start
 #### 📐 System Architecture & Production Deployment
 - **Architecture Design:** Authored **10 UML 2 Class Diagrams** (PlantUML) and **Conceptual ERD** covering the entire platform domain.
 - **24/7 Cloud Deployment:** Deployed and maintained the zero-cost production stack on **Vercel** (Frontend), **Render Docker** (API), **Neon** (PostgreSQL 16 SSL), and **Upstash** (Redis TLS).
+- **University Recognition:** Recognized in the official FPT University press feature for modeling and digitizing the complete RC Racing Cafe operations lifecycle.
 

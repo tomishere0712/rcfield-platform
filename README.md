@@ -1,4 +1,4 @@
-# RCField – RC Cafe Operations & Marketplace Platform 🏎️🏁
+# RCField – RC Cafe Operations & Marketplace Platform 🏎️
 
 > **Comprehensive RC (Remote Control) Cafe Operations, Tournament Hosting & Vehicle Marketplace Platform.**  
 > An end-to-end fullstack ecosystem designed for RC hobbyists, venue owners, and tournament organizers.
